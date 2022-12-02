@@ -240,20 +240,293 @@ lexer = lex.lex()
 
 def p_PROGRAM(p): #PROGRAM SHELL LOGIC
     '''
-    program : PROGRAM neuraladdfuncdir varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR neuralmainjump statutes RIGHTBR
+    program : PROGRAM ID SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
     '''
     print ('Llego al final de la gramatica, aceptado \n')
-    global GLOBALINTcounter,GLOBALFLOATcounter,GLOBALCHARcounter
-    global TEMPINTcounter,TEMPFLOATcounter,TEMPCHARcounter,TEMPBOOLcounter
-    global CONSTINTcounter,CONSTFLOATcounter,CONSTCHARcounter,POINTERScounter
-
-    actualmodulename = p[2] # GET THE NAME OF THE PROGRAM, WHICH WILL BE STORED IN THE DIRFUNC
-
-
-    #STORING THE VARIABLE NUMBERS BY SUBSTRACTING THE INITIAL MEMORY ALLOCATIONS TO THE FINAL VARIABLES COUNTERS
 
 
 
+####### VARIABLES DECLARATION HANDLING ##########
+
+def p_VARSGL(p):
+    '''
+    varsgl : VARS vars
+            | empty
+    '''
+
+def p_VARS(p):
+    '''
+    vars : typing COLON ID varsarr varsmul vars
+            | empty
+    '''
+
+def p_VARSARR(p):
+    '''
+    varsarr : LEFTSQR CTEINT RIGHTSQR
+        | empty
+    '''
+
+def p_VARSMUL(p):
+    '''
+    varsmul : COMMA ID varsarr varsmul
+            | SEMICOLON
+    '''
+
+
+####### MODULES HABDLING ##########
+
+def p_MODULES(p):
+    '''
+    modules : FUNCTION functype ID funcparam
+            | empty
+    '''
+
+def p_FUNCTYPE(p):
+    '''
+    functype : VOID
+            | typing
+    '''
+
+def p_FUNCPARAM(p):
+    '''
+    funcparam : LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+    '''
+
+def p_TYPING(p):
+    '''
+    typing : INT
+            | FLOAT
+            | CHAR
+    '''
+
+def p_PARAMETERS(p):
+    '''
+    parameters : typing COLON ID idarray mulparams
+            | empty
+    '''
+
+def p_MULPARAMS(p):
+    '''
+    mulparams : COMMA parameters
+            | empty
+    '''
+
+#### STATUTES HANDLING #####
+
+def p_STATUTES(p):
+    '''
+    statutes : assign statutesaux
+            | reading statutesaux
+            | writing statutesaux
+            | returning statutesaux
+            | ifing statutesaux
+            | whiling statutesaux
+            | foring statutesaux
+            | exp statutesaux
+            | specialfunc statutesaux
+    '''
+
+
+
+#def p_FUNCTYPE(p):
+#    '''
+#    specialfuncs : empty
+#            | empty
+#    '''
+
+
+
+def p_ASSIGN(p):
+    '''
+    assign : ID idarray EQUAL exp SEMICOLON
+    '''
+
+
+
+# WRITING
+
+def p_WRITING(p):
+    '''
+    writing : WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    '''
+
+def p_AUXWRITE(p):
+    '''
+    auxwrite : writetyping
+            | exp
+    '''
+
+def p_WRITETYPING(p):
+    '''
+    writetyping : STRING
+            | CTECHAR
+    '''
+
+def p_MULWRITE(p):
+    '''
+    mulwrite : COMMA auxwrite mulwrite
+            | empty
+    '''
+
+# READING
+
+def p_READING(p):
+    '''
+    reading : READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    '''
+
+def p_MULREAD(p):
+    '''
+    mulread : COMMA ID idarray mulread
+            | empty
+    '''
+
+# RETURNING
+
+def p_RETURNING(p):
+    '''
+    returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    '''
+
+
+########### CYCLES AND DECISIONGS #############
+
+# IFING
+
+def p_IFING(p):
+    '''
+    ifing : IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    '''
+
+def p_ELSING(p):
+    '''
+    elsing : ELSE LEFTBR STATUTES RIGHTBR
+            | empty
+    '''
+
+
+# WHILING
+
+def p_WHILING(p):
+    '''
+    whiling : WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    '''
+
+# FORING
+
+def p_FORING(p):
+    '''
+    foring : FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    '''
+
+
+
+##### VARIABLES AND EXPRESSIONS HANDLING #####
+
+def p_IDARRAY(p):
+    '''
+    idarray : LEFTSQR exp RIGHTSQR
+            | empty
+    '''
+
+
+def p_EXP(p):
+    '''
+    exp : andexp exp1
+    '''
+
+def p_EXP1(p):
+    '''
+    exp1 : OR exp
+        | empty
+    '''
+
+def p_ANDEXP(p):
+    '''
+    andexp : boolexp andexp1
+    '''
+
+def p_ANDEXP1(p):
+    '''
+    andexp1 : AND andexp
+        | empty
+    '''
+
+def p_BOOLEXP(p):
+    '''
+    boolexp : arithexp arithexp1
+    '''
+
+def p_BOOLEXP1(p):
+    '''
+    boolexp1 : GREATER arithexp
+        | GREATERAND arithexp
+        | LESSER arithexp
+        | LESSERAND arithexp
+        | SAME arithexp
+        | NOTSAME arithexp
+        | NOT arithexp
+        | empty
+    '''
+
+def p_ARITHEXP(p):
+    '''
+    arithexp : geoexp arithexp1
+    '''
+
+def p_ARITHEXP1(p):
+    '''
+    arithexp1 : PLUS arithexp
+        | REST arithexp
+        | empty
+    '''
+
+def p_GEOEXP(p):
+    '''
+    geoexp : finexp geoexp1
+    '''
+
+def p_GEOEXP1(p):
+    '''
+    geoexp1 : TIMES geoexp
+        | DIVIDE geoexp
+        | empty
+    '''
+
+def p_FINEXP(p):
+    '''
+    finexp : LEFTPAR exp RIGHTPAR
+            | cteexp
+    '''
+
+def p_CTEEXP(p):
+    '''
+    cteexp : CTEINT
+            | CTEFLOAT
+            | CTECHAR
+            | ID paramsexp
+    '''
+
+
+#FUNCTIONS WITH PARAMETERS CALL OR ARRAY CALL HANDLING 
+
+def p_PARAMSEXP(p):
+    '''
+    paramsexp : LEFTPAR paramsexp2 RIGHTPAR
+                | idarray
+    '''
+
+def p_PARAMSEXP2(p):
+    '''
+    paramsexp2 : exp auxparamsexp2
+            | empty
+    '''
+
+def p_AUXPARAMSEXP2(p):
+    '''
+    auxparamsexp2 : COMMA exp auxparamsexp2
+            | empty
+    '''
 ####EXCEPTIONS HANDLING#####
 
 def p_empty(p):
