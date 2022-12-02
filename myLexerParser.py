@@ -269,13 +269,14 @@ def p_error(p):
 
 
 ##ALTERNATIVE FILEHANDLER
-
-import ply.yacc as yacc
-parser = yacc.yacc()
-f = open("./"+arch , "r")
-input = f.read()
-parser.parse(input, debug=0)
-output = open("Quads.mir", "w")
-for x in QUADSlist:
-    output.write(str(x.QUADcounter)+ "~" + str(x.operator) + "~" + str(x.LeftOperand)+ "~" + str(x.RightOperand) + "~" + str(x.result) + "\n")
-output.close()
+#
+#import ply.yacc as yacc
+#parser = yacc.yacc()
+#f = open("./"+arch , "r")
+#input = f.read()
+#parser.parse(input, debug=0)
+#output = open("Quads.mir", "w")
+#for x in QUADSlist:
+#    output.write(str(x.QUADcounter)+ "~" + str(x.operator) + "~" + str(x.LeftOperand)+ "~" + str(x.RightOperand) + "~" + str(x.result) + "\n")
+#output.close()
+#
