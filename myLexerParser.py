@@ -45,7 +45,7 @@ LOCALnames = [] # As above but in local scope
 ###### SENSORS, CHECKING THE SCOPE (CONTEXT) OF THE VARIABLES, & COUNTERS ############
 Scopesensor = 'g' # G for global or l for local
 currenttyping = '' # Stores the typing, being either int float or char
-
+currentfunctionname = ''
 
 
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
@@ -262,7 +262,11 @@ def insertinVARStables(id,type):
         LocalVar_set[id] = {'type' : type}
         LOCALnames.append(id)
 
-
+def endandresetfunction():
+    global Scopesensor, LocalVar_set,LOCALnames
+    Scopesensor = 'g' # RETURN TO THE GLOBAL SCOPE TILL NEXT LOCAL CHANGE
+    LocalVar_set = {} # EMPTY THE LOCAL VARIABLES
+    LOCALnames = [] # EMPTY THE ORDERED USED NAMES
 
 
 
@@ -328,7 +332,7 @@ def p_PROGRAM(p): #PROGRAM SHELL LOGIC
     #WHEN ENDING THE PROGRAM DELETE THE TABLE OF FUNCTIONS AND GLOBAL VAR TABLE
     #PROBABLY NOT TILL VIRTUAL MACHINE IS COMPLETE
     print(Tableof_functions)
-    
+
 
 def p_NEURALTABLEFUNCTIONS(p):
     '''
@@ -377,20 +381,39 @@ def p_VARSMUL(p):
 
 def p_MODULES(p):
     '''
-    modules : FUNCTION functype ID funcparam
+    modules : FUNCTION functype neuralinsertfuncname funcparam
             | empty
     '''
+
+def p_NEURALINSERTFUNCNAME(p):
+    '''
+    neuralinsertfuncname : ID
+    '''
+    global Scopesensor, currentfunctionname
+    Scopesensor = 'l'
+    currentfunctionname = p[1]
+    GlobalVar_set[currentfunctionname]= {'type', currenttyping}
+    addtotableoffunctions(currentfunctionname,currenttyping,Scopesensor,LocalVar_set)
 
 def p_FUNCTYPE(p):
     '''
     functype : VOID
             | typing
     '''
+    global currenttyping
+    print(p[1])
+    currenttyping = p[1]
 
 def p_FUNCPARAM(p):
     '''
-    funcparam : LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+    funcparam : LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR neuralendfuncs modules
     '''
+
+def p_NEURALENDFUNCS(p):
+    '''
+    neuralendfuncs : 
+    '''
+    endandresetfunction()
 
 def p_TYPING(p):
     '''
