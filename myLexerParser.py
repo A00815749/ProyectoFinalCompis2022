@@ -34,12 +34,19 @@ ConstantVar_set = {} # Direct values of variables that don't change in the runni
 #The Operation number that will be stored inside the quads product indicating which type of operation the quads is
 
 ##### PYTHON LISTS, MUTABLE, ORDER OF ELEMENTS INHERENT IN THEIR APPLICATION, CAN FUNCTION AS STACKS #############
+QUADSlist = []
+GLOBALnames = [] # Storing names in global scope, using lists for ease of search, used as backup for the idnames in the sets used above
+LOCALnames = [] # As above but in local scope
 
 
 ######### MY STACKS, USING THE PYTHON LISTS AND POP() TO SIMULATE THE STACK BEHAVIOR
 
 
 ###### SENSORS, CHECKING THE SCOPE (CONTEXT) OF THE VARIABLES, & COUNTERS ############
+Scopesensor = 'g' # G for global or l for local
+currenttyping = '' # Stores the typing, being either int float or char
+
+
 
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
 #When a memory block is used, it adds 1 to the counter.
@@ -74,20 +81,8 @@ class Quadruple :
         self.RightOperand = RightOperand
         self.result = result
 
-#### SEMANTIC CUBE CLASS OBJECT, A SENSOR THAR CHECKS OPERATIONS BETWEEN THE SIMPLE DATATYPES #############
+#### SEMANTIC CUBE CLASS OBJECT, A SENSOR THAR CHECKS OPERATIONS BETWEEN THE SIMPLE DATATYPES IN VARIABLES #############
 semantics = Semanticcube()
-
-########################################################################################################################################
-
-#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
-#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
-#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
-#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
-#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
-
-########### GLOBAL AUXILIAR METHODS FOR NEURALGIC POINTS MANIPULATIONS ############
-
-
 
 ########################################################################################################################################
 
@@ -233,6 +228,86 @@ lexer = lex.lex()
 
 ########################################################################################################################################
 
+#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
+#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
+#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
+#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
+#---------------------------------------------------NEURALGIC FUNCTIONS AUX ------------------------------------------------------------
+
+########### GLOBAL AUXILIAR METHODS FOR NEURALGIC POINTS MANIPULATIONS ############
+
+
+def addtotableoffunctions(idname, type, scopecontext, variables):
+    if (idname in Tableof_functions):
+        errorhandler(1)
+    elif (idname in GLOBALnames):
+        errorhandler(2)
+    else:
+        Tableof_functions[idname] = {'type': type, 'scopecontext' : scopecontext, 'variables' : variables }
+        GLOBALnames.append(idname)
+
+def insertinVARStables(id,type):
+    if (Scopesensor == 'g'):
+        if (id in GLOBALnames):
+            errorhandler(3, str(id + " " + type))
+        if (id in GlobalVar_set):
+            errorhandler(4,id)
+        GlobalVar_set[id]= {'type' : type }
+        GLOBALnames.append(id)
+    else:
+        if id in LOCALnames:
+            errorhandler(3, str(id + " " + type))
+        if id in LocalVar_set:
+            errorhandler("varrepetida",id)
+        LocalVar_set[id] = {'type' : type}
+        LOCALnames.append(id)
+
+
+
+
+
+
+
+
+#### ERROR HABDLER IN AUXILIAR METHODS
+
+#LIST OF ERRORS
+# 1 = Function name is duplicated in the table of functions
+# 2 = Backup simple set name indicates that the name called is duplicate, check the table of functions status
+# 3 = Name trying to be used as variable name is used as a function name
+# 4 = Duplicated variable name
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+def errorhandler(errortype, location = ""):
+    errormessage = ""
+    if (errortype == 1):
+        errormessage = "Function name is duplicated in the table of functions"
+    elif (errortype == 2):
+        errormessage = "Backup simple set name indicates that the name called is duplicate, check the table of functions status"
+    elif (errortype == 3):
+        errormessage = "Name trying to be used as variable name is used as a function name"
+    elif (errortype == 4):
+        errormessage = "Duplicated variable name"
+    print("ERROR " + errormessage + "\n at ===> " + str(location))
+    sys.exit()
+
+
+########################################################################################################################################
+
 #---------------------------------------------------THE GRAMMAR ------------------------------------------------------------------------
 #---------------------------------------------------THE GRAMMAR ------------------------------------------------------------------------
 #---------------------------------------------------THE GRAMMAR ------------------------------------------------------------------------
@@ -247,15 +322,22 @@ lexer = lex.lex()
 
 def p_PROGRAM(p): #PROGRAM SHELL LOGIC
     '''
-    program : PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+    program : PROGRAM neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
     '''
     print ('Llego al final de la gramatica, aceptado \n')
+    #WHEN ENDING THE PROGRAM DELETE THE TABLE OF FUNCTIONS AND GLOBAL VAR TABLE
+    #PROBABLY NOT TILL VIRTUAL MACHINE IS COMPLETE
+    print(Tableof_functions)
+    
 
 def p_NEURALTABLEFUNCTIONS(p):
     '''
-    neuraltablefunctions :
+    neuraltablefunctions : ID
     '''
-    #print ('Chekeo')
+    #print (p[1]) #THE VALUE STORED IN ID
+    addtotableoffunctions(p[1],'VOID',Scopesensor, GlobalVar_set)
+
+
 
 ####### VARIABLES DECLARATION HANDLING ##########
 
@@ -267,9 +349,16 @@ def p_VARSGL(p):
 
 def p_VARS(p):
     '''
-    vars : typing COLON ID varsarr varsmul vars
+    vars : typing COLON neuralinsertvar varsarr varsmul vars
             | empty
     '''
+
+def p_NEURALINSERTVAR(p):
+    '''
+    neuralinsertvar : ID
+    '''
+    insertinVARStables(p[1],currenttyping)
+    
 
 def p_VARSARR(p):
     '''
@@ -279,7 +368,7 @@ def p_VARSARR(p):
 
 def p_VARSMUL(p):
     '''
-    varsmul : COMMA ID varsarr varsmul
+    varsmul : COMMA neuralinsertvar varsarr varsmul
             | SEMICOLON
     '''
 
@@ -309,6 +398,8 @@ def p_TYPING(p):
             | FLOAT
             | CHAR
     '''
+    global currenttyping
+    currenttyping = p[1] # STORE THE INT, FLOAT OR CHAR TOKEN FOR THE VARIABLE TYPE
 
 def p_PARAMETERS(p):
     '''
