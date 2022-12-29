@@ -1,0 +1,3408 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    STR
+    TRUE
+    FALSE
+    MEDIA
+    MEDIANA
+    MODA
+    VARIANZA
+    STDEV
+    PLOTXY
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+Rule 2     neuraltablefunctions -> <empty>
+Rule 3     varsgl -> VARS vars
+Rule 4     varsgl -> empty
+Rule 5     vars -> typing COLON ID varsarr varsmul vars
+Rule 6     vars -> empty
+Rule 7     varsarr -> LEFTSQR CTEINT RIGHTSQR
+Rule 8     varsarr -> empty
+Rule 9     varsmul -> COMMA ID varsarr varsmul
+Rule 10    varsmul -> SEMICOLON
+Rule 11    modules -> FUNCTION functype ID funcparam
+Rule 12    modules -> empty
+Rule 13    functype -> VOID
+Rule 14    functype -> typing
+Rule 15    funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+Rule 16    typing -> INT
+Rule 17    typing -> FLOAT
+Rule 18    typing -> CHAR
+Rule 19    parameters -> typing COLON ID idarray mulparams
+Rule 20    parameters -> empty
+Rule 21    mulparams -> COMMA parameters
+Rule 22    mulparams -> empty
+Rule 23    statutes -> assign statutesaux
+Rule 24    statutes -> reading statutesaux
+Rule 25    statutes -> writing statutesaux
+Rule 26    statutes -> returning statutesaux
+Rule 27    statutes -> ifing statutesaux
+Rule 28    statutes -> whiling statutesaux
+Rule 29    statutes -> foring statutesaux
+Rule 30    statutes -> exp statutesaux
+Rule 31    statutes -> specialfunc statutesaux
+Rule 32    statutesaux -> <empty>
+Rule 33    specialfunc -> empty
+Rule 34    assign -> ID idarray EQUAL exp SEMICOLON
+Rule 35    writing -> WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+Rule 36    auxwrite -> writetyping
+Rule 37    auxwrite -> exp
+Rule 38    writetyping -> STRING
+Rule 39    writetyping -> CTECHAR
+Rule 40    mulwrite -> COMMA auxwrite mulwrite
+Rule 41    mulwrite -> empty
+Rule 42    reading -> READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+Rule 43    mulread -> COMMA ID idarray mulread
+Rule 44    mulread -> empty
+Rule 45    returning -> RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+Rule 46    ifing -> IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+Rule 47    elsing -> ELSE LEFTBR statutes RIGHTBR
+Rule 48    elsing -> empty
+Rule 49    whiling -> WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+Rule 50    foring -> FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+Rule 51    idarray -> LEFTSQR exp RIGHTSQR
+Rule 52    idarray -> empty
+Rule 53    exp -> andexp exp1
+Rule 54    exp1 -> OR exp
+Rule 55    exp1 -> empty
+Rule 56    andexp -> boolexp andexp1
+Rule 57    andexp1 -> AND andexp
+Rule 58    andexp1 -> empty
+Rule 59    boolexp -> arithexp boolexp1
+Rule 60    boolexp1 -> GREATER arithexp
+Rule 61    boolexp1 -> GREATERAND arithexp
+Rule 62    boolexp1 -> LESSER arithexp
+Rule 63    boolexp1 -> LESSERAND arithexp
+Rule 64    boolexp1 -> SAME arithexp
+Rule 65    boolexp1 -> NOTSAME arithexp
+Rule 66    boolexp1 -> NOT arithexp
+Rule 67    boolexp1 -> empty
+Rule 68    arithexp -> geoexp arithexp1
+Rule 69    arithexp1 -> PLUS arithexp
+Rule 70    arithexp1 -> REST arithexp
+Rule 71    arithexp1 -> empty
+Rule 72    geoexp -> finexp geoexp1
+Rule 73    geoexp1 -> TIMES geoexp
+Rule 74    geoexp1 -> DIVIDE geoexp
+Rule 75    geoexp1 -> empty
+Rule 76    finexp -> LEFTPAR exp RIGHTPAR
+Rule 77    finexp -> cteexp
+Rule 78    cteexp -> CTEINT
+Rule 79    cteexp -> CTEFLOAT
+Rule 80    cteexp -> CTECHAR
+Rule 81    cteexp -> ID paramsexp
+Rule 82    paramsexp -> LEFTPAR paramsexp2 RIGHTPAR
+Rule 83    paramsexp -> idarray
+Rule 84    paramsexp2 -> exp auxparamsexp2
+Rule 85    paramsexp2 -> empty
+Rule 86    auxparamsexp2 -> COMMA exp auxparamsexp2
+Rule 87    auxparamsexp2 -> empty
+Rule 88    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 57
+CHAR                 : 18
+COLON                : 5 19
+COMMA                : 9 21 40 43 86
+CTECHAR              : 39 80
+CTEFLOAT             : 79
+CTEINT               : 7 78
+DIVIDE               : 74
+DO                   : 49 50
+ELSE                 : 47
+EQUAL                : 34 50
+FALSE                : 
+FLOAT                : 17
+FOR                  : 50
+FUNCTION             : 11
+GREATER              : 60
+GREATERAND           : 61
+ID                   : 1 5 9 11 19 34 42 43 50 81
+IF                   : 46
+INT                  : 16
+LEFTBR               : 1 15 46 47 49 50
+LEFTPAR              : 1 15 35 42 45 46 49 76 82
+LEFTSQR              : 7 51
+LESSER               : 62
+LESSERAND            : 63
+MAIN                 : 1
+MEDIA                : 
+MEDIANA              : 
+MODA                 : 
+NOT                  : 66
+NOTSAME              : 65
+OR                   : 54
+PLOTXY               : 
+PLUS                 : 69
+PROGRAM              : 1
+READ                 : 42
+REST                 : 70
+RETURN               : 45
+RIGHTBR              : 1 15 46 47 49 50
+RIGHTPAR             : 1 15 35 42 45 46 49 76 82
+RIGHTSQR             : 7 51
+SAME                 : 64
+SEMICOLON            : 1 10 15 34 35 42 45
+STDEV                : 
+STR                  : 
+STRING               : 38
+THEN                 : 46
+TIMES                : 73
+TO                   : 50
+TRUE                 : 
+VARIANZA             : 
+VARS                 : 3
+VOID                 : 13
+WHILE                : 49
+WRITE                : 35
+error                : 
+
+Nonterminals, with rules where they appear
+
+andexp               : 53 57
+andexp1              : 56
+arithexp             : 59 60 61 62 63 64 65 66 69 70
+arithexp1            : 68
+assign               : 23
+auxparamsexp2        : 84 86
+auxwrite             : 35 40
+boolexp              : 56
+boolexp1             : 59
+cteexp               : 77
+elsing               : 46
+empty                : 4 6 8 12 20 22 33 41 44 48 52 55 58 67 71 75 85 87
+exp                  : 30 34 37 45 46 49 50 50 51 54 76 84 86
+exp1                 : 53
+finexp               : 72
+foring               : 29
+funcparam            : 11
+functype             : 11
+geoexp               : 68 73 74
+geoexp1              : 72
+idarray              : 19 34 42 43 50 83
+ifing                : 27
+modules              : 1 15
+mulparams            : 19
+mulread              : 42 43
+mulwrite             : 35 40
+neuraltablefunctions : 1
+parameters           : 15 21
+paramsexp            : 81
+paramsexp2           : 82
+program              : 0
+reading              : 24
+returning            : 26
+specialfunc          : 31
+statutes             : 1 15 46 47 49 50
+statutesaux          : 23 24 25 26 27 28 29 30 31
+typing               : 5 14 19
+vars                 : 3 5
+varsarr              : 5 9
+varsgl               : 1 15
+varsmul              : 5 9
+whiling              : 28
+writetyping          : 36
+writing              : 25
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+
+    PROGRAM         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAM . ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+
+    ID              shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAM ID . neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+    (2) neuraltablefunctions -> .
+
+    SEMICOLON       reduce using rule 2 (neuraltablefunctions -> .)
+
+    neuraltablefunctions           shift and go to state 4
+
+state 4
+
+    (1) program -> PROGRAM ID neuraltablefunctions . SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+
+    SEMICOLON       shift and go to state 5
+
+
+state 5
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON . varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+    (3) varsgl -> . VARS vars
+    (4) varsgl -> . empty
+    (88) empty -> .
+
+    VARS            shift and go to state 7
+    FUNCTION        reduce using rule 88 (empty -> .)
+    MAIN            reduce using rule 88 (empty -> .)
+
+    varsgl                         shift and go to state 6
+    empty                          shift and go to state 8
+
+state 6
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl . modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+    (11) modules -> . FUNCTION functype ID funcparam
+    (12) modules -> . empty
+    (88) empty -> .
+
+    FUNCTION        shift and go to state 10
+    MAIN            reduce using rule 88 (empty -> .)
+
+    modules                        shift and go to state 9
+    empty                          shift and go to state 11
+
+state 7
+
+    (3) varsgl -> VARS . vars
+    (5) vars -> . typing COLON ID varsarr varsmul vars
+    (6) vars -> . empty
+    (16) typing -> . INT
+    (17) typing -> . FLOAT
+    (18) typing -> . CHAR
+    (88) empty -> .
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    CHAR            shift and go to state 17
+    FUNCTION        reduce using rule 88 (empty -> .)
+    MAIN            reduce using rule 88 (empty -> .)
+    LEFTBR          reduce using rule 88 (empty -> .)
+
+    vars                           shift and go to state 12
+    typing                         shift and go to state 13
+    empty                          shift and go to state 14
+
+state 8
+
+    (4) varsgl -> empty .
+
+    FUNCTION        reduce using rule 4 (varsgl -> empty .)
+    MAIN            reduce using rule 4 (varsgl -> empty .)
+    LEFTBR          reduce using rule 4 (varsgl -> empty .)
+
+
+state 9
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules . MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+
+    MAIN            shift and go to state 18
+
+
+state 10
+
+    (11) modules -> FUNCTION . functype ID funcparam
+    (13) functype -> . VOID
+    (14) functype -> . typing
+    (16) typing -> . INT
+    (17) typing -> . FLOAT
+    (18) typing -> . CHAR
+
+    VOID            shift and go to state 20
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    CHAR            shift and go to state 17
+
+    functype                       shift and go to state 19
+    typing                         shift and go to state 21
+
+state 11
+
+    (12) modules -> empty .
+
+    MAIN            reduce using rule 12 (modules -> empty .)
+
+
+state 12
+
+    (3) varsgl -> VARS vars .
+
+    FUNCTION        reduce using rule 3 (varsgl -> VARS vars .)
+    MAIN            reduce using rule 3 (varsgl -> VARS vars .)
+    LEFTBR          reduce using rule 3 (varsgl -> VARS vars .)
+
+
+state 13
+
+    (5) vars -> typing . COLON ID varsarr varsmul vars
+
+    COLON           shift and go to state 22
+
+
+state 14
+
+    (6) vars -> empty .
+
+    FUNCTION        reduce using rule 6 (vars -> empty .)
+    MAIN            reduce using rule 6 (vars -> empty .)
+    LEFTBR          reduce using rule 6 (vars -> empty .)
+
+
+state 15
+
+    (16) typing -> INT .
+
+    COLON           reduce using rule 16 (typing -> INT .)
+    ID              reduce using rule 16 (typing -> INT .)
+
+
+state 16
+
+    (17) typing -> FLOAT .
+
+    COLON           reduce using rule 17 (typing -> FLOAT .)
+    ID              reduce using rule 17 (typing -> FLOAT .)
+
+
+state 17
+
+    (18) typing -> CHAR .
+
+    COLON           reduce using rule 18 (typing -> CHAR .)
+    ID              reduce using rule 18 (typing -> CHAR .)
+
+
+state 18
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN . LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+
+    LEFTPAR         shift and go to state 23
+
+
+state 19
+
+    (11) modules -> FUNCTION functype . ID funcparam
+
+    ID              shift and go to state 24
+
+
+state 20
+
+    (13) functype -> VOID .
+
+    ID              reduce using rule 13 (functype -> VOID .)
+
+
+state 21
+
+    (14) functype -> typing .
+
+    ID              reduce using rule 14 (functype -> typing .)
+
+
+state 22
+
+    (5) vars -> typing COLON . ID varsarr varsmul vars
+
+    ID              shift and go to state 25
+
+
+state 23
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR . RIGHTPAR LEFTBR statutes RIGHTBR
+
+    RIGHTPAR        shift and go to state 26
+
+
+state 24
+
+    (11) modules -> FUNCTION functype ID . funcparam
+    (15) funcparam -> . LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+
+    LEFTPAR         shift and go to state 28
+
+    funcparam                      shift and go to state 27
+
+state 25
+
+    (5) vars -> typing COLON ID . varsarr varsmul vars
+    (7) varsarr -> . LEFTSQR CTEINT RIGHTSQR
+    (8) varsarr -> . empty
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 30
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+
+    varsarr                        shift and go to state 29
+    empty                          shift and go to state 31
+
+state 26
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR . LEFTBR statutes RIGHTBR
+
+    LEFTBR          shift and go to state 32
+
+
+state 27
+
+    (11) modules -> FUNCTION functype ID funcparam .
+
+    MAIN            reduce using rule 11 (modules -> FUNCTION functype ID funcparam .)
+
+
+state 28
+
+    (15) funcparam -> LEFTPAR . parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+    (19) parameters -> . typing COLON ID idarray mulparams
+    (20) parameters -> . empty
+    (16) typing -> . INT
+    (17) typing -> . FLOAT
+    (18) typing -> . CHAR
+    (88) empty -> .
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    CHAR            shift and go to state 17
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    parameters                     shift and go to state 33
+    typing                         shift and go to state 34
+    empty                          shift and go to state 35
+
+state 29
+
+    (5) vars -> typing COLON ID varsarr . varsmul vars
+    (9) varsmul -> . COMMA ID varsarr varsmul
+    (10) varsmul -> . SEMICOLON
+
+    COMMA           shift and go to state 37
+    SEMICOLON       shift and go to state 38
+
+    varsmul                        shift and go to state 36
+
+state 30
+
+    (7) varsarr -> LEFTSQR . CTEINT RIGHTSQR
+
+    CTEINT          shift and go to state 39
+
+
+state 31
+
+    (8) varsarr -> empty .
+
+    COMMA           reduce using rule 8 (varsarr -> empty .)
+    SEMICOLON       reduce using rule 8 (varsarr -> empty .)
+
+
+state 32
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR . statutes RIGHTBR
+    (23) statutes -> . assign statutesaux
+    (24) statutes -> . reading statutesaux
+    (25) statutes -> . writing statutesaux
+    (26) statutes -> . returning statutesaux
+    (27) statutes -> . ifing statutesaux
+    (28) statutes -> . whiling statutesaux
+    (29) statutes -> . foring statutesaux
+    (30) statutes -> . exp statutesaux
+    (31) statutes -> . specialfunc statutesaux
+    (34) assign -> . ID idarray EQUAL exp SEMICOLON
+    (42) reading -> . READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    (35) writing -> . WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    (45) returning -> . RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    (46) ifing -> . IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (49) whiling -> . WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (50) foring -> . FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (33) specialfunc -> . empty
+    (56) andexp -> . boolexp andexp1
+    (88) empty -> .
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    ID              shift and go to state 40
+    READ            shift and go to state 52
+    WRITE           shift and go to state 53
+    RETURN          shift and go to state 54
+    IF              shift and go to state 55
+    WHILE           shift and go to state 56
+    FOR             shift and go to state 57
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+
+    statutes                       shift and go to state 42
+    assign                         shift and go to state 43
+    reading                        shift and go to state 44
+    writing                        shift and go to state 45
+    returning                      shift and go to state 46
+    ifing                          shift and go to state 47
+    whiling                        shift and go to state 48
+    foring                         shift and go to state 49
+    exp                            shift and go to state 50
+    specialfunc                    shift and go to state 51
+    andexp                         shift and go to state 58
+    empty                          shift and go to state 59
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 33
+
+    (15) funcparam -> LEFTPAR parameters . RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+
+    RIGHTPAR        shift and go to state 68
+
+
+state 34
+
+    (19) parameters -> typing . COLON ID idarray mulparams
+
+    COLON           shift and go to state 69
+
+
+state 35
+
+    (20) parameters -> empty .
+
+    RIGHTPAR        reduce using rule 20 (parameters -> empty .)
+
+
+state 36
+
+    (5) vars -> typing COLON ID varsarr varsmul . vars
+    (5) vars -> . typing COLON ID varsarr varsmul vars
+    (6) vars -> . empty
+    (16) typing -> . INT
+    (17) typing -> . FLOAT
+    (18) typing -> . CHAR
+    (88) empty -> .
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    CHAR            shift and go to state 17
+    FUNCTION        reduce using rule 88 (empty -> .)
+    MAIN            reduce using rule 88 (empty -> .)
+    LEFTBR          reduce using rule 88 (empty -> .)
+
+    typing                         shift and go to state 13
+    vars                           shift and go to state 70
+    empty                          shift and go to state 14
+
+state 37
+
+    (9) varsmul -> COMMA . ID varsarr varsmul
+
+    ID              shift and go to state 71
+
+
+state 38
+
+    (10) varsmul -> SEMICOLON .
+
+    INT             reduce using rule 10 (varsmul -> SEMICOLON .)
+    FLOAT           reduce using rule 10 (varsmul -> SEMICOLON .)
+    CHAR            reduce using rule 10 (varsmul -> SEMICOLON .)
+    FUNCTION        reduce using rule 10 (varsmul -> SEMICOLON .)
+    MAIN            reduce using rule 10 (varsmul -> SEMICOLON .)
+    LEFTBR          reduce using rule 10 (varsmul -> SEMICOLON .)
+
+
+state 39
+
+    (7) varsarr -> LEFTSQR CTEINT . RIGHTSQR
+
+    RIGHTSQR        shift and go to state 72
+
+
+state 40
+
+    (34) assign -> ID . idarray EQUAL exp SEMICOLON
+    (81) cteexp -> ID . paramsexp
+    (51) idarray -> . LEFTSQR exp RIGHTSQR
+    (52) idarray -> . empty
+    (82) paramsexp -> . LEFTPAR paramsexp2 RIGHTPAR
+    (83) paramsexp -> . idarray
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 75
+    LEFTPAR         shift and go to state 77
+    EQUAL           reduce using rule 88 (empty -> .)
+    TIMES           reduce using rule 88 (empty -> .)
+    DIVIDE          reduce using rule 88 (empty -> .)
+    PLUS            reduce using rule 88 (empty -> .)
+    REST            reduce using rule 88 (empty -> .)
+    GREATER         reduce using rule 88 (empty -> .)
+    GREATERAND      reduce using rule 88 (empty -> .)
+    LESSER          reduce using rule 88 (empty -> .)
+    LESSERAND       reduce using rule 88 (empty -> .)
+    SAME            reduce using rule 88 (empty -> .)
+    NOTSAME         reduce using rule 88 (empty -> .)
+    NOT             reduce using rule 88 (empty -> .)
+    AND             reduce using rule 88 (empty -> .)
+    OR              reduce using rule 88 (empty -> .)
+    RIGHTBR         reduce using rule 88 (empty -> .)
+
+    idarray                        shift and go to state 73
+    paramsexp                      shift and go to state 74
+    empty                          shift and go to state 76
+
+state 41
+
+    (76) finexp -> LEFTPAR . exp RIGHTPAR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 78
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 42
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes . RIGHTBR
+
+    RIGHTBR         shift and go to state 80
+
+
+state 43
+
+    (23) statutes -> assign . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 81
+
+state 44
+
+    (24) statutes -> reading . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 82
+
+state 45
+
+    (25) statutes -> writing . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 83
+
+state 46
+
+    (26) statutes -> returning . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 84
+
+state 47
+
+    (27) statutes -> ifing . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 85
+
+state 48
+
+    (28) statutes -> whiling . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 86
+
+state 49
+
+    (29) statutes -> foring . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 87
+
+state 50
+
+    (30) statutes -> exp . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 88
+
+state 51
+
+    (31) statutes -> specialfunc . statutesaux
+    (32) statutesaux -> .
+
+    RIGHTBR         reduce using rule 32 (statutesaux -> .)
+
+    statutesaux                    shift and go to state 89
+
+state 52
+
+    (42) reading -> READ . LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+
+    LEFTPAR         shift and go to state 90
+
+
+state 53
+
+    (35) writing -> WRITE . LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+
+    LEFTPAR         shift and go to state 91
+
+
+state 54
+
+    (45) returning -> RETURN . LEFTPAR exp RIGHTPAR SEMICOLON
+
+    LEFTPAR         shift and go to state 92
+
+
+state 55
+
+    (46) ifing -> IF . LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+
+    LEFTPAR         shift and go to state 93
+
+
+state 56
+
+    (49) whiling -> WHILE . LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+
+    LEFTPAR         shift and go to state 94
+
+
+state 57
+
+    (50) foring -> FOR . ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+
+    ID              shift and go to state 95
+
+
+state 58
+
+    (53) exp -> andexp . exp1
+    (54) exp1 -> . OR exp
+    (55) exp1 -> . empty
+    (88) empty -> .
+
+    OR              shift and go to state 97
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    RIGHTSQR        reduce using rule 88 (empty -> .)
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+    TO              reduce using rule 88 (empty -> .)
+    DO              reduce using rule 88 (empty -> .)
+
+    exp1                           shift and go to state 96
+    empty                          shift and go to state 98
+
+state 59
+
+    (33) specialfunc -> empty .
+
+    RIGHTBR         reduce using rule 33 (specialfunc -> empty .)
+
+
+state 60
+
+    (56) andexp -> boolexp . andexp1
+    (57) andexp1 -> . AND andexp
+    (58) andexp1 -> . empty
+    (88) empty -> .
+
+    AND             shift and go to state 100
+    OR              reduce using rule 88 (empty -> .)
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    RIGHTSQR        reduce using rule 88 (empty -> .)
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+    TO              reduce using rule 88 (empty -> .)
+    DO              reduce using rule 88 (empty -> .)
+
+    andexp1                        shift and go to state 99
+    empty                          shift and go to state 101
+
+state 61
+
+    (59) boolexp -> arithexp . boolexp1
+    (60) boolexp1 -> . GREATER arithexp
+    (61) boolexp1 -> . GREATERAND arithexp
+    (62) boolexp1 -> . LESSER arithexp
+    (63) boolexp1 -> . LESSERAND arithexp
+    (64) boolexp1 -> . SAME arithexp
+    (65) boolexp1 -> . NOTSAME arithexp
+    (66) boolexp1 -> . NOT arithexp
+    (67) boolexp1 -> . empty
+    (88) empty -> .
+
+    GREATER         shift and go to state 103
+    GREATERAND      shift and go to state 104
+    LESSER          shift and go to state 105
+    LESSERAND       shift and go to state 106
+    SAME            shift and go to state 107
+    NOTSAME         shift and go to state 108
+    NOT             shift and go to state 109
+    AND             reduce using rule 88 (empty -> .)
+    OR              reduce using rule 88 (empty -> .)
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    RIGHTSQR        reduce using rule 88 (empty -> .)
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+    TO              reduce using rule 88 (empty -> .)
+    DO              reduce using rule 88 (empty -> .)
+
+    boolexp1                       shift and go to state 102
+    empty                          shift and go to state 110
+
+state 62
+
+    (68) arithexp -> geoexp . arithexp1
+    (69) arithexp1 -> . PLUS arithexp
+    (70) arithexp1 -> . REST arithexp
+    (71) arithexp1 -> . empty
+    (88) empty -> .
+
+    PLUS            shift and go to state 112
+    REST            shift and go to state 113
+    GREATER         reduce using rule 88 (empty -> .)
+    GREATERAND      reduce using rule 88 (empty -> .)
+    LESSER          reduce using rule 88 (empty -> .)
+    LESSERAND       reduce using rule 88 (empty -> .)
+    SAME            reduce using rule 88 (empty -> .)
+    NOTSAME         reduce using rule 88 (empty -> .)
+    NOT             reduce using rule 88 (empty -> .)
+    AND             reduce using rule 88 (empty -> .)
+    OR              reduce using rule 88 (empty -> .)
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    RIGHTSQR        reduce using rule 88 (empty -> .)
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+    TO              reduce using rule 88 (empty -> .)
+    DO              reduce using rule 88 (empty -> .)
+
+    arithexp1                      shift and go to state 111
+    empty                          shift and go to state 114
+
+state 63
+
+    (72) geoexp -> finexp . geoexp1
+    (73) geoexp1 -> . TIMES geoexp
+    (74) geoexp1 -> . DIVIDE geoexp
+    (75) geoexp1 -> . empty
+    (88) empty -> .
+
+    TIMES           shift and go to state 116
+    DIVIDE          shift and go to state 117
+    PLUS            reduce using rule 88 (empty -> .)
+    REST            reduce using rule 88 (empty -> .)
+    GREATER         reduce using rule 88 (empty -> .)
+    GREATERAND      reduce using rule 88 (empty -> .)
+    LESSER          reduce using rule 88 (empty -> .)
+    LESSERAND       reduce using rule 88 (empty -> .)
+    SAME            reduce using rule 88 (empty -> .)
+    NOTSAME         reduce using rule 88 (empty -> .)
+    NOT             reduce using rule 88 (empty -> .)
+    AND             reduce using rule 88 (empty -> .)
+    OR              reduce using rule 88 (empty -> .)
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    RIGHTSQR        reduce using rule 88 (empty -> .)
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+    TO              reduce using rule 88 (empty -> .)
+    DO              reduce using rule 88 (empty -> .)
+
+    geoexp1                        shift and go to state 115
+    empty                          shift and go to state 118
+
+state 64
+
+    (77) finexp -> cteexp .
+
+    TIMES           reduce using rule 77 (finexp -> cteexp .)
+    DIVIDE          reduce using rule 77 (finexp -> cteexp .)
+    PLUS            reduce using rule 77 (finexp -> cteexp .)
+    REST            reduce using rule 77 (finexp -> cteexp .)
+    GREATER         reduce using rule 77 (finexp -> cteexp .)
+    GREATERAND      reduce using rule 77 (finexp -> cteexp .)
+    LESSER          reduce using rule 77 (finexp -> cteexp .)
+    LESSERAND       reduce using rule 77 (finexp -> cteexp .)
+    SAME            reduce using rule 77 (finexp -> cteexp .)
+    NOTSAME         reduce using rule 77 (finexp -> cteexp .)
+    NOT             reduce using rule 77 (finexp -> cteexp .)
+    AND             reduce using rule 77 (finexp -> cteexp .)
+    OR              reduce using rule 77 (finexp -> cteexp .)
+    RIGHTBR         reduce using rule 77 (finexp -> cteexp .)
+    RIGHTPAR        reduce using rule 77 (finexp -> cteexp .)
+    RIGHTSQR        reduce using rule 77 (finexp -> cteexp .)
+    COMMA           reduce using rule 77 (finexp -> cteexp .)
+    SEMICOLON       reduce using rule 77 (finexp -> cteexp .)
+    TO              reduce using rule 77 (finexp -> cteexp .)
+    DO              reduce using rule 77 (finexp -> cteexp .)
+
+
+state 65
+
+    (78) cteexp -> CTEINT .
+
+    TIMES           reduce using rule 78 (cteexp -> CTEINT .)
+    DIVIDE          reduce using rule 78 (cteexp -> CTEINT .)
+    PLUS            reduce using rule 78 (cteexp -> CTEINT .)
+    REST            reduce using rule 78 (cteexp -> CTEINT .)
+    GREATER         reduce using rule 78 (cteexp -> CTEINT .)
+    GREATERAND      reduce using rule 78 (cteexp -> CTEINT .)
+    LESSER          reduce using rule 78 (cteexp -> CTEINT .)
+    LESSERAND       reduce using rule 78 (cteexp -> CTEINT .)
+    SAME            reduce using rule 78 (cteexp -> CTEINT .)
+    NOTSAME         reduce using rule 78 (cteexp -> CTEINT .)
+    NOT             reduce using rule 78 (cteexp -> CTEINT .)
+    AND             reduce using rule 78 (cteexp -> CTEINT .)
+    OR              reduce using rule 78 (cteexp -> CTEINT .)
+    RIGHTBR         reduce using rule 78 (cteexp -> CTEINT .)
+    RIGHTPAR        reduce using rule 78 (cteexp -> CTEINT .)
+    RIGHTSQR        reduce using rule 78 (cteexp -> CTEINT .)
+    COMMA           reduce using rule 78 (cteexp -> CTEINT .)
+    SEMICOLON       reduce using rule 78 (cteexp -> CTEINT .)
+    TO              reduce using rule 78 (cteexp -> CTEINT .)
+    DO              reduce using rule 78 (cteexp -> CTEINT .)
+
+
+state 66
+
+    (79) cteexp -> CTEFLOAT .
+
+    TIMES           reduce using rule 79 (cteexp -> CTEFLOAT .)
+    DIVIDE          reduce using rule 79 (cteexp -> CTEFLOAT .)
+    PLUS            reduce using rule 79 (cteexp -> CTEFLOAT .)
+    REST            reduce using rule 79 (cteexp -> CTEFLOAT .)
+    GREATER         reduce using rule 79 (cteexp -> CTEFLOAT .)
+    GREATERAND      reduce using rule 79 (cteexp -> CTEFLOAT .)
+    LESSER          reduce using rule 79 (cteexp -> CTEFLOAT .)
+    LESSERAND       reduce using rule 79 (cteexp -> CTEFLOAT .)
+    SAME            reduce using rule 79 (cteexp -> CTEFLOAT .)
+    NOTSAME         reduce using rule 79 (cteexp -> CTEFLOAT .)
+    NOT             reduce using rule 79 (cteexp -> CTEFLOAT .)
+    AND             reduce using rule 79 (cteexp -> CTEFLOAT .)
+    OR              reduce using rule 79 (cteexp -> CTEFLOAT .)
+    RIGHTBR         reduce using rule 79 (cteexp -> CTEFLOAT .)
+    RIGHTPAR        reduce using rule 79 (cteexp -> CTEFLOAT .)
+    RIGHTSQR        reduce using rule 79 (cteexp -> CTEFLOAT .)
+    COMMA           reduce using rule 79 (cteexp -> CTEFLOAT .)
+    SEMICOLON       reduce using rule 79 (cteexp -> CTEFLOAT .)
+    TO              reduce using rule 79 (cteexp -> CTEFLOAT .)
+    DO              reduce using rule 79 (cteexp -> CTEFLOAT .)
+
+
+state 67
+
+    (80) cteexp -> CTECHAR .
+
+    TIMES           reduce using rule 80 (cteexp -> CTECHAR .)
+    DIVIDE          reduce using rule 80 (cteexp -> CTECHAR .)
+    PLUS            reduce using rule 80 (cteexp -> CTECHAR .)
+    REST            reduce using rule 80 (cteexp -> CTECHAR .)
+    GREATER         reduce using rule 80 (cteexp -> CTECHAR .)
+    GREATERAND      reduce using rule 80 (cteexp -> CTECHAR .)
+    LESSER          reduce using rule 80 (cteexp -> CTECHAR .)
+    LESSERAND       reduce using rule 80 (cteexp -> CTECHAR .)
+    SAME            reduce using rule 80 (cteexp -> CTECHAR .)
+    NOTSAME         reduce using rule 80 (cteexp -> CTECHAR .)
+    NOT             reduce using rule 80 (cteexp -> CTECHAR .)
+    AND             reduce using rule 80 (cteexp -> CTECHAR .)
+    OR              reduce using rule 80 (cteexp -> CTECHAR .)
+    RIGHTBR         reduce using rule 80 (cteexp -> CTECHAR .)
+    RIGHTPAR        reduce using rule 80 (cteexp -> CTECHAR .)
+    RIGHTSQR        reduce using rule 80 (cteexp -> CTECHAR .)
+    COMMA           reduce using rule 80 (cteexp -> CTECHAR .)
+    SEMICOLON       reduce using rule 80 (cteexp -> CTECHAR .)
+    TO              reduce using rule 80 (cteexp -> CTECHAR .)
+    DO              reduce using rule 80 (cteexp -> CTECHAR .)
+
+
+state 68
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR . SEMICOLON varsgl LEFTBR statutes RIGHTBR modules
+
+    SEMICOLON       shift and go to state 119
+
+
+state 69
+
+    (19) parameters -> typing COLON . ID idarray mulparams
+
+    ID              shift and go to state 120
+
+
+state 70
+
+    (5) vars -> typing COLON ID varsarr varsmul vars .
+
+    FUNCTION        reduce using rule 5 (vars -> typing COLON ID varsarr varsmul vars .)
+    MAIN            reduce using rule 5 (vars -> typing COLON ID varsarr varsmul vars .)
+    LEFTBR          reduce using rule 5 (vars -> typing COLON ID varsarr varsmul vars .)
+
+
+state 71
+
+    (9) varsmul -> COMMA ID . varsarr varsmul
+    (7) varsarr -> . LEFTSQR CTEINT RIGHTSQR
+    (8) varsarr -> . empty
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 30
+    COMMA           reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+
+    varsarr                        shift and go to state 121
+    empty                          shift and go to state 31
+
+state 72
+
+    (7) varsarr -> LEFTSQR CTEINT RIGHTSQR .
+
+    COMMA           reduce using rule 7 (varsarr -> LEFTSQR CTEINT RIGHTSQR .)
+    SEMICOLON       reduce using rule 7 (varsarr -> LEFTSQR CTEINT RIGHTSQR .)
+
+
+state 73
+
+    (34) assign -> ID idarray . EQUAL exp SEMICOLON
+    (83) paramsexp -> idarray .
+
+    EQUAL           shift and go to state 122
+    TIMES           reduce using rule 83 (paramsexp -> idarray .)
+    DIVIDE          reduce using rule 83 (paramsexp -> idarray .)
+    PLUS            reduce using rule 83 (paramsexp -> idarray .)
+    REST            reduce using rule 83 (paramsexp -> idarray .)
+    GREATER         reduce using rule 83 (paramsexp -> idarray .)
+    GREATERAND      reduce using rule 83 (paramsexp -> idarray .)
+    LESSER          reduce using rule 83 (paramsexp -> idarray .)
+    LESSERAND       reduce using rule 83 (paramsexp -> idarray .)
+    SAME            reduce using rule 83 (paramsexp -> idarray .)
+    NOTSAME         reduce using rule 83 (paramsexp -> idarray .)
+    NOT             reduce using rule 83 (paramsexp -> idarray .)
+    AND             reduce using rule 83 (paramsexp -> idarray .)
+    OR              reduce using rule 83 (paramsexp -> idarray .)
+    RIGHTBR         reduce using rule 83 (paramsexp -> idarray .)
+
+
+state 74
+
+    (81) cteexp -> ID paramsexp .
+
+    TIMES           reduce using rule 81 (cteexp -> ID paramsexp .)
+    DIVIDE          reduce using rule 81 (cteexp -> ID paramsexp .)
+    PLUS            reduce using rule 81 (cteexp -> ID paramsexp .)
+    REST            reduce using rule 81 (cteexp -> ID paramsexp .)
+    GREATER         reduce using rule 81 (cteexp -> ID paramsexp .)
+    GREATERAND      reduce using rule 81 (cteexp -> ID paramsexp .)
+    LESSER          reduce using rule 81 (cteexp -> ID paramsexp .)
+    LESSERAND       reduce using rule 81 (cteexp -> ID paramsexp .)
+    SAME            reduce using rule 81 (cteexp -> ID paramsexp .)
+    NOTSAME         reduce using rule 81 (cteexp -> ID paramsexp .)
+    NOT             reduce using rule 81 (cteexp -> ID paramsexp .)
+    AND             reduce using rule 81 (cteexp -> ID paramsexp .)
+    OR              reduce using rule 81 (cteexp -> ID paramsexp .)
+    RIGHTBR         reduce using rule 81 (cteexp -> ID paramsexp .)
+    RIGHTPAR        reduce using rule 81 (cteexp -> ID paramsexp .)
+    RIGHTSQR        reduce using rule 81 (cteexp -> ID paramsexp .)
+    COMMA           reduce using rule 81 (cteexp -> ID paramsexp .)
+    SEMICOLON       reduce using rule 81 (cteexp -> ID paramsexp .)
+    TO              reduce using rule 81 (cteexp -> ID paramsexp .)
+    DO              reduce using rule 81 (cteexp -> ID paramsexp .)
+
+
+state 75
+
+    (51) idarray -> LEFTSQR . exp RIGHTSQR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 123
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 76
+
+    (52) idarray -> empty .
+
+    EQUAL           reduce using rule 52 (idarray -> empty .)
+    TIMES           reduce using rule 52 (idarray -> empty .)
+    DIVIDE          reduce using rule 52 (idarray -> empty .)
+    PLUS            reduce using rule 52 (idarray -> empty .)
+    REST            reduce using rule 52 (idarray -> empty .)
+    GREATER         reduce using rule 52 (idarray -> empty .)
+    GREATERAND      reduce using rule 52 (idarray -> empty .)
+    LESSER          reduce using rule 52 (idarray -> empty .)
+    LESSERAND       reduce using rule 52 (idarray -> empty .)
+    SAME            reduce using rule 52 (idarray -> empty .)
+    NOTSAME         reduce using rule 52 (idarray -> empty .)
+    NOT             reduce using rule 52 (idarray -> empty .)
+    AND             reduce using rule 52 (idarray -> empty .)
+    OR              reduce using rule 52 (idarray -> empty .)
+    RIGHTBR         reduce using rule 52 (idarray -> empty .)
+    RIGHTPAR        reduce using rule 52 (idarray -> empty .)
+    RIGHTSQR        reduce using rule 52 (idarray -> empty .)
+    COMMA           reduce using rule 52 (idarray -> empty .)
+    SEMICOLON       reduce using rule 52 (idarray -> empty .)
+    TO              reduce using rule 52 (idarray -> empty .)
+    DO              reduce using rule 52 (idarray -> empty .)
+
+
+state 77
+
+    (82) paramsexp -> LEFTPAR . paramsexp2 RIGHTPAR
+    (84) paramsexp2 -> . exp auxparamsexp2
+    (85) paramsexp2 -> . empty
+    (53) exp -> . andexp exp1
+    (88) empty -> .
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    paramsexp2                     shift and go to state 124
+    exp                            shift and go to state 125
+    empty                          shift and go to state 126
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 78
+
+    (76) finexp -> LEFTPAR exp . RIGHTPAR
+
+    RIGHTPAR        shift and go to state 127
+
+
+state 79
+
+    (81) cteexp -> ID . paramsexp
+    (82) paramsexp -> . LEFTPAR paramsexp2 RIGHTPAR
+    (83) paramsexp -> . idarray
+    (51) idarray -> . LEFTSQR exp RIGHTSQR
+    (52) idarray -> . empty
+    (88) empty -> .
+
+    LEFTPAR         shift and go to state 77
+    LEFTSQR         shift and go to state 75
+    TIMES           reduce using rule 88 (empty -> .)
+    DIVIDE          reduce using rule 88 (empty -> .)
+    PLUS            reduce using rule 88 (empty -> .)
+    REST            reduce using rule 88 (empty -> .)
+    GREATER         reduce using rule 88 (empty -> .)
+    GREATERAND      reduce using rule 88 (empty -> .)
+    LESSER          reduce using rule 88 (empty -> .)
+    LESSERAND       reduce using rule 88 (empty -> .)
+    SAME            reduce using rule 88 (empty -> .)
+    NOTSAME         reduce using rule 88 (empty -> .)
+    NOT             reduce using rule 88 (empty -> .)
+    AND             reduce using rule 88 (empty -> .)
+    OR              reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+    RIGHTSQR        reduce using rule 88 (empty -> .)
+    COMMA           reduce using rule 88 (empty -> .)
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    SEMICOLON       reduce using rule 88 (empty -> .)
+    TO              reduce using rule 88 (empty -> .)
+    DO              reduce using rule 88 (empty -> .)
+
+    paramsexp                      shift and go to state 74
+    idarray                        shift and go to state 128
+    empty                          shift and go to state 76
+
+state 80
+
+    (1) program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR .
+
+    $end            reduce using rule 1 (program -> PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR .)
+
+
+state 81
+
+    (23) statutes -> assign statutesaux .
+
+    RIGHTBR         reduce using rule 23 (statutes -> assign statutesaux .)
+
+
+state 82
+
+    (24) statutes -> reading statutesaux .
+
+    RIGHTBR         reduce using rule 24 (statutes -> reading statutesaux .)
+
+
+state 83
+
+    (25) statutes -> writing statutesaux .
+
+    RIGHTBR         reduce using rule 25 (statutes -> writing statutesaux .)
+
+
+state 84
+
+    (26) statutes -> returning statutesaux .
+
+    RIGHTBR         reduce using rule 26 (statutes -> returning statutesaux .)
+
+
+state 85
+
+    (27) statutes -> ifing statutesaux .
+
+    RIGHTBR         reduce using rule 27 (statutes -> ifing statutesaux .)
+
+
+state 86
+
+    (28) statutes -> whiling statutesaux .
+
+    RIGHTBR         reduce using rule 28 (statutes -> whiling statutesaux .)
+
+
+state 87
+
+    (29) statutes -> foring statutesaux .
+
+    RIGHTBR         reduce using rule 29 (statutes -> foring statutesaux .)
+
+
+state 88
+
+    (30) statutes -> exp statutesaux .
+
+    RIGHTBR         reduce using rule 30 (statutes -> exp statutesaux .)
+
+
+state 89
+
+    (31) statutes -> specialfunc statutesaux .
+
+    RIGHTBR         reduce using rule 31 (statutes -> specialfunc statutesaux .)
+
+
+state 90
+
+    (42) reading -> READ LEFTPAR . ID idarray mulread RIGHTPAR SEMICOLON
+
+    ID              shift and go to state 129
+
+
+state 91
+
+    (35) writing -> WRITE LEFTPAR . auxwrite mulwrite RIGHTPAR SEMICOLON
+    (36) auxwrite -> . writetyping
+    (37) auxwrite -> . exp
+    (38) writetyping -> . STRING
+    (39) writetyping -> . CTECHAR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    STRING          shift and go to state 133
+    CTECHAR         shift and go to state 134
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    ID              shift and go to state 79
+
+    auxwrite                       shift and go to state 130
+    writetyping                    shift and go to state 131
+    exp                            shift and go to state 132
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 92
+
+    (45) returning -> RETURN LEFTPAR . exp RIGHTPAR SEMICOLON
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 135
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 93
+
+    (46) ifing -> IF LEFTPAR . exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 136
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 94
+
+    (49) whiling -> WHILE LEFTPAR . exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 137
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 95
+
+    (50) foring -> FOR ID . idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (51) idarray -> . LEFTSQR exp RIGHTSQR
+    (52) idarray -> . empty
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 75
+    EQUAL           reduce using rule 88 (empty -> .)
+
+    idarray                        shift and go to state 138
+    empty                          shift and go to state 76
+
+state 96
+
+    (53) exp -> andexp exp1 .
+
+    RIGHTBR         reduce using rule 53 (exp -> andexp exp1 .)
+    RIGHTPAR        reduce using rule 53 (exp -> andexp exp1 .)
+    RIGHTSQR        reduce using rule 53 (exp -> andexp exp1 .)
+    COMMA           reduce using rule 53 (exp -> andexp exp1 .)
+    SEMICOLON       reduce using rule 53 (exp -> andexp exp1 .)
+    TO              reduce using rule 53 (exp -> andexp exp1 .)
+    DO              reduce using rule 53 (exp -> andexp exp1 .)
+
+
+state 97
+
+    (54) exp1 -> OR . exp
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 139
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 98
+
+    (55) exp1 -> empty .
+
+    RIGHTBR         reduce using rule 55 (exp1 -> empty .)
+    RIGHTPAR        reduce using rule 55 (exp1 -> empty .)
+    RIGHTSQR        reduce using rule 55 (exp1 -> empty .)
+    COMMA           reduce using rule 55 (exp1 -> empty .)
+    SEMICOLON       reduce using rule 55 (exp1 -> empty .)
+    TO              reduce using rule 55 (exp1 -> empty .)
+    DO              reduce using rule 55 (exp1 -> empty .)
+
+
+state 99
+
+    (56) andexp -> boolexp andexp1 .
+
+    OR              reduce using rule 56 (andexp -> boolexp andexp1 .)
+    RIGHTBR         reduce using rule 56 (andexp -> boolexp andexp1 .)
+    RIGHTPAR        reduce using rule 56 (andexp -> boolexp andexp1 .)
+    RIGHTSQR        reduce using rule 56 (andexp -> boolexp andexp1 .)
+    COMMA           reduce using rule 56 (andexp -> boolexp andexp1 .)
+    SEMICOLON       reduce using rule 56 (andexp -> boolexp andexp1 .)
+    TO              reduce using rule 56 (andexp -> boolexp andexp1 .)
+    DO              reduce using rule 56 (andexp -> boolexp andexp1 .)
+
+
+state 100
+
+    (57) andexp1 -> AND . andexp
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    andexp                         shift and go to state 140
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 101
+
+    (58) andexp1 -> empty .
+
+    OR              reduce using rule 58 (andexp1 -> empty .)
+    RIGHTBR         reduce using rule 58 (andexp1 -> empty .)
+    RIGHTPAR        reduce using rule 58 (andexp1 -> empty .)
+    RIGHTSQR        reduce using rule 58 (andexp1 -> empty .)
+    COMMA           reduce using rule 58 (andexp1 -> empty .)
+    SEMICOLON       reduce using rule 58 (andexp1 -> empty .)
+    TO              reduce using rule 58 (andexp1 -> empty .)
+    DO              reduce using rule 58 (andexp1 -> empty .)
+
+
+state 102
+
+    (59) boolexp -> arithexp boolexp1 .
+
+    AND             reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    OR              reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    RIGHTBR         reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    RIGHTPAR        reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    RIGHTSQR        reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    COMMA           reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    SEMICOLON       reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    TO              reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+    DO              reduce using rule 59 (boolexp -> arithexp boolexp1 .)
+
+
+state 103
+
+    (60) boolexp1 -> GREATER . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 141
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 104
+
+    (61) boolexp1 -> GREATERAND . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 142
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 105
+
+    (62) boolexp1 -> LESSER . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 143
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 106
+
+    (63) boolexp1 -> LESSERAND . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 144
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 107
+
+    (64) boolexp1 -> SAME . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 145
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 108
+
+    (65) boolexp1 -> NOTSAME . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 146
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 109
+
+    (66) boolexp1 -> NOT . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 147
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 110
+
+    (67) boolexp1 -> empty .
+
+    AND             reduce using rule 67 (boolexp1 -> empty .)
+    OR              reduce using rule 67 (boolexp1 -> empty .)
+    RIGHTBR         reduce using rule 67 (boolexp1 -> empty .)
+    RIGHTPAR        reduce using rule 67 (boolexp1 -> empty .)
+    RIGHTSQR        reduce using rule 67 (boolexp1 -> empty .)
+    COMMA           reduce using rule 67 (boolexp1 -> empty .)
+    SEMICOLON       reduce using rule 67 (boolexp1 -> empty .)
+    TO              reduce using rule 67 (boolexp1 -> empty .)
+    DO              reduce using rule 67 (boolexp1 -> empty .)
+
+
+state 111
+
+    (68) arithexp -> geoexp arithexp1 .
+
+    GREATER         reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    GREATERAND      reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    LESSER          reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    LESSERAND       reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    SAME            reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    NOTSAME         reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    NOT             reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    AND             reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    OR              reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    RIGHTBR         reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    RIGHTPAR        reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    RIGHTSQR        reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    COMMA           reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    SEMICOLON       reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    TO              reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+    DO              reduce using rule 68 (arithexp -> geoexp arithexp1 .)
+
+
+state 112
+
+    (69) arithexp1 -> PLUS . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 148
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 113
+
+    (70) arithexp1 -> REST . arithexp
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    arithexp                       shift and go to state 149
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 114
+
+    (71) arithexp1 -> empty .
+
+    GREATER         reduce using rule 71 (arithexp1 -> empty .)
+    GREATERAND      reduce using rule 71 (arithexp1 -> empty .)
+    LESSER          reduce using rule 71 (arithexp1 -> empty .)
+    LESSERAND       reduce using rule 71 (arithexp1 -> empty .)
+    SAME            reduce using rule 71 (arithexp1 -> empty .)
+    NOTSAME         reduce using rule 71 (arithexp1 -> empty .)
+    NOT             reduce using rule 71 (arithexp1 -> empty .)
+    AND             reduce using rule 71 (arithexp1 -> empty .)
+    OR              reduce using rule 71 (arithexp1 -> empty .)
+    RIGHTBR         reduce using rule 71 (arithexp1 -> empty .)
+    RIGHTPAR        reduce using rule 71 (arithexp1 -> empty .)
+    RIGHTSQR        reduce using rule 71 (arithexp1 -> empty .)
+    COMMA           reduce using rule 71 (arithexp1 -> empty .)
+    SEMICOLON       reduce using rule 71 (arithexp1 -> empty .)
+    TO              reduce using rule 71 (arithexp1 -> empty .)
+    DO              reduce using rule 71 (arithexp1 -> empty .)
+
+
+state 115
+
+    (72) geoexp -> finexp geoexp1 .
+
+    PLUS            reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    REST            reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    GREATER         reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    GREATERAND      reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    LESSER          reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    LESSERAND       reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    SAME            reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    NOTSAME         reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    NOT             reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    AND             reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    OR              reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    RIGHTBR         reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    RIGHTPAR        reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    RIGHTSQR        reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    COMMA           reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    SEMICOLON       reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    TO              reduce using rule 72 (geoexp -> finexp geoexp1 .)
+    DO              reduce using rule 72 (geoexp -> finexp geoexp1 .)
+
+
+state 116
+
+    (73) geoexp1 -> TIMES . geoexp
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    geoexp                         shift and go to state 150
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 117
+
+    (74) geoexp1 -> DIVIDE . geoexp
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    geoexp                         shift and go to state 151
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 118
+
+    (75) geoexp1 -> empty .
+
+    PLUS            reduce using rule 75 (geoexp1 -> empty .)
+    REST            reduce using rule 75 (geoexp1 -> empty .)
+    GREATER         reduce using rule 75 (geoexp1 -> empty .)
+    GREATERAND      reduce using rule 75 (geoexp1 -> empty .)
+    LESSER          reduce using rule 75 (geoexp1 -> empty .)
+    LESSERAND       reduce using rule 75 (geoexp1 -> empty .)
+    SAME            reduce using rule 75 (geoexp1 -> empty .)
+    NOTSAME         reduce using rule 75 (geoexp1 -> empty .)
+    NOT             reduce using rule 75 (geoexp1 -> empty .)
+    AND             reduce using rule 75 (geoexp1 -> empty .)
+    OR              reduce using rule 75 (geoexp1 -> empty .)
+    RIGHTBR         reduce using rule 75 (geoexp1 -> empty .)
+    RIGHTPAR        reduce using rule 75 (geoexp1 -> empty .)
+    RIGHTSQR        reduce using rule 75 (geoexp1 -> empty .)
+    COMMA           reduce using rule 75 (geoexp1 -> empty .)
+    SEMICOLON       reduce using rule 75 (geoexp1 -> empty .)
+    TO              reduce using rule 75 (geoexp1 -> empty .)
+    DO              reduce using rule 75 (geoexp1 -> empty .)
+
+
+state 119
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON . varsgl LEFTBR statutes RIGHTBR modules
+    (3) varsgl -> . VARS vars
+    (4) varsgl -> . empty
+    (88) empty -> .
+
+    VARS            shift and go to state 7
+    LEFTBR          reduce using rule 88 (empty -> .)
+
+    varsgl                         shift and go to state 152
+    empty                          shift and go to state 8
+
+state 120
+
+    (19) parameters -> typing COLON ID . idarray mulparams
+    (51) idarray -> . LEFTSQR exp RIGHTSQR
+    (52) idarray -> . empty
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 75
+    COMMA           reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    idarray                        shift and go to state 153
+    empty                          shift and go to state 76
+
+state 121
+
+    (9) varsmul -> COMMA ID varsarr . varsmul
+    (9) varsmul -> . COMMA ID varsarr varsmul
+    (10) varsmul -> . SEMICOLON
+
+    COMMA           shift and go to state 37
+    SEMICOLON       shift and go to state 38
+
+    varsmul                        shift and go to state 154
+
+state 122
+
+    (34) assign -> ID idarray EQUAL . exp SEMICOLON
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 155
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 123
+
+    (51) idarray -> LEFTSQR exp . RIGHTSQR
+
+    RIGHTSQR        shift and go to state 156
+
+
+state 124
+
+    (82) paramsexp -> LEFTPAR paramsexp2 . RIGHTPAR
+
+    RIGHTPAR        shift and go to state 157
+
+
+state 125
+
+    (84) paramsexp2 -> exp . auxparamsexp2
+    (86) auxparamsexp2 -> . COMMA exp auxparamsexp2
+    (87) auxparamsexp2 -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 159
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    auxparamsexp2                  shift and go to state 158
+    empty                          shift and go to state 160
+
+state 126
+
+    (85) paramsexp2 -> empty .
+
+    RIGHTPAR        reduce using rule 85 (paramsexp2 -> empty .)
+
+
+state 127
+
+    (76) finexp -> LEFTPAR exp RIGHTPAR .
+
+    TIMES           reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    DIVIDE          reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    PLUS            reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    REST            reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    GREATER         reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    GREATERAND      reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    LESSER          reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    LESSERAND       reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    SAME            reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    NOTSAME         reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    NOT             reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    AND             reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    OR              reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    RIGHTBR         reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    RIGHTPAR        reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    RIGHTSQR        reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    COMMA           reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    SEMICOLON       reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    TO              reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+    DO              reduce using rule 76 (finexp -> LEFTPAR exp RIGHTPAR .)
+
+
+state 128
+
+    (83) paramsexp -> idarray .
+
+    TIMES           reduce using rule 83 (paramsexp -> idarray .)
+    DIVIDE          reduce using rule 83 (paramsexp -> idarray .)
+    PLUS            reduce using rule 83 (paramsexp -> idarray .)
+    REST            reduce using rule 83 (paramsexp -> idarray .)
+    GREATER         reduce using rule 83 (paramsexp -> idarray .)
+    GREATERAND      reduce using rule 83 (paramsexp -> idarray .)
+    LESSER          reduce using rule 83 (paramsexp -> idarray .)
+    LESSERAND       reduce using rule 83 (paramsexp -> idarray .)
+    SAME            reduce using rule 83 (paramsexp -> idarray .)
+    NOTSAME         reduce using rule 83 (paramsexp -> idarray .)
+    NOT             reduce using rule 83 (paramsexp -> idarray .)
+    AND             reduce using rule 83 (paramsexp -> idarray .)
+    OR              reduce using rule 83 (paramsexp -> idarray .)
+    RIGHTPAR        reduce using rule 83 (paramsexp -> idarray .)
+    RIGHTSQR        reduce using rule 83 (paramsexp -> idarray .)
+    COMMA           reduce using rule 83 (paramsexp -> idarray .)
+    RIGHTBR         reduce using rule 83 (paramsexp -> idarray .)
+    SEMICOLON       reduce using rule 83 (paramsexp -> idarray .)
+    TO              reduce using rule 83 (paramsexp -> idarray .)
+    DO              reduce using rule 83 (paramsexp -> idarray .)
+
+
+state 129
+
+    (42) reading -> READ LEFTPAR ID . idarray mulread RIGHTPAR SEMICOLON
+    (51) idarray -> . LEFTSQR exp RIGHTSQR
+    (52) idarray -> . empty
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 75
+    COMMA           reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    idarray                        shift and go to state 161
+    empty                          shift and go to state 76
+
+state 130
+
+    (35) writing -> WRITE LEFTPAR auxwrite . mulwrite RIGHTPAR SEMICOLON
+    (40) mulwrite -> . COMMA auxwrite mulwrite
+    (41) mulwrite -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 163
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    mulwrite                       shift and go to state 162
+    empty                          shift and go to state 164
+
+state 131
+
+    (36) auxwrite -> writetyping .
+
+    COMMA           reduce using rule 36 (auxwrite -> writetyping .)
+    RIGHTPAR        reduce using rule 36 (auxwrite -> writetyping .)
+
+
+state 132
+
+    (37) auxwrite -> exp .
+
+    COMMA           reduce using rule 37 (auxwrite -> exp .)
+    RIGHTPAR        reduce using rule 37 (auxwrite -> exp .)
+
+
+state 133
+
+    (38) writetyping -> STRING .
+
+    COMMA           reduce using rule 38 (writetyping -> STRING .)
+    RIGHTPAR        reduce using rule 38 (writetyping -> STRING .)
+
+
+state 134
+
+    (39) writetyping -> CTECHAR .
+    (80) cteexp -> CTECHAR .
+
+  ! reduce/reduce conflict for COMMA resolved using rule 39 (writetyping -> CTECHAR .)
+  ! reduce/reduce conflict for RIGHTPAR resolved using rule 39 (writetyping -> CTECHAR .)
+    COMMA           reduce using rule 39 (writetyping -> CTECHAR .)
+    RIGHTPAR        reduce using rule 39 (writetyping -> CTECHAR .)
+    TIMES           reduce using rule 80 (cteexp -> CTECHAR .)
+    DIVIDE          reduce using rule 80 (cteexp -> CTECHAR .)
+    PLUS            reduce using rule 80 (cteexp -> CTECHAR .)
+    REST            reduce using rule 80 (cteexp -> CTECHAR .)
+    GREATER         reduce using rule 80 (cteexp -> CTECHAR .)
+    GREATERAND      reduce using rule 80 (cteexp -> CTECHAR .)
+    LESSER          reduce using rule 80 (cteexp -> CTECHAR .)
+    LESSERAND       reduce using rule 80 (cteexp -> CTECHAR .)
+    SAME            reduce using rule 80 (cteexp -> CTECHAR .)
+    NOTSAME         reduce using rule 80 (cteexp -> CTECHAR .)
+    NOT             reduce using rule 80 (cteexp -> CTECHAR .)
+    AND             reduce using rule 80 (cteexp -> CTECHAR .)
+    OR              reduce using rule 80 (cteexp -> CTECHAR .)
+
+  ! COMMA           [ reduce using rule 80 (cteexp -> CTECHAR .) ]
+  ! RIGHTPAR        [ reduce using rule 80 (cteexp -> CTECHAR .) ]
+
+
+state 135
+
+    (45) returning -> RETURN LEFTPAR exp . RIGHTPAR SEMICOLON
+
+    RIGHTPAR        shift and go to state 165
+
+
+state 136
+
+    (46) ifing -> IF LEFTPAR exp . RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+
+    RIGHTPAR        shift and go to state 166
+
+
+state 137
+
+    (49) whiling -> WHILE LEFTPAR exp . RIGHTPAR DO LEFTBR statutes RIGHTBR
+
+    RIGHTPAR        shift and go to state 167
+
+
+state 138
+
+    (50) foring -> FOR ID idarray . EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+
+    EQUAL           shift and go to state 168
+
+
+state 139
+
+    (54) exp1 -> OR exp .
+
+    RIGHTBR         reduce using rule 54 (exp1 -> OR exp .)
+    RIGHTPAR        reduce using rule 54 (exp1 -> OR exp .)
+    RIGHTSQR        reduce using rule 54 (exp1 -> OR exp .)
+    COMMA           reduce using rule 54 (exp1 -> OR exp .)
+    SEMICOLON       reduce using rule 54 (exp1 -> OR exp .)
+    TO              reduce using rule 54 (exp1 -> OR exp .)
+    DO              reduce using rule 54 (exp1 -> OR exp .)
+
+
+state 140
+
+    (57) andexp1 -> AND andexp .
+
+    OR              reduce using rule 57 (andexp1 -> AND andexp .)
+    RIGHTBR         reduce using rule 57 (andexp1 -> AND andexp .)
+    RIGHTPAR        reduce using rule 57 (andexp1 -> AND andexp .)
+    RIGHTSQR        reduce using rule 57 (andexp1 -> AND andexp .)
+    COMMA           reduce using rule 57 (andexp1 -> AND andexp .)
+    SEMICOLON       reduce using rule 57 (andexp1 -> AND andexp .)
+    TO              reduce using rule 57 (andexp1 -> AND andexp .)
+    DO              reduce using rule 57 (andexp1 -> AND andexp .)
+
+
+state 141
+
+    (60) boolexp1 -> GREATER arithexp .
+
+    AND             reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    OR              reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    RIGHTBR         reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    RIGHTPAR        reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    RIGHTSQR        reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    COMMA           reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    SEMICOLON       reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    TO              reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+    DO              reduce using rule 60 (boolexp1 -> GREATER arithexp .)
+
+
+state 142
+
+    (61) boolexp1 -> GREATERAND arithexp .
+
+    AND             reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    OR              reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    RIGHTBR         reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    RIGHTPAR        reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    RIGHTSQR        reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    COMMA           reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    SEMICOLON       reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    TO              reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+    DO              reduce using rule 61 (boolexp1 -> GREATERAND arithexp .)
+
+
+state 143
+
+    (62) boolexp1 -> LESSER arithexp .
+
+    AND             reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    OR              reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    RIGHTBR         reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    RIGHTPAR        reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    RIGHTSQR        reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    COMMA           reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    SEMICOLON       reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    TO              reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+    DO              reduce using rule 62 (boolexp1 -> LESSER arithexp .)
+
+
+state 144
+
+    (63) boolexp1 -> LESSERAND arithexp .
+
+    AND             reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    OR              reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    RIGHTBR         reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    RIGHTPAR        reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    RIGHTSQR        reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    COMMA           reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    SEMICOLON       reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    TO              reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+    DO              reduce using rule 63 (boolexp1 -> LESSERAND arithexp .)
+
+
+state 145
+
+    (64) boolexp1 -> SAME arithexp .
+
+    AND             reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    OR              reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    RIGHTBR         reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    RIGHTPAR        reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    RIGHTSQR        reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    COMMA           reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    SEMICOLON       reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    TO              reduce using rule 64 (boolexp1 -> SAME arithexp .)
+    DO              reduce using rule 64 (boolexp1 -> SAME arithexp .)
+
+
+state 146
+
+    (65) boolexp1 -> NOTSAME arithexp .
+
+    AND             reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    OR              reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    RIGHTBR         reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    RIGHTPAR        reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    RIGHTSQR        reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    COMMA           reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    SEMICOLON       reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    TO              reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+    DO              reduce using rule 65 (boolexp1 -> NOTSAME arithexp .)
+
+
+state 147
+
+    (66) boolexp1 -> NOT arithexp .
+
+    AND             reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    OR              reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    RIGHTBR         reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    RIGHTPAR        reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    RIGHTSQR        reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    COMMA           reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    SEMICOLON       reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    TO              reduce using rule 66 (boolexp1 -> NOT arithexp .)
+    DO              reduce using rule 66 (boolexp1 -> NOT arithexp .)
+
+
+state 148
+
+    (69) arithexp1 -> PLUS arithexp .
+
+    GREATER         reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    GREATERAND      reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    LESSER          reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    LESSERAND       reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    SAME            reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    NOTSAME         reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    NOT             reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    AND             reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    OR              reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    RIGHTBR         reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    RIGHTPAR        reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    RIGHTSQR        reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    COMMA           reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    SEMICOLON       reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    TO              reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+    DO              reduce using rule 69 (arithexp1 -> PLUS arithexp .)
+
+
+state 149
+
+    (70) arithexp1 -> REST arithexp .
+
+    GREATER         reduce using rule 70 (arithexp1 -> REST arithexp .)
+    GREATERAND      reduce using rule 70 (arithexp1 -> REST arithexp .)
+    LESSER          reduce using rule 70 (arithexp1 -> REST arithexp .)
+    LESSERAND       reduce using rule 70 (arithexp1 -> REST arithexp .)
+    SAME            reduce using rule 70 (arithexp1 -> REST arithexp .)
+    NOTSAME         reduce using rule 70 (arithexp1 -> REST arithexp .)
+    NOT             reduce using rule 70 (arithexp1 -> REST arithexp .)
+    AND             reduce using rule 70 (arithexp1 -> REST arithexp .)
+    OR              reduce using rule 70 (arithexp1 -> REST arithexp .)
+    RIGHTBR         reduce using rule 70 (arithexp1 -> REST arithexp .)
+    RIGHTPAR        reduce using rule 70 (arithexp1 -> REST arithexp .)
+    RIGHTSQR        reduce using rule 70 (arithexp1 -> REST arithexp .)
+    COMMA           reduce using rule 70 (arithexp1 -> REST arithexp .)
+    SEMICOLON       reduce using rule 70 (arithexp1 -> REST arithexp .)
+    TO              reduce using rule 70 (arithexp1 -> REST arithexp .)
+    DO              reduce using rule 70 (arithexp1 -> REST arithexp .)
+
+
+state 150
+
+    (73) geoexp1 -> TIMES geoexp .
+
+    PLUS            reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    REST            reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    GREATER         reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    GREATERAND      reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    LESSER          reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    LESSERAND       reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    SAME            reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    NOTSAME         reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    NOT             reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    AND             reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    OR              reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    RIGHTBR         reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    RIGHTPAR        reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    RIGHTSQR        reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    COMMA           reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    SEMICOLON       reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    TO              reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+    DO              reduce using rule 73 (geoexp1 -> TIMES geoexp .)
+
+
+state 151
+
+    (74) geoexp1 -> DIVIDE geoexp .
+
+    PLUS            reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    REST            reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    GREATER         reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    GREATERAND      reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    LESSER          reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    LESSERAND       reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    SAME            reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    NOTSAME         reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    NOT             reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    AND             reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    OR              reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    RIGHTBR         reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    RIGHTPAR        reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    RIGHTSQR        reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    COMMA           reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    SEMICOLON       reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    TO              reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+    DO              reduce using rule 74 (geoexp1 -> DIVIDE geoexp .)
+
+
+state 152
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl . LEFTBR statutes RIGHTBR modules
+
+    LEFTBR          shift and go to state 169
+
+
+state 153
+
+    (19) parameters -> typing COLON ID idarray . mulparams
+    (21) mulparams -> . COMMA parameters
+    (22) mulparams -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 171
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    mulparams                      shift and go to state 170
+    empty                          shift and go to state 172
+
+state 154
+
+    (9) varsmul -> COMMA ID varsarr varsmul .
+
+    INT             reduce using rule 9 (varsmul -> COMMA ID varsarr varsmul .)
+    FLOAT           reduce using rule 9 (varsmul -> COMMA ID varsarr varsmul .)
+    CHAR            reduce using rule 9 (varsmul -> COMMA ID varsarr varsmul .)
+    FUNCTION        reduce using rule 9 (varsmul -> COMMA ID varsarr varsmul .)
+    MAIN            reduce using rule 9 (varsmul -> COMMA ID varsarr varsmul .)
+    LEFTBR          reduce using rule 9 (varsmul -> COMMA ID varsarr varsmul .)
+
+
+state 155
+
+    (34) assign -> ID idarray EQUAL exp . SEMICOLON
+
+    SEMICOLON       shift and go to state 173
+
+
+state 156
+
+    (51) idarray -> LEFTSQR exp RIGHTSQR .
+
+    EQUAL           reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    TIMES           reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    DIVIDE          reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    PLUS            reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    REST            reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    GREATER         reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    GREATERAND      reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    LESSER          reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    LESSERAND       reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    SAME            reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    NOTSAME         reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    NOT             reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    AND             reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    OR              reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    RIGHTBR         reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    RIGHTPAR        reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    RIGHTSQR        reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    COMMA           reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    SEMICOLON       reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    TO              reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+    DO              reduce using rule 51 (idarray -> LEFTSQR exp RIGHTSQR .)
+
+
+state 157
+
+    (82) paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .
+
+    TIMES           reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    DIVIDE          reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    PLUS            reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    REST            reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    GREATER         reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    GREATERAND      reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    LESSER          reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    LESSERAND       reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    SAME            reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    NOTSAME         reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    NOT             reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    AND             reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    OR              reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    RIGHTBR         reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    RIGHTPAR        reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    RIGHTSQR        reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    COMMA           reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    SEMICOLON       reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    TO              reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+    DO              reduce using rule 82 (paramsexp -> LEFTPAR paramsexp2 RIGHTPAR .)
+
+
+state 158
+
+    (84) paramsexp2 -> exp auxparamsexp2 .
+
+    RIGHTPAR        reduce using rule 84 (paramsexp2 -> exp auxparamsexp2 .)
+
+
+state 159
+
+    (86) auxparamsexp2 -> COMMA . exp auxparamsexp2
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 174
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 160
+
+    (87) auxparamsexp2 -> empty .
+
+    RIGHTPAR        reduce using rule 87 (auxparamsexp2 -> empty .)
+
+
+state 161
+
+    (42) reading -> READ LEFTPAR ID idarray . mulread RIGHTPAR SEMICOLON
+    (43) mulread -> . COMMA ID idarray mulread
+    (44) mulread -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 176
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    mulread                        shift and go to state 175
+    empty                          shift and go to state 177
+
+state 162
+
+    (35) writing -> WRITE LEFTPAR auxwrite mulwrite . RIGHTPAR SEMICOLON
+
+    RIGHTPAR        shift and go to state 178
+
+
+state 163
+
+    (40) mulwrite -> COMMA . auxwrite mulwrite
+    (36) auxwrite -> . writetyping
+    (37) auxwrite -> . exp
+    (38) writetyping -> . STRING
+    (39) writetyping -> . CTECHAR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    STRING          shift and go to state 133
+    CTECHAR         shift and go to state 134
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    ID              shift and go to state 79
+
+    auxwrite                       shift and go to state 179
+    writetyping                    shift and go to state 131
+    exp                            shift and go to state 132
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 164
+
+    (41) mulwrite -> empty .
+
+    RIGHTPAR        reduce using rule 41 (mulwrite -> empty .)
+
+
+state 165
+
+    (45) returning -> RETURN LEFTPAR exp RIGHTPAR . SEMICOLON
+
+    SEMICOLON       shift and go to state 180
+
+
+state 166
+
+    (46) ifing -> IF LEFTPAR exp RIGHTPAR . THEN LEFTBR statutes RIGHTBR elsing
+
+    THEN            shift and go to state 181
+
+
+state 167
+
+    (49) whiling -> WHILE LEFTPAR exp RIGHTPAR . DO LEFTBR statutes RIGHTBR
+
+    DO              shift and go to state 182
+
+
+state 168
+
+    (50) foring -> FOR ID idarray EQUAL . exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 183
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 169
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR . statutes RIGHTBR modules
+    (23) statutes -> . assign statutesaux
+    (24) statutes -> . reading statutesaux
+    (25) statutes -> . writing statutesaux
+    (26) statutes -> . returning statutesaux
+    (27) statutes -> . ifing statutesaux
+    (28) statutes -> . whiling statutesaux
+    (29) statutes -> . foring statutesaux
+    (30) statutes -> . exp statutesaux
+    (31) statutes -> . specialfunc statutesaux
+    (34) assign -> . ID idarray EQUAL exp SEMICOLON
+    (42) reading -> . READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    (35) writing -> . WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    (45) returning -> . RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    (46) ifing -> . IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (49) whiling -> . WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (50) foring -> . FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (33) specialfunc -> . empty
+    (56) andexp -> . boolexp andexp1
+    (88) empty -> .
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    ID              shift and go to state 40
+    READ            shift and go to state 52
+    WRITE           shift and go to state 53
+    RETURN          shift and go to state 54
+    IF              shift and go to state 55
+    WHILE           shift and go to state 56
+    FOR             shift and go to state 57
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+
+    statutes                       shift and go to state 184
+    assign                         shift and go to state 43
+    reading                        shift and go to state 44
+    writing                        shift and go to state 45
+    returning                      shift and go to state 46
+    ifing                          shift and go to state 47
+    whiling                        shift and go to state 48
+    foring                         shift and go to state 49
+    exp                            shift and go to state 50
+    specialfunc                    shift and go to state 51
+    andexp                         shift and go to state 58
+    empty                          shift and go to state 59
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 170
+
+    (19) parameters -> typing COLON ID idarray mulparams .
+
+    RIGHTPAR        reduce using rule 19 (parameters -> typing COLON ID idarray mulparams .)
+
+
+state 171
+
+    (21) mulparams -> COMMA . parameters
+    (19) parameters -> . typing COLON ID idarray mulparams
+    (20) parameters -> . empty
+    (16) typing -> . INT
+    (17) typing -> . FLOAT
+    (18) typing -> . CHAR
+    (88) empty -> .
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    CHAR            shift and go to state 17
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    parameters                     shift and go to state 185
+    typing                         shift and go to state 34
+    empty                          shift and go to state 35
+
+state 172
+
+    (22) mulparams -> empty .
+
+    RIGHTPAR        reduce using rule 22 (mulparams -> empty .)
+
+
+state 173
+
+    (34) assign -> ID idarray EQUAL exp SEMICOLON .
+
+    RIGHTBR         reduce using rule 34 (assign -> ID idarray EQUAL exp SEMICOLON .)
+
+
+state 174
+
+    (86) auxparamsexp2 -> COMMA exp . auxparamsexp2
+    (86) auxparamsexp2 -> . COMMA exp auxparamsexp2
+    (87) auxparamsexp2 -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 159
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    auxparamsexp2                  shift and go to state 186
+    empty                          shift and go to state 160
+
+state 175
+
+    (42) reading -> READ LEFTPAR ID idarray mulread . RIGHTPAR SEMICOLON
+
+    RIGHTPAR        shift and go to state 187
+
+
+state 176
+
+    (43) mulread -> COMMA . ID idarray mulread
+
+    ID              shift and go to state 188
+
+
+state 177
+
+    (44) mulread -> empty .
+
+    RIGHTPAR        reduce using rule 44 (mulread -> empty .)
+
+
+state 178
+
+    (35) writing -> WRITE LEFTPAR auxwrite mulwrite RIGHTPAR . SEMICOLON
+
+    SEMICOLON       shift and go to state 189
+
+
+state 179
+
+    (40) mulwrite -> COMMA auxwrite . mulwrite
+    (40) mulwrite -> . COMMA auxwrite mulwrite
+    (41) mulwrite -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 163
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    mulwrite                       shift and go to state 190
+    empty                          shift and go to state 164
+
+state 180
+
+    (45) returning -> RETURN LEFTPAR exp RIGHTPAR SEMICOLON .
+
+    RIGHTBR         reduce using rule 45 (returning -> RETURN LEFTPAR exp RIGHTPAR SEMICOLON .)
+
+
+state 181
+
+    (46) ifing -> IF LEFTPAR exp RIGHTPAR THEN . LEFTBR statutes RIGHTBR elsing
+
+    LEFTBR          shift and go to state 191
+
+
+state 182
+
+    (49) whiling -> WHILE LEFTPAR exp RIGHTPAR DO . LEFTBR statutes RIGHTBR
+
+    LEFTBR          shift and go to state 192
+
+
+state 183
+
+    (50) foring -> FOR ID idarray EQUAL exp . TO exp DO LEFTBR statutes RIGHTBR
+
+    TO              shift and go to state 193
+
+
+state 184
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes . RIGHTBR modules
+
+    RIGHTBR         shift and go to state 194
+
+
+state 185
+
+    (21) mulparams -> COMMA parameters .
+
+    RIGHTPAR        reduce using rule 21 (mulparams -> COMMA parameters .)
+
+
+state 186
+
+    (86) auxparamsexp2 -> COMMA exp auxparamsexp2 .
+
+    RIGHTPAR        reduce using rule 86 (auxparamsexp2 -> COMMA exp auxparamsexp2 .)
+
+
+state 187
+
+    (42) reading -> READ LEFTPAR ID idarray mulread RIGHTPAR . SEMICOLON
+
+    SEMICOLON       shift and go to state 195
+
+
+state 188
+
+    (43) mulread -> COMMA ID . idarray mulread
+    (51) idarray -> . LEFTSQR exp RIGHTSQR
+    (52) idarray -> . empty
+    (88) empty -> .
+
+    LEFTSQR         shift and go to state 75
+    COMMA           reduce using rule 88 (empty -> .)
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    idarray                        shift and go to state 196
+    empty                          shift and go to state 76
+
+state 189
+
+    (35) writing -> WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON .
+
+    RIGHTBR         reduce using rule 35 (writing -> WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON .)
+
+
+state 190
+
+    (40) mulwrite -> COMMA auxwrite mulwrite .
+
+    RIGHTPAR        reduce using rule 40 (mulwrite -> COMMA auxwrite mulwrite .)
+
+
+state 191
+
+    (46) ifing -> IF LEFTPAR exp RIGHTPAR THEN LEFTBR . statutes RIGHTBR elsing
+    (23) statutes -> . assign statutesaux
+    (24) statutes -> . reading statutesaux
+    (25) statutes -> . writing statutesaux
+    (26) statutes -> . returning statutesaux
+    (27) statutes -> . ifing statutesaux
+    (28) statutes -> . whiling statutesaux
+    (29) statutes -> . foring statutesaux
+    (30) statutes -> . exp statutesaux
+    (31) statutes -> . specialfunc statutesaux
+    (34) assign -> . ID idarray EQUAL exp SEMICOLON
+    (42) reading -> . READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    (35) writing -> . WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    (45) returning -> . RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    (46) ifing -> . IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (49) whiling -> . WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (50) foring -> . FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (33) specialfunc -> . empty
+    (56) andexp -> . boolexp andexp1
+    (88) empty -> .
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    ID              shift and go to state 40
+    READ            shift and go to state 52
+    WRITE           shift and go to state 53
+    RETURN          shift and go to state 54
+    IF              shift and go to state 55
+    WHILE           shift and go to state 56
+    FOR             shift and go to state 57
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+
+    exp                            shift and go to state 50
+    statutes                       shift and go to state 197
+    assign                         shift and go to state 43
+    reading                        shift and go to state 44
+    writing                        shift and go to state 45
+    returning                      shift and go to state 46
+    ifing                          shift and go to state 47
+    whiling                        shift and go to state 48
+    foring                         shift and go to state 49
+    specialfunc                    shift and go to state 51
+    andexp                         shift and go to state 58
+    empty                          shift and go to state 59
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 192
+
+    (49) whiling -> WHILE LEFTPAR exp RIGHTPAR DO LEFTBR . statutes RIGHTBR
+    (23) statutes -> . assign statutesaux
+    (24) statutes -> . reading statutesaux
+    (25) statutes -> . writing statutesaux
+    (26) statutes -> . returning statutesaux
+    (27) statutes -> . ifing statutesaux
+    (28) statutes -> . whiling statutesaux
+    (29) statutes -> . foring statutesaux
+    (30) statutes -> . exp statutesaux
+    (31) statutes -> . specialfunc statutesaux
+    (34) assign -> . ID idarray EQUAL exp SEMICOLON
+    (42) reading -> . READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    (35) writing -> . WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    (45) returning -> . RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    (46) ifing -> . IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (49) whiling -> . WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (50) foring -> . FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (33) specialfunc -> . empty
+    (56) andexp -> . boolexp andexp1
+    (88) empty -> .
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    ID              shift and go to state 40
+    READ            shift and go to state 52
+    WRITE           shift and go to state 53
+    RETURN          shift and go to state 54
+    IF              shift and go to state 55
+    WHILE           shift and go to state 56
+    FOR             shift and go to state 57
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+
+    exp                            shift and go to state 50
+    statutes                       shift and go to state 198
+    assign                         shift and go to state 43
+    reading                        shift and go to state 44
+    writing                        shift and go to state 45
+    returning                      shift and go to state 46
+    ifing                          shift and go to state 47
+    whiling                        shift and go to state 48
+    foring                         shift and go to state 49
+    specialfunc                    shift and go to state 51
+    andexp                         shift and go to state 58
+    empty                          shift and go to state 59
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 193
+
+    (50) foring -> FOR ID idarray EQUAL exp TO . exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (56) andexp -> . boolexp andexp1
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+    ID              shift and go to state 79
+
+    exp                            shift and go to state 199
+    andexp                         shift and go to state 58
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 194
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR . modules
+    (11) modules -> . FUNCTION functype ID funcparam
+    (12) modules -> . empty
+    (88) empty -> .
+
+    FUNCTION        shift and go to state 10
+    MAIN            reduce using rule 88 (empty -> .)
+
+    modules                        shift and go to state 200
+    empty                          shift and go to state 11
+
+state 195
+
+    (42) reading -> READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON .
+
+    RIGHTBR         reduce using rule 42 (reading -> READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON .)
+
+
+state 196
+
+    (43) mulread -> COMMA ID idarray . mulread
+    (43) mulread -> . COMMA ID idarray mulread
+    (44) mulread -> . empty
+    (88) empty -> .
+
+    COMMA           shift and go to state 176
+    RIGHTPAR        reduce using rule 88 (empty -> .)
+
+    mulread                        shift and go to state 201
+    empty                          shift and go to state 177
+
+state 197
+
+    (46) ifing -> IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes . RIGHTBR elsing
+
+    RIGHTBR         shift and go to state 202
+
+
+state 198
+
+    (49) whiling -> WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes . RIGHTBR
+
+    RIGHTBR         shift and go to state 203
+
+
+state 199
+
+    (50) foring -> FOR ID idarray EQUAL exp TO exp . DO LEFTBR statutes RIGHTBR
+
+    DO              shift and go to state 204
+
+
+state 200
+
+    (15) funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules .
+
+    MAIN            reduce using rule 15 (funcparam -> LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR modules .)
+
+
+state 201
+
+    (43) mulread -> COMMA ID idarray mulread .
+
+    RIGHTPAR        reduce using rule 43 (mulread -> COMMA ID idarray mulread .)
+
+
+state 202
+
+    (46) ifing -> IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR . elsing
+    (47) elsing -> . ELSE LEFTBR statutes RIGHTBR
+    (48) elsing -> . empty
+    (88) empty -> .
+
+    ELSE            shift and go to state 206
+    RIGHTBR         reduce using rule 88 (empty -> .)
+
+    elsing                         shift and go to state 205
+    empty                          shift and go to state 207
+
+state 203
+
+    (49) whiling -> WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR .
+
+    RIGHTBR         reduce using rule 49 (whiling -> WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR .)
+
+
+state 204
+
+    (50) foring -> FOR ID idarray EQUAL exp TO exp DO . LEFTBR statutes RIGHTBR
+
+    LEFTBR          shift and go to state 208
+
+
+state 205
+
+    (46) ifing -> IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing .
+
+    RIGHTBR         reduce using rule 46 (ifing -> IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing .)
+
+
+state 206
+
+    (47) elsing -> ELSE . LEFTBR statutes RIGHTBR
+
+    LEFTBR          shift and go to state 209
+
+
+state 207
+
+    (48) elsing -> empty .
+
+    RIGHTBR         reduce using rule 48 (elsing -> empty .)
+
+
+state 208
+
+    (50) foring -> FOR ID idarray EQUAL exp TO exp DO LEFTBR . statutes RIGHTBR
+    (23) statutes -> . assign statutesaux
+    (24) statutes -> . reading statutesaux
+    (25) statutes -> . writing statutesaux
+    (26) statutes -> . returning statutesaux
+    (27) statutes -> . ifing statutesaux
+    (28) statutes -> . whiling statutesaux
+    (29) statutes -> . foring statutesaux
+    (30) statutes -> . exp statutesaux
+    (31) statutes -> . specialfunc statutesaux
+    (34) assign -> . ID idarray EQUAL exp SEMICOLON
+    (42) reading -> . READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    (35) writing -> . WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    (45) returning -> . RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    (46) ifing -> . IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (49) whiling -> . WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (50) foring -> . FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (33) specialfunc -> . empty
+    (56) andexp -> . boolexp andexp1
+    (88) empty -> .
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    ID              shift and go to state 40
+    READ            shift and go to state 52
+    WRITE           shift and go to state 53
+    RETURN          shift and go to state 54
+    IF              shift and go to state 55
+    WHILE           shift and go to state 56
+    FOR             shift and go to state 57
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+
+    exp                            shift and go to state 50
+    statutes                       shift and go to state 210
+    assign                         shift and go to state 43
+    reading                        shift and go to state 44
+    writing                        shift and go to state 45
+    returning                      shift and go to state 46
+    ifing                          shift and go to state 47
+    whiling                        shift and go to state 48
+    foring                         shift and go to state 49
+    specialfunc                    shift and go to state 51
+    andexp                         shift and go to state 58
+    empty                          shift and go to state 59
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 209
+
+    (47) elsing -> ELSE LEFTBR . statutes RIGHTBR
+    (23) statutes -> . assign statutesaux
+    (24) statutes -> . reading statutesaux
+    (25) statutes -> . writing statutesaux
+    (26) statutes -> . returning statutesaux
+    (27) statutes -> . ifing statutesaux
+    (28) statutes -> . whiling statutesaux
+    (29) statutes -> . foring statutesaux
+    (30) statutes -> . exp statutesaux
+    (31) statutes -> . specialfunc statutesaux
+    (34) assign -> . ID idarray EQUAL exp SEMICOLON
+    (42) reading -> . READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    (35) writing -> . WRITE LEFTPAR auxwrite mulwrite RIGHTPAR SEMICOLON
+    (45) returning -> . RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    (46) ifing -> . IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    (49) whiling -> . WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    (50) foring -> . FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    (53) exp -> . andexp exp1
+    (33) specialfunc -> . empty
+    (56) andexp -> . boolexp andexp1
+    (88) empty -> .
+    (59) boolexp -> . arithexp boolexp1
+    (68) arithexp -> . geoexp arithexp1
+    (72) geoexp -> . finexp geoexp1
+    (76) finexp -> . LEFTPAR exp RIGHTPAR
+    (77) finexp -> . cteexp
+    (78) cteexp -> . CTEINT
+    (79) cteexp -> . CTEFLOAT
+    (80) cteexp -> . CTECHAR
+    (81) cteexp -> . ID paramsexp
+
+    ID              shift and go to state 40
+    READ            shift and go to state 52
+    WRITE           shift and go to state 53
+    RETURN          shift and go to state 54
+    IF              shift and go to state 55
+    WHILE           shift and go to state 56
+    FOR             shift and go to state 57
+    RIGHTBR         reduce using rule 88 (empty -> .)
+    LEFTPAR         shift and go to state 41
+    CTEINT          shift and go to state 65
+    CTEFLOAT        shift and go to state 66
+    CTECHAR         shift and go to state 67
+
+    statutes                       shift and go to state 211
+    assign                         shift and go to state 43
+    reading                        shift and go to state 44
+    writing                        shift and go to state 45
+    returning                      shift and go to state 46
+    ifing                          shift and go to state 47
+    whiling                        shift and go to state 48
+    foring                         shift and go to state 49
+    exp                            shift and go to state 50
+    specialfunc                    shift and go to state 51
+    andexp                         shift and go to state 58
+    empty                          shift and go to state 59
+    boolexp                        shift and go to state 60
+    arithexp                       shift and go to state 61
+    geoexp                         shift and go to state 62
+    finexp                         shift and go to state 63
+    cteexp                         shift and go to state 64
+
+state 210
+
+    (50) foring -> FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes . RIGHTBR
+
+    RIGHTBR         shift and go to state 212
+
+
+state 211
+
+    (47) elsing -> ELSE LEFTBR statutes . RIGHTBR
+
+    RIGHTBR         shift and go to state 213
+
+
+state 212
+
+    (50) foring -> FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR .
+
+    RIGHTBR         reduce using rule 50 (foring -> FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR .)
+
+
+state 213
+
+    (47) elsing -> ELSE LEFTBR statutes RIGHTBR .
+
+    RIGHTBR         reduce using rule 47 (elsing -> ELSE LEFTBR statutes RIGHTBR .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: reduce/reduce conflict in state 134 resolved using rule (writetyping -> CTECHAR)
+WARNING: rejected rule (cteexp -> CTECHAR) in state 134

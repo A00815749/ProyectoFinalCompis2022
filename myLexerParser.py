@@ -23,6 +23,14 @@ arch = input("Nombre del archivo para compilar : ")
 ###################----------------GLOBAL VARIABLES AND METHODS------------------###################
 ###### PYTHON SETS, MUTABLE, ORDER OF ELEMENTS NOT IMPORTANT############
 
+Tableof_functions = {} # The table set where we store the functions name and other things
+GlobalVar_set = {} # Storing the variables in a global context
+LocalVar_set = {} # Local context
+ConstantVar_set = {} # Direct values of variables that don't change in the running process
+
+
+
+
 #The Operation number that will be stored inside the quads product indicating which type of operation the quads is
 
 ##### PYTHON LISTS, MUTABLE, ORDER OF ELEMENTS INHERENT IN THEIR APPLICATION, CAN FUNCTION AS STACKS #############
@@ -240,11 +248,15 @@ lexer = lex.lex()
 
 def p_PROGRAM(p): #PROGRAM SHELL LOGIC
     '''
-    program : PROGRAM ID SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+    program : PROGRAM ID neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
     '''
     print ('Llego al final de la gramatica, aceptado \n')
 
-
+def p_NEURALTABLEFUNCTIONS(p):
+    '''
+    neuraltablefunctions :
+    '''
+    #print ('Chekeo')
 
 ####### VARIABLES DECLARATION HANDLING ##########
 
@@ -326,13 +338,15 @@ def p_STATUTES(p):
             | specialfunc statutesaux
     '''
 
+def p_STATUTESAUX(p):
+    '''
+    statutesaux :
+    '''
 
-
-#def p_FUNCTYPE(p):
-#    '''
-#    specialfuncs : empty
-#            | empty
-#    '''
+def p_SPECIALFUNC(p):
+    '''
+    specialfunc : empty
+    '''
 
 
 
@@ -400,7 +414,7 @@ def p_IFING(p):
 
 def p_ELSING(p):
     '''
-    elsing : ELSE LEFTBR STATUTES RIGHTBR
+    elsing : ELSE LEFTBR statutes RIGHTBR
             | empty
     '''
 
@@ -454,7 +468,7 @@ def p_ANDEXP1(p):
 
 def p_BOOLEXP(p):
     '''
-    boolexp : arithexp arithexp1
+    boolexp : arithexp boolexp1
     '''
 
 def p_BOOLEXP1(p):
@@ -537,17 +551,18 @@ def p_empty(p):
 
 def p_error(p):
     print ("Syntax Error in '%s'" % p.value)
+    print ("The token is ")
     print (p)
     sys.exit()
 
 
 ##ALTERNATIVE FILEHANDLER
-#
-#import ply.yacc as yacc
-#parser = yacc.yacc()
-#f = open("./"+arch , "r")
-#input = f.read()
-#parser.parse(input, debug=0)
+
+import ply.yacc as yacc
+parser = yacc.yacc()
+f = open("./"+arch , "r")
+input = f.read()
+parser.parse(input, debug=0)
 #output = open("Quads.mir", "w")
 #for x in QUADSlist:
 #    output.write(str(x.QUADcounter)+ "~" + str(x.operator) + "~" + str(x.LeftOperand)+ "~" + str(x.RightOperand) + "~" + str(x.result) + "\n")
