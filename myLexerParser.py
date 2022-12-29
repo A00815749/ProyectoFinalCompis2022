@@ -242,7 +242,6 @@ lexer = lex.lex()
 
 
 
-
 #-----------------------------------OUTER INITIAL SHELL---------------------------------------------#
 #functions = modules
 
@@ -338,9 +337,10 @@ def p_STATUTES(p):
             | specialfunc statutesaux
     '''
 
-def p_STATUTESAUX(p):
+def p_STATUTESAUX(p): # Repeat of statutes
     '''
-    statutesaux :
+    statutesaux : statutes 
+                | empty
     '''
 
 def p_SPECIALFUNC(p):
@@ -352,7 +352,7 @@ def p_SPECIALFUNC(p):
 
 def p_ASSIGN(p):
     '''
-    assign : ID idarray EQUAL exp SEMICOLON
+    assign : ID idarray EQUAL exp SEMICOLON 
     '''
 
 
@@ -554,6 +554,13 @@ def p_error(p):
     print ("The token is ")
     print (p)
     sys.exit()
+
+def p_DEBUG(p): # Manual Debugger 
+    '''
+    debug : empty
+    '''
+    print ("Llego aqui")
+
 
 
 ##ALTERNATIVE FILEHANDLER
