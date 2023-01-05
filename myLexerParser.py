@@ -400,9 +400,7 @@ def p_FUNCTYPE(p):
     functype : VOID
             | typing
     '''
-    global currenttyping
-    print(p[1])
-    currenttyping = p[1]
+  
 
 def p_FUNCPARAM(p):
     '''
