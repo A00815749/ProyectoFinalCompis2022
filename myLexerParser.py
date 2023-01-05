@@ -40,7 +40,9 @@ LOCALnames = [] # As above but in local scope
 
 
 ######### MY STACKS, USING THE PYTHON LISTS AND POP() TO SIMULATE THE STACK BEHAVIOR
-
+PilaO = []
+Ptypes = []
+POper = []
 
 ###### SENSORS, CHECKING THE SCOPE (CONTEXT) OF THE VARIABLES, & COUNTERS ############
 Scopesensor = 'g' # G for global or l for local
@@ -82,7 +84,7 @@ class Quadruple :
         self.result = result
 
 #### SEMANTIC CUBE CLASS OBJECT, A SENSOR THAR CHECKS OPERATIONS BETWEEN THE SIMPLE DATATYPES IN VARIABLES #############
-semantics = Semanticcube()
+semanticchecker = Semanticcube()
 
 ########################################################################################################################################
 
@@ -411,7 +413,7 @@ def p_NEURALENDFUNCS(p):
     '''
     neuralendfuncs : 
     '''
-    endandresetfunction()
+    endandresetfunction() # CLEAN THE LOCAL TABLES, RESET CONTEXT TO GLOBAL
 
 def p_TYPING(p):
     '''

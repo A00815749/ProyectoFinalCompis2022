@@ -1,0 +1,28 @@
+Program MyRlike;
+VARS
+    int: i, a, j, e; 
+    float: v;
+    char: c;  
+
+function float extra(int: x, float: y); 
+VARS int: b;
+    float: d;
+    char: f;
+{
+    return (x*y);
+}
+main(){
+    i = 12;
+    a = 10;
+    j = i + a;
+    e = j * a;
+    c = 'c';
+    i = a / 3;
+
+    if(a >= 10 and i == 3) then {
+        write("hola mundo");
+    }
+    write(i);
+    write(extra(5,7.0)); 
+    write(c);
+}
