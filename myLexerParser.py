@@ -28,10 +28,40 @@ GlobalVar_set = {} # Storing the variables in a global context
 LocalVar_set = {} # Local context
 ConstantVar_set = {} # Direct values of variables that don't change in the running process
 
-
-
-
-#The Operation number that will be stored inside the quads product indicating which type of operation the quads is
+# The Operation number that will be stored inside the quads product indicating which type of operation the quads is
+HASHofoperatorsinquads = {
+    '+' : 1,
+    '-' : 2,
+    '*' : 3,
+    '/' : 4,
+    '>' : 5,
+    '>=' : 6,
+    '<' : 7,
+    '<=' : 8,
+    '==' : 9,
+    '<>' : 10,
+    '=' : 11,
+    'READ' : 12,
+    'WRITE' : 13,
+    'and' : 14,
+    'OR' : 15,
+    'GOTO' : 16,
+    'GOTOF' : 17,
+    'GOTOV' : 18,
+    'ERA' : 19,
+    'VER' : 20,
+    'ENDPROC' : 21,
+    'PARAM' : 22,
+    'GOSUB' : 23,
+    'MEDIA' : 24,
+    'MEDIANA' : 25,
+    'MODA' : 26,
+    'STDEV' : 27,
+    'VARIANZA' : 28,
+    'PLOTXY' : 29,
+    'RETURN' : 30,
+    '' : -1
+}
 
 ##### PYTHON LISTS, MUTABLE, ORDER OF ELEMENTS INHERENT IN THEIR APPLICATION, CAN FUNCTION AS STACKS #############
 QUADSlist = []
@@ -48,7 +78,7 @@ POper = []
 Scopesensor = 'g' # G for global or l for local
 currenttyping = '' # Stores the typing, being either int float or char
 currentfunctionname = ''
-
+TEMPORALScounter = 0 # Sensor for counting the temporals used, stored in the table of functions
 
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
 #When a memory block is used, it adds 1 to the counter.
@@ -264,16 +294,60 @@ def insertinVARStables(id,type):
         LocalVar_set[id] = {'type' : type}
         LOCALnames.append(id)
 
-def endandresetfunction():
+def endandresetfunction(): # RESET THE MEMORY SPACES
     global Scopesensor, LocalVar_set,LOCALnames
+    global LOCALCHARcounter,LOCALFLOATcounter,LOCALINTcounter
+    global TEMPINTcounter, TEMPFLOATcounter, TEMPCHARcounter, TEMPBOOLcounter, POINTERScounter
+    global PARAMSINTcounter, PARAMSFLOATcounter, PARAMSCHARcounter
+    LOCALINTcounter = 7000 - 1
+    LOCALFLOATcounter = 9000 - 1
+    LOCALCHARcounter = 11000 - 1
+    TEMPINTcounter = 13000 - 1
+    TEMPFLOATcounter = 15000 - 1
+    TEMPCHARcounter = 17000 - 1
+    TEMPBOOLcounter = 19000 - 1
+    PARAMSINTcounter = 30000 - 1
+    PARAMSFLOATcounter = 33000 - 1
+    PARAMSCHARcounter = 36000 - 1 
+    POINTERScounter = 40000 - 1 
     Scopesensor = 'g' # RETURN TO THE GLOBAL SCOPE TILL NEXT LOCAL CHANGE
     LocalVar_set = {} # EMPTY THE LOCAL VARIABLES
     LOCALnames = [] # EMPTY THE ORDERED USED NAMES
 
+def setAVAILvirtualtempaddress(type): # GETTING THE TEMPORAL
+    global TEMPINTcounter, TEMPFLOATcounter, TEMPCHARcounter, TEMPBOOLcounter
+    global TEMPORALScounter, POINTERScounter
+    TEMPORALScounter += 1
+    if type == 'int':
+        TEMPINTcounter += 1
+        return TEMPINTcounter
+    elif type == 'float':
+        TEMPFLOATcounter += 1
+        return TEMPFLOATcounter
+    elif type == 'char':
+        TEMPCHARcounter += 1
+        return TEMPCHARcounter
+    elif type == 'bool':
+        TEMPBOOLcounter += 1
+        return TEMPBOOLcounter
+    elif type == 'pointer':
+        POINTERScounter += 1
+        return POINTERScounter
 
-
-
-
+def setAVAILvirtualCTEaddress(value):
+    global CONSTINTcounter,CONSTFLOATcounter,CONSTCHARcounter
+    constanttype = type(value)
+    if constanttype == int:
+        CONSTINTcounter += 1
+        return CONSTINTcounter
+    elif constanttype == float:
+        CONSTFLOATcounter += 1
+        return CONSTFLOATcounter
+    elif constanttype == str:
+        CONSTCHARcounter += 1
+        return CONSTCHARcounter
+    else: 
+        errorhandler(6, str(value)) # SEND THE VALUE THAT WE TRIED TO MAKE CONSTANT
 
 #### ERROR HABDLER IN AUXILIAR METHODS
 
@@ -282,6 +356,8 @@ def endandresetfunction():
 # 2 = Backup simple set name indicates that the name called is duplicate, check the table of functions status
 # 3 = Name trying to be used as variable name is used as a function name
 # 4 = Duplicated variable name
+# 5 = Mismatch of variable types in the semantic cube, the operationg between the two variables gives an ERROR in the cube
+# 6 = Error while trying to add a constant variable value in the virtual memory blocks, is neither int, float or char/string
 #
 #
 #
@@ -308,6 +384,10 @@ def errorhandler(errortype, location = ""):
         errormessage = "Name trying to be used as variable name is used as a function name"
     elif (errortype == 4):
         errormessage = "Duplicated variable name"
+    elif (errortype == 5):
+        errormessage = "Mismatch of variable types in the semantic cube, the operationg between the two variables gives an ERROR in the cube"
+    elif (errortype == 6):
+        errormessage = "Error while trying to add a constant variable value in the virtual memory blocks, is neither int, float or char/string"
     print("ERROR " + errormessage + "\n at ===> " + str(location))
     sys.exit()
 
@@ -333,7 +413,7 @@ def p_PROGRAM(p): #PROGRAM SHELL LOGIC
     print ('Llego al final de la gramatica, aceptado \n')
     #WHEN ENDING THE PROGRAM DELETE THE TABLE OF FUNCTIONS AND GLOBAL VAR TABLE
     #PROBABLY NOT TILL VIRTUAL MACHINE IS COMPLETE
-    print(Tableof_functions)
+    #print(Tableof_functions)
 
 
 def p_NEURALTABLEFUNCTIONS(p):
@@ -558,6 +638,9 @@ def p_IDARRAY(p):
     '''
 
 
+
+########################################################## EXPRESSION LOGIC START POINT ######################################
+
 def p_EXP(p):
     '''
     exp : andexp exp1
@@ -576,56 +659,176 @@ def p_ANDEXP(p):
 
 def p_ANDEXP1(p):
     '''
-    andexp1 : AND andexp
+    andexp1 : neuraland andexp
         | empty
     '''
+
+def p_NEURALAND(p):
+    '''
+    neuraland : AND
+    '''
+    global POper
+    # CAN CHANGE THE 'and' TO & IN THE FUTURE
+    POper.append(p[1]) #STORING 'and' OPERATOR TOKEN
+
+
+
+
+###### BOOLEANS AND THE AND QUADS GENERATOR ################
 
 def p_BOOLEXP(p):
     '''
     boolexp : arithexp boolexp1
     '''
+    #HERE YOU EXIT THE BOOLEAN EXPRESSION, WHICH IS INSIDE THE SINTAX DIAGRAM OF THE AND EXPRESSION, SO YOU MUST RESOLVE
+    #THE QUADS FOR THE ANDs, AS SEEN IN CLASS
+    global POper,PilaO,Ptypes,HASHofoperatorsinquads,QUADSlist
+    if POper[-1] == 'and':
+        rightOperand = PilaO.pop()
+        righttype = Ptypes.pop()
+        leftOperand = PilaO.pop()
+        lefttype = Ptypes.pop()
+        operator = POper.pop()
+        resulttype = semanticchecker.getType(lefttype,righttype,operator)
+        if resulttype == 'ERROR':
+            errorhandler(5)
+        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+        resultaddress = setAVAILvirtualtempaddress(resulttype)
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+        PilaO.append(resultaddress)
+        Ptypes.append(resulttype)
+
+
 
 def p_BOOLEXP1(p):
     '''
-    boolexp1 : GREATER arithexp
-        | GREATERAND arithexp
-        | LESSER arithexp
-        | LESSERAND arithexp
-        | SAME arithexp
-        | NOTSAME arithexp
-        | NOT arithexp
+    boolexp1 : neuralbool arithexp
         | empty
     '''
+
+def p_NEURALBOOL(p):
+    '''
+    neuralbool : GREATER 
+        | GREATERAND 
+        | LESSER 
+        | LESSERAND 
+        | SAME 
+        | NOTSAME 
+        | NOT 
+    '''
+    global POper
+    POper.append(p[1]) # STORE THE BOOLEAN TOKEN
+
+
+
+###### ARITHMETIC TOKENS AND BOOLEAN QUADS GENERATOR ##############
+
+
 
 def p_ARITHEXP(p):
     '''
     arithexp : geoexp arithexp1
     '''
+    global POper,Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads
+    booltokens = ['>','>=', '<','<=','==','<>']
+    if POper[-1] in booltokens: # GENERATING THE BOOL OPERATORS QUADS
+        rightOperand = PilaO.pop()
+        righttype = Ptypes.pop()
+        leftOperand = PilaO.pop()
+        lefttype = Ptypes.pop()
+        operator = POper.pop()
+        resulttype = semanticchecker.getType(lefttype,righttype,operator)
+        if resulttype == 'ERROR':
+            errorhandler(5)
+        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+        resultaddress = setAVAILvirtualtempaddress(resulttype)
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+        PilaO.append(resultaddress)
+        Ptypes.append(resulttype)
 
 def p_ARITHEXP1(p):
     '''
-    arithexp1 : PLUS arithexp
-        | REST arithexp
+    arithexp1 : neuralarith arithexp
         | empty
     '''
+
+def p_NEURALARITH(p):
+    '''
+    neuralarith : PLUS
+                | REST
+    '''
+    global POper
+    POper.append(p[1])
+
+
+###### GEOMETRIC TOKENS AND ARITHMETIC QUADS GENERATOR #####################################
+
 
 def p_GEOEXP(p):
     '''
     geoexp : finexp geoexp1
     '''
+    global POper,Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads
+    if POper[-1] == '+' or POper[-1] == '-': # GENERATING THE ARITHMETIC OPERATORS QUADS
+        rightOperand = PilaO.pop()
+        righttype = Ptypes.pop()
+        leftOperand = PilaO.pop()
+        lefttype = Ptypes.pop()
+        operator = POper.pop()
+        resulttype = semanticchecker.getType(lefttype,righttype,operator)
+        if resulttype == 'ERROR':
+            errorhandler(5)
+        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+        resultaddress = setAVAILvirtualtempaddress(resulttype)
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+        PilaO.append(resultaddress)
+        Ptypes.append(resulttype)
 
 def p_GEOEXP1(p):
     '''
-    geoexp1 : TIMES geoexp
-        | DIVIDE geoexp
+    geoexp1 : neuralgeo geoexp
         | empty
     '''
+
+def p_NEURALGEO(p):
+    '''
+    neuralgeo : TIMES
+            | DIVIDE
+    '''
+    global POper
+    POper.append(p[1]) # ADD THE GEOMETRIC TOKENS BEING * OR /
+
+
+###### PARENTHESIS LOGIC, FALSE BOTTOMS AND VECTORS(ARRAYS), GEOMETRIC QUADS GENERATOR ######################
+
 
 def p_FINEXP(p):
     '''
     finexp : LEFTPAR exp RIGHTPAR
             | cteexp
     '''
+    # PARENTHESES HANDLING AND VECTORS HANDLING SECTION
+
+    #
+    if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
+        rightOperand = PilaO.pop()
+        righttype = Ptypes.pop()
+        leftOperand = PilaO.pop()
+        lefttype = Ptypes.pop()
+        operator = POper.pop()
+        resulttype = semanticchecker.getType(lefttype,righttype,operator)
+        if resulttype == 'ERROR':
+            errorhandler(5)
+        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+        resultaddress = setAVAILvirtualtempaddress(resulttype)
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+        PilaO.append(resultaddress)
+        Ptypes.append(resulttype)
+
+
+
+
+###### CONSTANT TOKENS AND EXPRESSIONS HANDLING ############
 
 def p_CTEEXP(p):
     '''
@@ -634,6 +837,11 @@ def p_CTEEXP(p):
             | CTECHAR
             | ID paramsexp
     '''
+    global ConstantVar_set
+    if len(p) == 2:
+        if not p[1] in ConstantVar_set: #IF THE CONSTANT IS NOT ALREADY SAVED, SAVE IT NOW
+            ConstantVar_set[p[1]] = setAVAILvirtualCTEaddress(p[1])
+
 
 
 #FUNCTIONS WITH PARAMETERS CALL OR ARRAY CALL HANDLING 
