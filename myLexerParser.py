@@ -278,20 +278,20 @@ def addtotableoffunctions(idname, type, scopecontext, variables):
         Tableof_functions[idname] = {'type': type, 'scopecontext' : scopecontext, 'variables' : variables }
         GLOBALnames.append(idname)
 
-def insertinVARStables(id,type):
-    if (Scopesensor == 'g'):
+def insertinVARStables(id,virtualaddr,type):
+    if (virtualaddr < 7000):
         if (id in GLOBALnames):
             errorhandler(3, str(id + " " + type))
         if (id in GlobalVar_set):
             errorhandler(4,id)
-        GlobalVar_set[id]= {'type' : type }
+        GlobalVar_set[id]= {'virtualaddress': virtualaddr, 'type' : type }
         GLOBALnames.append(id)
     else:
         if id in LOCALnames:
             errorhandler(3, str(id + " " + type))
         if id in LocalVar_set:
             errorhandler("varrepetida",id)
-        LocalVar_set[id] = {'type' : type}
+        LocalVar_set[id] = {'virtualaddress': virtualaddr,'type' : type}
         LOCALnames.append(id)
 
 def endandresetfunction(): # RESET THE MEMORY SPACES
@@ -348,6 +348,44 @@ def setAVAILvirtualCTEaddress(value):
         return CONSTCHARcounter
     else: 
         errorhandler(6, str(value)) # SEND THE VALUE THAT WE TRIED TO MAKE CONSTANT
+
+def virtualaddrfetch(value):
+    global GlobalVar_set, LocalVar_set, ConstantVar_set, Tableof_functions
+    if value in LocalVar_set: # GET ME THE VIRTUAL ADDRESS IF LOCAL OR GLOBAL OR CONSTANT
+        return LocalVar_set[value]['virtualaddress']
+    elif value in GlobalVar_set:
+        return GlobalVar_set[value]['virtualaddress']
+    else:
+        if type(value) == int:
+            return ConstantVar_set[int(value)]
+        if type(value) == float:
+            return ConstantVar_set[float(value)]
+        if type(value) == str:
+            return ConstantVar_set[str(value)]
+
+def getsetvirtualaddrVARS(type,scope):
+    global GLOBALINTcounter,GLOBALFLOATcounter,GLOBALCHARcounter
+    global LOCALINTcounter,LOCALFLOATcounter,LOCALCHARcounter
+    if scope == 'g':
+        if type == 'int':
+            GLOBALINTcounter+= 1
+            return GLOBALINTcounter + 1
+        elif type == 'float':
+            GLOBALFLOATcounter+= 1
+            return GLOBALFLOATcounter + 1
+        elif type == 'char':
+            GLOBALCHARcounter+= 1
+            return GLOBALCHARcounter + 1
+    else:
+        if type == 'int':
+            LOCALINTcounter+= 1
+            return LOCALINTcounter + 1
+        elif type == 'float':
+            LOCALFLOATcounter+= 1
+            return LOCALFLOATcounter + 1
+        elif type == 'char':
+            LOCALCHARcounter+= 1
+            return LOCALCHARcounter + 1
 
 #### ERROR HABDLER IN AUXILIAR METHODS
 
@@ -443,7 +481,9 @@ def p_NEURALINSERTVAR(p):
     '''
     neuralinsertvar : ID
     '''
-    insertinVARStables(p[1],currenttyping)
+    global Scopesensor,currenttyping
+    newaddr = getsetvirtualaddrVARS(currenttyping,Scopesensor)
+    insertinVARStables(p[1],newaddr,currenttyping)
     
 
 def p_VARSARR(p):
@@ -457,6 +497,12 @@ def p_VARSMUL(p):
     varsmul : COMMA neuralinsertvar varsarr varsmul
             | SEMICOLON
     '''
+
+
+
+
+
+
 
 
 ####### MODULES HABDLING ##########
@@ -516,6 +562,17 @@ def p_MULPARAMS(p):
             | empty
     '''
 
+
+
+
+
+
+
+
+
+
+
+
 #### STATUTES HANDLING #####
 
 def p_STATUTES(p):
@@ -542,6 +599,13 @@ def p_SPECIALFUNC(p):
     specialfunc : empty
     '''
 
+
+
+
+
+
+
+
 #### ASSIGNING IDs TO VARIABLES LOGIC SECTION############
 
 def p_ASSIGN(p):
@@ -554,6 +618,11 @@ def p_NEURALASSIGN1(p):
     '''
     neuralassign1 : ID
     '''
+    global Ptypes,PilaO
+    virtualaddr = virtualaddrfetch(p[1])
+    PilaO.append(virtualaddr)
+
+
 
 def p_NEURALASSIGN2(p):
     '''
