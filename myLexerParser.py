@@ -79,6 +79,8 @@ Scopesensor = 'g' # G for global or l for local
 currenttyping = '' # Stores the typing, being either int float or char
 currentfunctionname = ''
 TEMPORALScounter = 0 # Sensor for counting the temporals used, stored in the table of functions
+INITIALvalinFOR = 0 # Global value to store the counter in the for logic section
+FINALvalinFOR = 0 # Global value to store the final value in the counter for the for logic section
 
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
 #When a memory block is used, it adds 1 to the counter.
@@ -413,9 +415,9 @@ def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CA
 # 5 = Mismatch of variable types in the semantic cube, the operationg between the two variables gives an ERROR in the cube
 # 6 = Error while trying to add a constant variable value in the virtual memory blocks, is neither int, float or char/string
 # 7 = Error trying to parse a non-boolean value in the if neuralif handling
-#
-#
-#
+# 8 = Error in for variable expression being evaluated to other than int (neuralfor1)
+# 9 = Error in for variable expression being evaluated to other than int (neuralfor2)
+# 10 = Error in for variable expression being evaluated to other than int (neuralfor3)
 #
 #
 #
@@ -444,6 +446,12 @@ def errorhandler(errortype, location = ""):
         errormessage = "Error while trying to add a constant variable value in the virtual memory blocks, is neither int, float or char/string"
     elif (errortype == 7):
         errormessage = "Error trying to parse a non-boolean value in the if neuralif handling"
+    elif (errortype == 8):
+        errormessage = "Error in for variable expression being evaluated to other than int (neuralfor1)"
+    elif (errortype == 9):
+        errormessage = "Error in for variable expression being evaluated to other than int (neuralfor2)"
+    elif (errortype == 10):
+        errormessage = "Error in for variable expression being evaluated to other than int (neuralfor3)"
     print("ERROR " + errormessage + "\n at ===> " + str(location))
     sys.exit()
 
@@ -776,21 +784,109 @@ def p_NEURALELSE(p):
 
 
 
-# WHILING
+######### WHILE CYCLE LOGIG SECTION ###########
 
 def p_WHILING(p):
     '''
-    whiling : WHILE LEFTPAR exp RIGHTPAR DO LEFTBR statutes RIGHTBR
+    whiling : neuralwhile1 LEFTPAR exp neuralwhile2 DO LEFTBR statutes RIGHTBR
     '''
+    global Pjumps,QUADSlist,HASHofoperatorsinquads
+    if Pjumps:
+        endofwhile = Pjumps.pop()
+        startofwhile = Pjumps.pop()
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startofwhile+1)) # SET THE GOTO QUAD WHITH THE APPROPIATE COUNTER
+        modQuad = QUADSlist[endofwhile - 1]
+        modQuad.result = len(QUADSlist) + 1 # STORE IN THE QUAD THE COUNTER
 
-# FORING
+
+def p_NEURALWHILE1(p):
+    '''
+    neuralwhile1 : WHILE
+    '''
+    global Pjumps, QUADSlist
+    Pjumps.append(len(QUADSlist)) # GET THE QUADCOUNTER SAVED
+
+def p_NEURALWHILE2(p):
+    '''
+    neuralwhile2 : RIGHTPAR
+    '''
+    global Ptypes,PilaO,QUADSlist,Pjumps,HASHofoperatorsinquads
+    if Ptypes and PilaO:
+        exptype = Ptypes.pop()
+        if exptype == 'bool':
+            result = PilaO.pop()
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],result,-1,99)) #THE QUAD PENDING THE QUADCOUNTER FOR THE GOTOF
+            Pjumps.append(len(QUADSlist)) # THE QUADCOUNTER STORED IN PJUMPS
+
+
+
+
+###### FOR LOGIC SECTION #####################
 
 def p_FORING(p):
     '''
-    foring : FOR ID idarray EQUAL exp TO exp DO LEFTBR statutes RIGHTBR
+    foring : FOR neuralfor1 idarray EQUAL exp neuralfor2 exp neuralfor3 LEFTBR statutes RIGHTBR
     '''
+    global INITIALvalinFOR,Pjumps,QUADSlist,HASHofoperatorsinquads,Ptypes,PilaO
+    temporalint = setAVAILvirtualtempaddress('int')
+    constant1addr = virtualaddrfetch(1)
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],INITIALvalinFOR,constant1addr,temporalint)) # THE ITERATION
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],temporalint,-1,INITIALvalinFOR)) #CONTINUING ITERATION
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],temporalint,-1,PilaO[-1])) #THE QUADRUPLE GETTING THE OPERATOR STACK MODIFIED
+    endoffor = Pjumps.pop() #GET THE COUNTER FOR THE ENDOFFOR
+    startoffor = Pjumps.pop() # GET THE COUNTER FOR THE STARTOFFOR
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startoffor)) # VALIDATE THE CONDITION
+    QUADSlist[endoffor - 1].result =  len(QUADSlist) + 1 # GET THAT PENDING QUADRUPLE WITH THE QUAD COUNTER
+    PilaO.pop()
+    Ptypes.pop()
+
+def p_NEURALFOR1(p):
+    '''
+    neuralfor1 : ID
+    '''
+    global PilaO, Ptypes
+    virtualaddr = virtualaddrfetch(p[1]) # THE VIRTUAL ADDRESS OF THE VARIABLE(ID) WE ARE LOOKING FOR
+    type = getVALtype(p[1])
+    PilaO.append(virtualaddr) # ADD THE VARIABLE TO THE STACK
+    if type == 'int':
+        Ptypes.append(type)
+    else:
+        errorhandler(8)
 
 
+def p_NEURALFOR2(p):
+    '''
+    neuralfor2 : TO
+    '''
+    global Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads
+    type = Ptypes.pop()
+    if type == 'int':
+        if PilaO:
+            exp = PilaO.pop()
+            INITIALvalinFOR = PilaO[-1] # STORE THE LAST OPERAND, MUST BE THE ONE IN NEURALFOR1
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],exp,-1,INITIALvalinFOR))
+    else:
+        errorhandler(9)
+
+
+def p_NEURALFOR3(p):
+    '''
+    neuralfor3 : DO
+    '''
+    global Ptypes,PilaO,INITIALvalinFOR,FINALvalinFOR,Pjumps,QUADSlist,HASHofoperatorsinquads
+    if Ptypes and PilaO:
+        type = Ptypes.pop()
+        if type == 'int':
+            exp = PilaO.pop()
+            FINALvalinFOR = setAVAILvirtualtempaddress('int') # GET THE VIRTUAL ADDRESS
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],exp,-1,FINALvalinFOR))
+            temporalbool = setAVAILvirtualtempaddress('bool') # GET THE VIRTUAL ADDRESS
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['<'],INITIALvalinFOR,FINALvalinFOR,temporalbool))
+            Pjumps.append(len(QUADSlist))
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],temporalbool,-1,-99))
+            Pjumps.append(len(QUADSlist))
+        else:
+            errorhandler(10)
 
 ##### VARIABLES AND EXPRESSIONS HANDLING #####
 
