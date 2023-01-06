@@ -7,7 +7,7 @@ Diciembre 2 Revisando el lenguaje base para ver si tiene sentido, revision del c
 
 Diciembre 20 ~ Diciembre 29 Revision de la sintaxis y de bugs, arreglo de estos, codificiacion y revision de la creacion de la tabla de funciones simple, junto con la adicion de la tabla de variables global y local
 
-Diciembre 30 ~ Enero 6 Arreglo del guardado de variables locales, iniciliazacion de logica de aritmetica y expresiones, inicio del uso de bloques de memoria virtuales
+Diciembre 30 ~ Enero 6 Arreglo del guardado de variables locales, inicializacion de logica de aritmetica y expresiones, inicio del uso de bloques de memoria virtuales, agregado de fondos falsos para el manejo de parentesis en expresiones
 
 
 
@@ -17,6 +17,5 @@ Diciembre 30 ~ Enero 6 Arreglo del guardado de variables locales, iniciliazacion
 
 
 
-## SECTION FOR PENDIND PROBLEMS TO CHECK BETWEEN CODING SESSIONS
-CHECK IF VOID FUNCTIONS STORE THEIR TYPING CORRECTLY
-CHECK IF FUNCTIONS WITH VARIABLES STORE THEIR DATA CORRECTLY, USE OTHER TEST FILE OTHER THAN STRESS
+## SECTION FOR PENDING PROBLEMS TO CHECK BETWEEN CODING SESSIONS ###
+ADD THE PilaO APPENDS NEEDED, CURRENT BUG WHERE ITS EMPTY

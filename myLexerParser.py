@@ -801,29 +801,44 @@ def p_NEURALGEO(p):
 
 ###### PARENTHESIS LOGIC, FALSE BOTTOMS AND VECTORS(ARRAYS), GEOMETRIC QUADS GENERATOR ######################
 
+def p_ADDPARENTH(p):
+    '''
+    addparenth : LEFTPAR
+    '''
+    global POper
+    POper.append('~~~') # ADD A FALSE BOTTOM
+
+
+def p_POPPARENTH(p):
+    '''
+    popparenth : RIGHTPAR
+    '''
+    global POper
+    POper.pop() #GET RID OF FALSE BOTTOM
 
 def p_FINEXP(p):
     '''
-    finexp : LEFTPAR exp RIGHTPAR
+    finexp : addparenth exp popparenth
             | cteexp
     '''
     # PARENTHESES HANDLING AND VECTORS HANDLING SECTION
 
     #
-    if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
-        rightOperand = PilaO.pop()
-        righttype = Ptypes.pop()
-        leftOperand = PilaO.pop()
-        lefttype = Ptypes.pop()
-        operator = POper.pop()
-        resulttype = semanticchecker.getType(lefttype,righttype,operator)
-        if resulttype == 'ERROR':
-            errorhandler(5)
-        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
-        resultaddress = setAVAILvirtualtempaddress(resulttype)
-        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
-        PilaO.append(resultaddress)
-        Ptypes.append(resulttype)
+    if len(POper) > 0:
+        if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
+            rightOperand = PilaO.pop()
+            righttype = Ptypes.pop()
+            leftOperand = PilaO.pop()
+            lefttype = Ptypes.pop()
+            operator = POper.pop()
+            resulttype = semanticchecker.getType(lefttype,righttype,operator)
+            if resulttype == 'ERROR':
+                errorhandler(5)
+            # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+            resultaddress = setAVAILvirtualtempaddress(resulttype)
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+            PilaO.append(resultaddress)
+            Ptypes.append(resulttype)
 
 
 
