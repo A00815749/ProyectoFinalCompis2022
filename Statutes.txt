@@ -1,0 +1,29 @@
+Program Statutes;
+VARS
+    int: a, b, c;
+    float: d, e, f;
+    char: g, h, i, j;
+
+main(){
+    a = 10;
+    b = -20;
+    c = 30;
+    write("Ints started ", a , b , c);
+    a = b * b;
+    b = b + a;
+    c = b / a;
+    write("Int operations ", a, b, c);
+    d = 3.1416;
+    e = 1.2345;
+    f = -35.6189479;
+    write("Floats started: ", d, e, f);
+    d = d*d*d*d;
+    e = 20.0/3;
+    f = f - (f*2);
+    write("Float operations: ", d, e, f);
+    g = 'a';
+    h = 'n';
+    i = 'd';
+    j = 'y';
+    write("Chars started", g, h, i, j);
+}

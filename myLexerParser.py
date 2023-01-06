@@ -542,13 +542,23 @@ def p_SPECIALFUNC(p):
     specialfunc : empty
     '''
 
-
+#### ASSIGNING IDs TO VARIABLES LOGIC SECTION############
 
 def p_ASSIGN(p):
     '''
-    assign : ID idarray EQUAL exp SEMICOLON 
+    assign : neuralassign1 idarray neuralassign2 exp SEMICOLON 
     '''
 
+
+def p_NEURALASSIGN1(p):
+    '''
+    neuralassign1 : ID
+    '''
+
+def p_NEURALASSIGN2(p):
+    '''
+    neuralassign2 : EQUAL
+    '''
 
 
 # WRITING
@@ -683,20 +693,21 @@ def p_BOOLEXP(p):
     #HERE YOU EXIT THE BOOLEAN EXPRESSION, WHICH IS INSIDE THE SINTAX DIAGRAM OF THE AND EXPRESSION, SO YOU MUST RESOLVE
     #THE QUADS FOR THE ANDs, AS SEEN IN CLASS
     global POper,PilaO,Ptypes,HASHofoperatorsinquads,QUADSlist
-    if POper[-1] == 'and':
-        rightOperand = PilaO.pop()
-        righttype = Ptypes.pop()
-        leftOperand = PilaO.pop()
-        lefttype = Ptypes.pop()
-        operator = POper.pop()
-        resulttype = semanticchecker.getType(lefttype,righttype,operator)
-        if resulttype == 'ERROR':
-            errorhandler(5)
-        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
-        resultaddress = setAVAILvirtualtempaddress(resulttype)
-        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
-        PilaO.append(resultaddress)
-        Ptypes.append(resulttype)
+    if len(POper) > 0:
+        if POper[-1] == 'and':
+            rightOperand = PilaO.pop()
+            righttype = Ptypes.pop()
+            leftOperand = PilaO.pop()
+            lefttype = Ptypes.pop()
+            operator = POper.pop()
+            resulttype = semanticchecker.getType(lefttype,righttype,operator)
+            if resulttype == 'ERROR':
+                errorhandler(5)
+            # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+            resultaddress = setAVAILvirtualtempaddress(resulttype)
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+            PilaO.append(resultaddress)
+            Ptypes.append(resulttype)
 
 
 
@@ -731,20 +742,21 @@ def p_ARITHEXP(p):
     '''
     global POper,Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads
     booltokens = ['>','>=', '<','<=','==','<>']
-    if POper[-1] in booltokens: # GENERATING THE BOOL OPERATORS QUADS
-        rightOperand = PilaO.pop()
-        righttype = Ptypes.pop()
-        leftOperand = PilaO.pop()
-        lefttype = Ptypes.pop()
-        operator = POper.pop()
-        resulttype = semanticchecker.getType(lefttype,righttype,operator)
-        if resulttype == 'ERROR':
-            errorhandler(5)
-        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
-        resultaddress = setAVAILvirtualtempaddress(resulttype)
-        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
-        PilaO.append(resultaddress)
-        Ptypes.append(resulttype)
+    if len(POper) > 0:
+        if POper[-1] in booltokens: # GENERATING THE BOOL OPERATORS QUADS
+            rightOperand = PilaO.pop()
+            righttype = Ptypes.pop()
+            leftOperand = PilaO.pop()
+            lefttype = Ptypes.pop()
+            operator = POper.pop()
+            resulttype = semanticchecker.getType(lefttype,righttype,operator)
+            if resulttype == 'ERROR':
+                errorhandler(5)
+            # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+            resultaddress = setAVAILvirtualtempaddress(resulttype)
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+            PilaO.append(resultaddress)
+            Ptypes.append(resulttype)
 
 def p_ARITHEXP1(p):
     '''
@@ -769,20 +781,21 @@ def p_GEOEXP(p):
     geoexp : finexp geoexp1
     '''
     global POper,Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads
-    if POper[-1] == '+' or POper[-1] == '-': # GENERATING THE ARITHMETIC OPERATORS QUADS
-        rightOperand = PilaO.pop()
-        righttype = Ptypes.pop()
-        leftOperand = PilaO.pop()
-        lefttype = Ptypes.pop()
-        operator = POper.pop()
-        resulttype = semanticchecker.getType(lefttype,righttype,operator)
-        if resulttype == 'ERROR':
-            errorhandler(5)
-        # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
-        resultaddress = setAVAILvirtualtempaddress(resulttype)
-        QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
-        PilaO.append(resultaddress)
-        Ptypes.append(resulttype)
+    if len(POper) > 0:
+        if POper[-1] == '+' or POper[-1] == '-': # GENERATING THE ARITHMETIC OPERATORS QUADS
+            rightOperand = PilaO.pop()
+            righttype = Ptypes.pop()
+            leftOperand = PilaO.pop()
+            lefttype = Ptypes.pop()
+            operator = POper.pop()
+            resulttype = semanticchecker.getType(lefttype,righttype,operator)
+            if resulttype == 'ERROR':
+                errorhandler(5)
+            # AVAIL SPACE, IN THE FUTURE IS A VIRTUAL TEMPORAL ADDRESS
+            resultaddress = setAVAILvirtualtempaddress(resulttype)
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
+            PilaO.append(resultaddress)
+            Ptypes.append(resulttype)
 
 def p_GEOEXP1(p):
     '''
