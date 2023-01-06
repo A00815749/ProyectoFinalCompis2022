@@ -73,7 +73,7 @@ LOCALnames = [] # As above but in local scope
 PilaO = []
 Ptypes = []
 POper = []
-
+Pjumps = []
 ###### SENSORS, CHECKING THE SCOPE (CONTEXT) OF THE VARIABLES, & COUNTERS ############
 Scopesensor = 'g' # G for global or l for local
 currenttyping = '' # Stores the typing, being either int float or char
@@ -387,6 +387,22 @@ def getsetvirtualaddrVARS(type,scope):
             LOCALCHARcounter+= 1
             return LOCALCHARcounter + 1
 
+def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CALLED
+    if value in LocalVar_set:
+        return LocalVar_set[value]['type']
+    if value in GlobalVar_set:
+        return GlobalVar_set[value]['type']
+    if value in Tableof_functions:
+        return Tableof_functions[value]['type']
+    if type(value)== int:
+        return 'int'
+    if type(value)== float:
+        return 'float'
+    if type(value)== str:
+        return 'char'
+
+
+
 #### ERROR HABDLER IN AUXILIAR METHODS
 
 #LIST OF ERRORS
@@ -396,7 +412,7 @@ def getsetvirtualaddrVARS(type,scope):
 # 4 = Duplicated variable name
 # 5 = Mismatch of variable types in the semantic cube, the operationg between the two variables gives an ERROR in the cube
 # 6 = Error while trying to add a constant variable value in the virtual memory blocks, is neither int, float or char/string
-#
+# 7 = Error trying to parse a non-boolean value in the if neuralif handling
 #
 #
 #
@@ -426,6 +442,8 @@ def errorhandler(errortype, location = ""):
         errormessage = "Mismatch of variable types in the semantic cube, the operationg between the two variables gives an ERROR in the cube"
     elif (errortype == 6):
         errormessage = "Error while trying to add a constant variable value in the virtual memory blocks, is neither int, float or char/string"
+    elif (errortype == 7):
+        errormessage = "Error trying to parse a non-boolean value in the if neuralif handling"
     print("ERROR " + errormessage + "\n at ===> " + str(location))
     sys.exit()
 
@@ -482,8 +500,8 @@ def p_NEURALINSERTVAR(p):
     neuralinsertvar : ID
     '''
     global Scopesensor,currenttyping
-    newaddr = getsetvirtualaddrVARS(currenttyping,Scopesensor)
-    insertinVARStables(p[1],newaddr,currenttyping)
+    newaddr = getsetvirtualaddrVARS(currenttyping,Scopesensor) # GET THE VIRTUAL BLOCK ADDRESS DEPENDING ON THE TYPE OF VARIABLE AND THE SCOPE OF THE ENVIRONMENT
+    insertinVARStables(p[1],newaddr,currenttyping) # STORE THE VARIABLE DATA
     
 
 def p_VARSARR(p):
@@ -492,7 +510,7 @@ def p_VARSARR(p):
         | empty
     '''
 
-def p_VARSMUL(p):
+def p_VARSMUL(p): # MULTIPLE VARIABLE LOGIC
     '''
     varsmul : COMMA neuralinsertvar varsarr varsmul
             | SEMICOLON
@@ -612,7 +630,17 @@ def p_ASSIGN(p):
     '''
     assign : neuralassign1 idarray neuralassign2 exp SEMICOLON 
     '''
-
+    global PilaO,Ptypes,HASHofoperatorsinquads,POper,QUADSlist
+    if PilaO and Ptypes:
+        asigned = PilaO.pop()
+        righttype = Ptypes.pop()
+        leftoperand = PilaO.pop()
+        lefttype = Ptypes.pop()
+        operator = POper.pop()
+        resulttype =semanticchecker.getType(lefttype,righttype,operator)
+        if resulttype == 'ERROR':
+                errorhandler(5)
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],asigned,-1,leftoperand))
 
 def p_NEURALASSIGN1(p):
     '''
@@ -621,6 +649,7 @@ def p_NEURALASSIGN1(p):
     global Ptypes,PilaO
     virtualaddr = virtualaddrfetch(p[1])
     PilaO.append(virtualaddr)
+    Ptypes.append(getVALtype(p[1]))
 
 
 
@@ -628,9 +657,11 @@ def p_NEURALASSIGN2(p):
     '''
     neuralassign2 : EQUAL
     '''
+    global POper
+    POper.append(p[1]) # STORING THE EQUAL TOKEN
 
 
-# WRITING
+###### WRITING LOGIC SECTION ############
 
 def p_WRITING(p):
     '''
@@ -642,25 +673,38 @@ def p_AUXWRITE(p):
     auxwrite : writetyping
             | exp
     '''
+    global PilaO,QUADSlist,HASHofoperatorsinquads
+    result = PilaO.pop() # GET THE OPERAND THAT WILL BE WRITTEN
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['WRITE'],-1,-1,result))
 
 def p_WRITETYPING(p):
     '''
     writetyping : STRING
             | CTECHAR
     '''
+    global PilaO
+    PilaO.append(p[1]) # STORE THAT OPERAND THAT IS A CTECHAR OR A STRING
 
-def p_MULWRITE(p):
+def p_MULWRITE(p): # MULTIPLE VARS TO WRITE
     '''
     mulwrite : COMMA auxwrite mulwrite
             | empty
     '''
 
-# READING
+###### READING LOGIC SECTION #######
 
 def p_READING(p):
     '''
-    reading : READ LEFTPAR ID idarray mulread RIGHTPAR SEMICOLON
+    reading : READ LEFTPAR neuralread idarray mulread RIGHTPAR SEMICOLON
     '''
+
+def p_NEURALREAD(p):
+    '''
+    neuralread : ID
+    '''
+    global QUADSlist,HASHofoperatorsinquads
+    readedvar = virtualaddrfetch(p[1]) #VAR TO BE READ AND ASSIGNED VIRTUAL ADDRESS VALUE
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['READ'],-1,-1,readedvar))
 
 def p_MULREAD(p):
     '''
@@ -668,28 +712,68 @@ def p_MULREAD(p):
             | empty
     '''
 
-# RETURNING
+# RETURNING SPECIAL QUADRUPLE LOGIC
 
 def p_RETURNING(p):
     '''
     returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
     '''
+    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set
+    valuetoreturn = PilaO.pop() ## CHECK THE STATUS OF PILAO AND PTYPES
+    Ptypes.pop()
+    functionvirtualaddr = GlobalVar_set[currentfunctionname]['virtualaddress'] # GET THE ADDRESS OF THE SPECIAL FUNCTION ADDRESS TO BE USED AS TEMPORAL CONTAINER
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['RETURN'],valuetoreturn,-1,functionvirtualaddr))
 
 
-########### CYCLES AND DECISIONGS #############
+
+########### CYCLES AND DECISIONS #############
 
 # IFING
 
 def p_IFING(p):
     '''
-    ifing : IF LEFTPAR exp RIGHTPAR THEN LEFTBR statutes RIGHTBR elsing
+    ifing : IF LEFTPAR exp neuralif THEN LEFTBR statutes RIGHTBR elsing
     '''
+    global Pjumps, QUADSlist
+    if Pjumps: #IF there are pending jumps
+        endofjump = Pjumps.pop() # GET THE STORED ADDRESS
+        modQuad = QUADSlist[endofjump-1] # GET THE ADDRESS PENDING FOR THE QUADRUPLE TO BE MODIFIED
+        modQuad.result = len(QUADSlist)+ 1 # STORES THE APPROPIATE ADDRESS
+
+def p_NEURALIF(p):
+    '''
+    neuralif : RIGHTPAR
+    '''
+    global Pjumps,Ptypes, PilaO, QUADSlist,HASHofoperatorsinquads
+    if Ptypes and PilaO:
+        VARStype = Ptypes.pop()
+        if VARStype == 'bool': # CHECK THAT THE IF STATEMENT GIVES A BOOL VALUE
+            result = PilaO.pop()
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],result,-1,-99)) # THE PENDING QUADRUPLE TO BE MODIFIED LATER 
+            Pjumps.append(len(QUADSlist))
+        else:
+            errorhandler(7)
 
 def p_ELSING(p):
     '''
-    elsing : ELSE LEFTBR statutes RIGHTBR
+    elsing : neuralelse LEFTBR statutes RIGHTBR
             | empty
     '''
+
+def p_NEURALELSE(p):
+    '''
+    neuralelse : ELSE
+    '''
+    global QUADSlist,Pjumps,HASHofoperatorsinquads
+    if Pjumps:
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,-99))
+        elseendofjump = Pjumps.pop() # GET THE ADDRESS FOR THE STORED JUMP
+        Pjumps.append(len(QUADSlist)) # ADD THE QUADRUPLE COUNTER
+        modQuad = QUADSlist[elseendofjump-1] # GET THE ADDRESS PENDING FOR THE QUADRUPLE TO BE MODIFIED
+        modQuad.result = len(QUADSlist) + 1 # STORES THE APPROPIATE ADDRESS
+
+
+
 
 
 # WHILING
