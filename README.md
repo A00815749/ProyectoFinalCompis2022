@@ -9,7 +9,7 @@ Diciembre 20 ~ Diciembre 29 Revision de la sintaxis y de bugs, arreglo de estos,
 
 Diciembre 30 ~ Enero 6 Arreglo del guardado de variables locales, inicializacion de logica de aritmetica y expresiones, inicio del uso de bloques de memoria virtuales, agregado de fondos falsos para el manejo de parentesis en expresiones, agregar la seccion de lectura, escritura, asignacion y de decision if-else
 
-
+Enero 7 ~ 10 Inicio de la maquina virtual, agregado de la seccion de ciclos while y for, manejando la parte inicial de la logica de funciones, revision de la mapa de memoria de ejecucion de la maquina virtual
 
 
 
@@ -18,4 +18,5 @@ Diciembre 30 ~ Enero 6 Arreglo del guardado de variables locales, inicializacion
 
 
 ## SECTION FOR PENDING PROBLEMS TO CHECK BETWEEN CODING SESSIONS ###
-ADD THE PilaO APPENDS NEEDED, CURRENT BUG WHERE ITS EMPTY, CHECK THE ENTIRE IF-ELSE, WHILE, FOR SECTION LOGIC TO SEE IF IT PASSES MUSTER, DOUBLE CHECK ASSIGN, READ, WRITE SECTIONS
+ CHECK THE ENTIRE IF-ELSE, WHILE, FOR SECTION LOGIC TO SEE IF IT PASSES MUSTER, DOUBLE CHECK ASSIGN, READ, WRITE SECTIONS
+ PilaO WAS EMPTY BECAUSE MISSING SECTIONS FOR ADDING VARIABLES IN FUNCTION CALLS AND DEFINITIONS

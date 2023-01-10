@@ -67,7 +67,9 @@ HASHofoperatorsinquads = {
 QUADSlist = []
 GLOBALnames = [] # Storing names in global scope, using lists for ease of search, used as backup for the idnames in the sets used above
 LOCALnames = [] # As above but in local scope
-
+PARAMETERSvarlist = [] # QUEUE
+PARAMETERStypelist = [] # TABLE
+COUNTERparameter = [] 
 
 ######### MY STACKS, USING THE PYTHON LISTS AND POP() TO SIMULATE THE STACK BEHAVIOR
 PilaO = []
@@ -270,6 +272,10 @@ lexer = lex.lex()
 
 ########### GLOBAL AUXILIAR METHODS FOR NEURALGIC POINTS MANIPULATIONS ############
 
+def getsetvirtualaddrFUNC():
+    global FUNCTIONVIRADDRcounter
+    FUNCTIONVIRADDRcounter+= 1
+    return FUNCTIONVIRADDRcounter
 
 def addtotableoffunctions(idname, type, scopecontext, variables):
     if (idname in Tableof_functions):
@@ -418,9 +424,9 @@ def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CA
 # 8 = Error in for variable expression being evaluated to other than int (neuralfor1)
 # 9 = Error in for variable expression being evaluated to other than int (neuralfor2)
 # 10 = Error in for variable expression being evaluated to other than int (neuralfor3)
-#
-#
-#
+# 11 = Error in a function call with an invalid number of parameters (neuralpar)
+# 12 =  Error in a function call with a mismatch of parameters (neuralpar2)
+# 13 = Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)
 #
 #
 #
@@ -452,6 +458,12 @@ def errorhandler(errortype, location = ""):
         errormessage = "Error in for variable expression being evaluated to other than int (neuralfor2)"
     elif (errortype == 10):
         errormessage = "Error in for variable expression being evaluated to other than int (neuralfor3)"
+    elif (errortype == 11):
+        errormessage = "Error in a function call with an invalid number of parameters (neuralpar)"
+    elif (errortype == 12):
+        errormessage = "Error in a function call with a mismatch of parameters (neuralpar2)"
+    elif (errortype == 13):
+        errormessage = "Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)"
     print("ERROR " + errormessage + "\n at ===> " + str(location))
     sys.exit()
 
@@ -472,9 +484,19 @@ def errorhandler(errortype, location = ""):
 
 def p_PROGRAM(p): #PROGRAM SHELL LOGIC
     '''
-    program : PROGRAM neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR statutes RIGHTBR
+    program : PROGRAM neuraltablefunctions SEMICOLON varsgl modules MAIN LEFTPAR RIGHTPAR LEFTBR neuralmainjump statutes RIGHTBR
     '''
     print ('Llego al final de la gramatica, aceptado \n')
+    global GLOBALINTcounter,GLOBALFLOATcounter,GLOBALCHARcounter
+    global TEMPINTcounter,TEMPFLOATcounter,TEMPCHARcounter,TEMPBOOLcounter
+    global CONSTINTcounter,CONSTFLOATcounter,CONSTCHARcounter,POINTERScounter
+    actualname = p[2] # NAME OF THE PROGRAM
+    Tableof_functions[actualname]['Intnumbers'] = (GLOBALINTcounter-(1000-1)) + (TEMPINTcounter - (13000-1))
+    Tableof_functions[actualname]['Floatnumbers'] = (GLOBALFLOATcounter - (3000 - 1)) + (TEMPFLOATcounter - (15000-1))
+    Tableof_functions[actualname]['Charnumbers'] = (GLOBALCHARcounter-(5000-1)) + (TEMPCHARcounter - (17000-1))
+    Tableof_functions[actualname]['Boolnumbers'] = (TEMPBOOLcounter-(19000-1))
+    Tableof_functions[actualname]['Pointernumbers'] = (POINTERScounter-(40000-1))
+    #STORING THE VARIABLE NUMBERS BY SUBSTRACTING THE INITIAL MEMORY ALLOCATIONS TO THE FINAL VARIABLES COUNTERS
     #WHEN ENDING THE PROGRAM DELETE THE TABLE OF FUNCTIONS AND GLOBAL VAR TABLE
     #PROBABLY NOT TILL VIRTUAL MACHINE IS COMPLETE
     #print(Tableof_functions)
@@ -486,7 +508,20 @@ def p_NEURALTABLEFUNCTIONS(p):
     '''
     #print (p[1]) #THE VALUE STORED IN ID
     addtotableoffunctions(p[1],'VOID',Scopesensor, GlobalVar_set)
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,-999))
+    Pjumps.append(len(QUADSlist))
+    ConstantVar_set[0] = setAVAILvirtualCTEaddress(0)
+    ConstantVar_set[1] = setAVAILvirtualCTEaddress(1) # SETTING THE CONSTANTS 0 AND 1 for FOR LOGIC HANDLING 
 
+def p_NEURALMAINJUMP(p):
+    '''
+    neuralmainjump :
+    '''
+    global QUADSlist, Pjumps
+    if Pjumps:
+        endoffunctions = Pjumps.pop()
+        newQuad = QUADSlist[endoffunctions-1]
+        newQuad.result = len(QUADSlist) + 1 # GO TO THE PART WHERE THE MAIN ACTUALLY STARTS
 
 
 ####### VARIABLES DECLARATION HANDLING ##########
@@ -524,14 +559,17 @@ def p_VARSMUL(p): # MULTIPLE VARIABLE LOGIC
             | SEMICOLON
     '''
 
+def p_TYPING(p):
+    '''
+    typing : INT
+            | FLOAT
+            | CHAR
+    '''
+    global currenttyping
+    currenttyping = p[1] # STORE THE INT, FLOAT OR CHAR TOKEN FOR THE VARIABLE TYPE
 
 
-
-
-
-
-
-####### MODULES HABDLING ##########
+####### MODULES HANDLING ##########
 
 def p_MODULES(p):
     '''
@@ -543,11 +581,12 @@ def p_NEURALINSERTFUNCNAME(p):
     '''
     neuralinsertfuncname : ID
     '''
-    global Scopesensor, currentfunctionname
+    global Scopesensor, currentfunctionname,LocalVar_set,GlobalVar_set,currenttyping
     Scopesensor = 'l'
+    funcaddr = getsetvirtualaddrFUNC() # GET A FUNCTION ADDRESS IN MEMORY
     currentfunctionname = p[1]
-    GlobalVar_set[currentfunctionname]= {'type', currenttyping}
-    addtotableoffunctions(currentfunctionname,currenttyping,Scopesensor,LocalVar_set)
+    GlobalVar_set[currentfunctionname]={'virtualaddress': funcaddr,'type': currenttyping}  # SAVE THE FUNCTION NAME AS GLOBAL VARIABLE
+    addtotableoffunctions(currentfunctionname,currenttyping,Scopesensor,LocalVar_set) # SAVE THE DATA TO TABLE OF FUNCTIONS
 
 def p_FUNCTYPE(p):
     '''
@@ -555,32 +594,65 @@ def p_FUNCTYPE(p):
             | typing
     '''
   
-
 def p_FUNCPARAM(p):
     '''
-    funcparam : LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR statutes RIGHTBR neuralendfuncs modules
+    funcparam : LEFTPAR parameters RIGHTPAR SEMICOLON varsgl LEFTBR startfunc statutes RIGHTBR funcsize neuralendfuncs modules
     '''
+    global Scopesensor
+    Scopesensor = 'l' # CHANGING THE CONTEXT
 
 def p_NEURALENDFUNCS(p):
     '''
     neuralendfuncs : 
     '''
+    global Tableof_functions,QUADSlist,HASHofoperatorsinquads,currentfunctionname,TEMPORALScounter
+    id = currentfunctionname
+    Tableof_functions[id]["Tempsnumber"]= TEMPORALScounter # SAVE THE NUMBER OF TEMPORALS IN THE FUNCTION
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['ENDPROC'],-1,-1,-1)) # UPLOAD THE QUAD
     endandresetfunction() # CLEAN THE LOCAL TABLES, RESET CONTEXT TO GLOBAL
 
-def p_TYPING(p):
+def p_FUNCSIZE(p): # SAVE THE MEMORY SIZE NEEDED FOR THE VARS IN THE FUNCTION INVOLVED
     '''
-    typing : INT
-            | FLOAT
-            | CHAR
+    funcsize :
     '''
-    global currenttyping
-    currenttyping = p[1] # STORE THE INT, FLOAT OR CHAR TOKEN FOR THE VARIABLE TYPE
+    global Tableof_functions,LocalVar_set,QUADSlist,currentfunctionname
+    global LOCALINTcounter,LOCALFLOATcounter, LOCALCHARcounter, TEMPINTcounter, TEMPFLOATcounter, TEMPCHARcounter, TEMPBOOLcounter, POINTERScounter
+    functionname = currentfunctionname
+    Tableof_functions[functionname]['Paramnumbers'] = len(LocalVar_set)
+    Tableof_functions[functionname]['Intnumbers'] = (LOCALINTcounter-(7000-1)) + (TEMPINTcounter - (13000-1))
+    Tableof_functions[functionname]['Floatnumbers'] = (LOCALFLOATcounter - (9000 - 1)) + (TEMPFLOATcounter - (15000-1))
+    Tableof_functions[functionname]['Charnumbers'] = (LOCALCHARcounter-(11000-1)) + (TEMPCHARcounter - (17000-1))
+    Tableof_functions[functionname]['Boolnumbers'] = (TEMPBOOLcounter-(19000-1))
+    Tableof_functions[functionname]['Pointernumbers'] = (POINTERScounter-(40000-1))
+
+def p_STARTFUNC(p):
+    '''
+    startfunc :
+    '''
+    global currentfunctionname,QUADSlist,Tableof_functions
+    functionname = currentfunctionname
+    Tableof_functions[functionname]['Initialfuncpoint']= len(QUADSlist) + 1
+
+
+####### PARAMETER VARIABLE HANDLING IN FUNCTION DEFINITION ############
 
 def p_PARAMETERS(p):
     '''
-    parameters : typing COLON ID idarray mulparams
+    parameters : typing COLON neuralinsertid idarray mulparams
             | empty
     '''
+
+def p_NEURALINSERTID(p):
+    '''
+    neuralinsertid : ID
+    '''
+    global Scopesensor, currenttyping, PARAMETERSvarlist, PARAMETERStypelist
+    Scopesensor - 'l'
+    virtualaddress = getsetvirtualaddrVARS(currenttyping,Scopesensor)
+    insertinVARStables(p[1],virtualaddress,virtualaddress,currenttyping)
+    PARAMETERSvarlist.append(virtualaddress)
+    PARAMETERStypelist.append(currenttyping)
+
 
 def p_MULPARAMS(p):
     '''
@@ -589,14 +661,93 @@ def p_MULPARAMS(p):
     '''
 
 
+#########PARAMETERS HANDLING IN FUNCTION CALLS #########
 
+def p_PARAMSEXP(p):
+    '''
+    paramsexp : LEFTPAR neuralera paramsexp2 neuralpar
+                | idarray
+    '''
 
+def p_PARAMSEXP2(p):
+    '''
+    paramsexp2 : exp neuralpar2 auxparamsexp2
+            | empty
+    '''
 
+def p_AUXPARAMSEXP2(p):
+    '''
+    auxparamsexp2 : COMMA exp auxparamsexp2
+            | empty
+    '''
 
+def p_NEURALERA(p):
+    '''
+    neuralera :
+    '''
+    global QUADSlist,HASHofoperatorsinquads,POper,COUNTERparameter
+    POper.append("~~~")
+    id = p[-3] # FUNCTION ID
+    QUADSlist.append (Quadruple(HASHofoperatorsinquads['ERA'],-1,-1,id))
+    COUNTERparameter.append(0)
 
+def p_NEURALPAR(p):
+    '''
+    neuralpar : RIGHTPAR
+    '''
+    global QUADSlist,HASHofoperatorsinquads,Tableof_functions,GlobalVar_set
+    global POper,PilaO,Ptypes,COUNTERparameter,PARAMETERStypelist,currentfunctionname
+    POper.pop() ## GET RID OF THE FALSE BOTTOM
+    id = p[-4] #FUNCTION NAME BEING 4 TOKENS BACK
+    counter = COUNTERparameter.pop()
+    if len(PARAMETERStypelist) != counter:
+        errorhandler(11)
+    startaddress = Tableof_functions[id]['Initialfuncpoint']
+    fucntionvirtualaddress = GlobalVar_set[id]['virtualaddress']
+    functiontype = GlobalVar_set[id]['type']
+    temporal = setAVAILvirtualtempaddress(functiontype)
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOSUB'],id,-1,startaddress))
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],fucntionvirtualaddress,-1,temporal))
+    PilaO.append(temporal)
+    Ptypes.append(functiontype)
 
+def p_NEURALPAR2(p):
+    '''
+    neuralpar2 :
+    '''
+    global PARAMSINTcounter,PARAMSFLOATcounter,PARAMSCHARcounter,PARAMETERStypelist
+    global PilaO,Ptypes,QUADSlist,HASHofoperatorsinquads,PARAMETERSvarlist,COUNTERparameter
+    if PilaO and Ptypes and PARAMETERStypelist:
+        argument = PilaO.pop()
+        argumenttype = Ptypes.pop()
+        counter = COUNTERparameter.pop()
+        if argumenttype != PARAMETERStypelist[counter]:
+            errorhandler(12)
+        if argumenttype == 'int':
+            PARAMSINTcounter += 1
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
+        if argumenttype == 'float':
+            PARAMSFLOATcounter += 1
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
+        if argumenttype == 'char':
+            PARAMSCHARcounter += 1
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
+        COUNTERparameter.append(counter+1)
+    else:
+        if len(PARAMETERStypelist)!= COUNTERparameter:
+            errorhandler(13)
 
+# RETURNING SPECIAL QUADRUPLE LOGIC
 
+def p_RETURNING(p):
+    '''
+    returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    '''
+    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set
+    valuetoreturn = PilaO.pop() ## CHECK THE STATUS OF PILAO AND PTYPES
+    Ptypes.pop()
+    functionvirtualaddr = GlobalVar_set[currentfunctionname]['virtualaddress'] # GET THE ADDRESS OF THE SPECIAL FUNCTION ADDRESS TO BE USED AS TEMPORAL CONTAINER
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['RETURN'],valuetoreturn,-1,functionvirtualaddr))
 
 
 #### STATUTES HANDLING #####
@@ -624,12 +775,6 @@ def p_SPECIALFUNC(p):
     '''
     specialfunc : empty
     '''
-
-
-
-
-
-
 
 
 #### ASSIGNING IDs TO VARIABLES LOGIC SECTION############
@@ -719,20 +864,6 @@ def p_MULREAD(p):
     mulread : COMMA ID idarray mulread
             | empty
     '''
-
-# RETURNING SPECIAL QUADRUPLE LOGIC
-
-def p_RETURNING(p):
-    '''
-    returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
-    '''
-    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set
-    valuetoreturn = PilaO.pop() ## CHECK THE STATUS OF PILAO AND PTYPES
-    Ptypes.pop()
-    functionvirtualaddr = GlobalVar_set[currentfunctionname]['virtualaddress'] # GET THE ADDRESS OF THE SPECIAL FUNCTION ADDRESS TO BE USED AS TEMPORAL CONTAINER
-    QUADSlist.append(Quadruple(HASHofoperatorsinquads['RETURN'],valuetoreturn,-1,functionvirtualaddr))
-
-
 
 ########### CYCLES AND DECISIONS #############
 
@@ -1084,7 +1215,10 @@ def p_FINEXP(p):
             | cteexp
     '''
     # PARENTHESES HANDLING AND VECTORS HANDLING SECTION
-
+    if len(p) == 3: # FUNCTION CALL HANDLING HERE
+        newvirtualaddr = virtualaddrfetch(p[1])
+        PilaO.append(newvirtualaddr)
+        Ptypes.append(getVALtype(p[1]))
     #
     if len(POper) > 0:
         if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
@@ -1120,26 +1254,6 @@ def p_CTEEXP(p):
             ConstantVar_set[p[1]] = setAVAILvirtualCTEaddress(p[1])
 
 
-
-#FUNCTIONS WITH PARAMETERS CALL OR ARRAY CALL HANDLING 
-
-def p_PARAMSEXP(p):
-    '''
-    paramsexp : LEFTPAR paramsexp2 RIGHTPAR
-                | idarray
-    '''
-
-def p_PARAMSEXP2(p):
-    '''
-    paramsexp2 : exp auxparamsexp2
-            | empty
-    '''
-
-def p_AUXPARAMSEXP2(p):
-    '''
-    auxparamsexp2 : COMMA exp auxparamsexp2
-            | empty
-    '''
 ####EXCEPTIONS HANDLING#####
 
 def p_empty(p):
