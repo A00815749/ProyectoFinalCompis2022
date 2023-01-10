@@ -71,8 +71,8 @@ for x in Tableof_functions.keys(): # GET THE THE NAME OF THE MAIN PROGRAM FUNCTI
     if Tableof_functions[x]['context'] == 'g':
         programname = x
 
-GLOBALmemory= Memorysimulacra()
-localmemory = None
+GLOBALmemory = Memorysimulacra()
+localmemory = Memorysimulacra()
 
 for elem in Tableof_functions[programname]['variables']: ## READ THE GLOBAL MEMORY
     vmaddress = Tableof_functions[programname]['variables'][elem]['virtualaddress'] # GET THE REPRESENTATIVE BLOCKS IN THE TABLE OF FUNCTIONS OF THE COMPILER
