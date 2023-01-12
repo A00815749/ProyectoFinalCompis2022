@@ -67,6 +67,15 @@ def isReadable(Variable, value):# CHECK IF IT CAN BE READ AS VARIABLE
             ERROR("TYPE MISMATCH WITH VARIABLE BLOCK ", value)
 
 
+def changeofcontextnext(value): # METHOD TO CHECK IF IT IS THE LAST LOCAL VARIABLE BEFORE CONTEXT CHANGE
+    global STACKofexecs
+    try:
+        STACKofexecs[-1].simmemory[value]
+        return True
+    except:
+        return False
+
+
 for x in Tableof_functions.keys(): # GET THE THE NAME OF THE MAIN PROGRAM FUNCTION
     if Tableof_functions[x]['context'] == 'g':
         programname = x
@@ -100,10 +109,6 @@ while PROCCOUNTER <= len(Quads):
 
 
     ####################### VIRTUAL MACHINE CONSOLE APPLICATION LOGIC STARTS HERE #######################
-
-
-
-
     # OPERATOR BEING "  EQUAL   =  "
     if int(operator) == 11:
         if Scopesensorglobal: # GLOBAL VARIABLE OR VALUES ASSIGNED TO GLOBAL VARIABLE
@@ -141,11 +146,7 @@ while PROCCOUNTER <= len(Quads):
             elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
                 localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] + GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
             else:
-                ERROR("TRYING NULL/EMPTY IN THE SUM QUADS")
-    
-    
-    
-    
+                ERROR("NULL VALUES IN THE SUM QUADS")
     
     # OPERATOR BEING "  TIMES   *  "
     elif int(operator) == 3:
@@ -164,7 +165,7 @@ while PROCCOUNTER <= len(Quads):
             elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
                 localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] * GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
             else:
-                ERROR("TRYING NULL/EMPTY IN THE TIMES QUADS")
+                ERROR("NULL VALUES THE TIMES QUADS")
 
 
     # OPERATOR BEING "  REST   -  "
@@ -174,17 +175,29 @@ while PROCCOUNTER <= len(Quads):
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
             else:
                 ERROR("EITHER OPERAND IS NULL/EMPTY","REST OPERATOR QUAD")
-        else: #MISSING THE CHANGE OF CONTEXT WHILE DEALING TINF FUNCTIONS, WAITING FOR COMPILER PART USING STACKofexecs 
-            if localsensor(int(leftoperand)) and localsensor (int(rightoperand)):
-                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] - localmemory.simmemory[int(rightoperand)]
-            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
-                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
-            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
-                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - localmemory.simmemory[int(rightoperand)]
-            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
-                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+        else:
+            if len(STACKofexecs) > 0:
+                if changeofcontextnext(int(leftoperand)) and changeofcontextnext(int(rightoperand)):
+                    STACKofexecs[-1].simmemory[int(result)] = STACKofexecs[-1].simmemory[int(leftoperand)] - STACKofexecs[-1].simmemory[int(rightoperand)]
+                elif changeofcontextnext(int(leftoperand)) and globalsensor(int(rightoperand)):
+                    STACKofexecs[-1].simmemory[int(result)] = STACKofexecs[-1].simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
+                elif globalsensor(int(leftoperand)) and changeofcontextnext(int(rightoperand)):
+                    STACKofexecs[-1].simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - STACKofexecs[-1].simmemory[int(rightoperand)]
+                elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                    STACKofexecs[-1].simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+                else:
+                    ERROR("NULL VALUES IN THE REST QUADS")
             else:
-                ERROR("TRYING NULL/EMPTY IN THE REST QUADS")
+                if localsensor(int(leftoperand)) and localsensor (int(rightoperand)):
+                    localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] - localmemory.simmemory[int(rightoperand)]
+                elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                    localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
+                elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                    localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - localmemory.simmemory[int(rightoperand)]
+                elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                    localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+                else:
+                    ERROR("NULL VALUES IN THE REST QUADS")
 
     # OPERATOR BEING "  DIVIDE   /  "
     elif int(operator) == 4:
@@ -218,7 +231,7 @@ while PROCCOUNTER <= len(Quads):
                 else:
                     localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] / GLOBALmemory.simmemory[int(rightoperand)]
             else:
-                ERROR("TRYING NONES IN THE DIVIDE QUADS")
+                ERROR("NULL VALUES IN THE DIVIDE QUADS")
 
     # OPERATOR BEING "  READ  "
     elif int(operator)==12:
@@ -235,7 +248,6 @@ while PROCCOUNTER <= len(Quads):
                 GLOBALmemory.simmemory[int(result)] = value # SAVE IT IN MEMORY
 
 
-
     # OPERATOR BEING "  WRITE  "
     elif int(operator) == 13:
         if result[0] == '"':
@@ -247,7 +259,286 @@ while PROCCOUNTER <= len(Quads):
                 print(localmemory.simmemory[int(result)])
             except:
                 print(GLOBALmemory.simmemory[int(result)])
+    
 
+    # OPERATOR BEING "  GREATER    >  "
+
+    elif int(operator) == 5 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","GREATER OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","GREATER OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] > GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] > localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] > GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] > localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] > GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE > QUADS")
+
+
+    # OPERATOR BEING "  GREATERAND    >=  "
+
+    elif int(operator) == 6 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","GREATERAND OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","GREATERAND OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] >= GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] >= localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] >= GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] >= localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] >= GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE >= QUADS")
+
+
+    # OPERATOR BEING "  LESSER    <  "
+    
+    elif int(operator) == 7 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","LESSER OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","LESSER OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] < GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] < localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] < GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] < localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] < GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE < QUADS")
+
+
+    # OPERATOR BEING "  LESSERAND    <=  "
+    
+    elif int(operator) == 8 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","LESSERAND OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","LESSERAND OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] <= GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] <= localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] <= GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] <= localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] <= GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE <= QUADS")
+
+
+    # OPERATOR BEING "  SAME    ==  "
+    
+    elif int(operator) == 9 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","SAME OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","SAME OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] == GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] == localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] == GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] == localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] == GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE == QUADS")
+
+
+    # OPERATOR BEING "  NOTSAME    <>  "
+    
+    elif int(operator) == 10 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","NOTSAME OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","NOTSAME OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] != GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] != localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] != GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] != localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] != GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE <> QUADS")
+
+    
+    # OPERATOR BEING "  AND  "
+    
+    elif int(operator) == 14 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] and localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] and localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE AND QUADS")
+
+    
+    # OPERATOR BEING "  OR  "
+
+    elif int(operator) == 15 :
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
+            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+                ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
+            GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] or GLOBALmemory.simmemory[int(rightoperand)]
+        else:
+            if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] or localmemory.simmemory[int(rightoperand)]
+            elif localsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)] or GLOBALmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and localsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] or localmemory.simmemory[int(rightoperand)]
+            elif globalsensor(int(leftoperand)) and globalsensor(int(rightoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] or GLOBALmemory.simmemory[int(rightoperand)] # ACCOUNT FOR CONTEXT CHANGES
+            else:
+                ERROR("NULL VALUES IN THE OR QUADS")
+
+    # OPERATOR BEING "  GOTO  "
+    elif int(operator) == 16:
+        PROCCOUNTER = int(result) - 2 # LOAD THE JUMP, ADJUSTING WITH THE OFFSET
+
+
+    # OPERATOR BEING "  GOTOF  "
+    elif int(operator) == 17:
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
+                ERROR("NULL VALUE IN OPERAND","GOTOF OPERATOR QUAD")
+            if not GLOBALmemory.simmemory[int(leftoperand)]:
+                PROCCOUNTER=int(result) - 2 # DO THE JUMP ONLY IF THE LEFTOPERAND BOOLEAN IS FALSE
+        else:
+            if localsensor(int(leftoperand)):
+                if localmemory.simmemory[int(leftoperand)] == None:
+                    ERROR("NULL VALUE IN OPERAND","GOTOF OPERATOR QUAD")
+                if not localmemory.simmemory[int(leftoperand)]:
+                    PROCCOUNTER=int(result)- 2 # DO THE JUMP ONLY IF THE LEFTOPERAND BOOLEAN IS FALSE
+            elif globalsensor(int(leftoperand)):
+                if GLOBALmemory.simmemory[int(leftoperand)] == None:
+                    ERROR("NULL VALUE IN OPERAND","GOTOF OPERATOR QUAD")
+                if not GLOBALmemory.simmemory[int(leftoperand)]:
+                    PROCCOUNTER=int(result)- 2 # DO THE JUMP ONLY IF THE LEFTOPERAND BOOLEAN IS FALSE
+
+
+    # OPERATOR BEING "  GOTOV  "
+    elif int(operator) == 18:
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
+                ERROR("NULL VALUE IN OPERAND","GOTOV OPERATOR QUAD")
+            if GLOBALmemory.simmemory[int(leftoperand)]:
+                PROCCOUNTER=int(result) - 2 # DO THE JUMP ONLY IF THE LEFTOPERAND BOOLEAN IS TRUE
+        else:
+            if localsensor(int(leftoperand)):
+                if localmemory.simmemory[int(leftoperand)] == None:
+                    ERROR("NULL VALUE IN OPERAND","GOTOV OPERATOR QUAD")
+                if localmemory.simmemory[int(leftoperand)]:
+                    PROCCOUNTER=int(result)- 2 # DO THE JUMP ONLY IF THE LEFTOPERAND BOOLEAN IS TRUE
+            elif globalsensor(int(leftoperand)):
+                if GLOBALmemory.simmemory[int(leftoperand)] == None:
+                    ERROR("NULL VALUE IN OPERAND","GOTOV OPERATOR QUAD")
+                if GLOBALmemory.simmemory[int(leftoperand)]:
+                    PROCCOUNTER=int(result)- 2 # DO THE JUMP ONLY IF THE LEFTOPERAND BOOLEAN IS TRUE
+
+
+    # OPERATOR BEING "  ERA  "
+    elif int(operator)== 19:
+        if localmemory is not None: # IS IT NOT EMPTY?
+            STACKofexecs.append(localmemory)
+            localmemory = Memorysimulacra()
+            loadlocalmemory(result) # START THE FUNCTION NAME
+        else:
+            localmemory = Memorysimulacra()
+            loadlocalmemory(result)
+
+    # OPERATOR BEING "  VER  "
+    elif int(operator)==20:
+        if Scopesensorglobal:
+            if GLOBALmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory[int(result)] or GLOBALmemory.simmemory[int(leftoperand)] < 0:
+                ERROR ("VECTOR INDEX OUT OF BOUNDS ",leftoperand)
+        else:
+            if localsensor(int(leftoperand)):
+                if localmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory[int(result)] or GLOBALmemory.simmemory[int(rightoperand)] < 0:
+                    ERROR ("VECTOR INDEX OUT OF BOUNDS ",leftoperand)
+            elif globalsensor(int(leftoperand)):
+                if GLOBALmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory(int(result)) or GLOBALmemory.simmemory[int(rightoperand)]< 0:
+                    ERROR ("VECTOR INDEX OUT OF BOUNDS ",leftoperand)
+
+    # OPERATOR BEING "  ENDPROC  "
+    elif int(operator) == 21:
+        if STACKofexecs:
+            localmemory=STACKofexecs.pop() # POP THE STACK OF EXECUTIONS
+        else:
+            Scopesensorglobal = True # CHANGE THE CONTEZT
+        PROCCOUNTER = PROCList.pop()
+    
+    # OPERATOR BEING "  PARAMS  "
+    elif int(operator)==22:
+        if Scopesensorglobal:
+            localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
+        else:
+            if changeofcontextnext(int(leftoperand)):
+                localmemory.simmemory[int(result)] = STACKofexecs[-1].simmemory[int(leftoperand)]
+            elif globalsensor(int(leftoperand)):
+                localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
+
+    # OPERATOR BEING "  GOSUB  "
+    elif int(operator)==23:
+        Scopesensorglobal=False # WE ARE IN LOCAL FUNCS 
+        PROCList.append(PROCCOUNTER+1) # GET ME THE FUNCTION QUADS
+        PROCCOUNTER = int(result)-2 # JUMP TO THE FUNCTION
+
+    # OPERATOR BEING "  RETURN  "
+    elif int(operator)==30:
+        if localsensor(int(leftoperand)):
+            GLOBALmemory.simmemory[int(result)]= localmemory.simmemory[int(leftoperand)]
+        elif globalsensor(int(leftoperand)):
+            GLOBALmemory.simmemory[int(result)]= GLOBALmemory.simmemory[int(leftoperand)]
+        if not STACKofexecs:
+            Scopesensorglobal = True
+        else:
+            localmemory=STACKofexecs.pop()
+        PROCCOUNTER = PROCList.pop() - 1 # JUMP TO THE ACTUAL ADDRESS
 
     PROCCOUNTER+=1
     if(PROCCOUNTER==len(Quads)):
