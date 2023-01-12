@@ -647,9 +647,9 @@ def p_NEURALINSERTID(p):
     neuralinsertid : ID
     '''
     global Scopesensor, currenttyping, PARAMETERSvarlist, PARAMETERStypelist
-    Scopesensor - 'l'
+    Scopesensor = 'l'
     virtualaddress = getsetvirtualaddrVARS(currenttyping,Scopesensor)
-    insertinVARStables(p[1],virtualaddress,virtualaddress,currenttyping)
+    insertinVARStables(p[1],virtualaddress,currenttyping)
     PARAMETERSvarlist.append(virtualaddress)
     PARAMETERStypelist.append(currenttyping)
 
@@ -1214,7 +1214,14 @@ def p_FINEXP(p):
     finexp : addparenth exp popparenth
             | cteexp
     '''
-    # PARENTHESES HANDLING AND VECTORS HANDLING SECTION
+    global PilaO,POper,Ptypes,QUADSlist,HASHofoperatorsinquads,ConstantVar_set
+    # PARENTHESES HANDLING, VECTORS HANDLING SECTION AND CTEEXP HANDLING
+    if len(p) == 2:
+        virtualaddr = virtualaddrfetch(p[1])
+        if not virtualaddr >= 27000 and virtualaddr < 30000: # IF NOT A FUNCTION CALL ID
+            PilaO.append(virtualaddr)
+            Ptypes.append(getVALtype(p[1]))
+
     if len(p) == 3: # FUNCTION CALL HANDLING HERE
         newvirtualaddr = virtualaddrfetch(p[1])
         PilaO.append(newvirtualaddr)
