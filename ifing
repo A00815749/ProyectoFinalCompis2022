@@ -1,0 +1,23 @@
+Program decisiones;
+VARS
+    int: x, y, z, a;
+
+main(){
+    x = 10;
+    y = 0;
+    z = 2; 
+    if(x > y) then {
+        y = y + 5;
+        write("new y: ", y);
+    }
+    if(y <> 0) then {
+        y = 0;
+        write("Y returned to 0");
+    }
+    if(y == 0 and z >= x) then {
+        write("Always false");
+    }else{
+        write("ELSE GET HERE");
+    }
+
+}

@@ -1,0 +1,12 @@
+Program whiles;
+VARS
+    int: x;
+main(){
+    x = 0;
+    while(x < 15) do{
+        write("Counter ", x);
+        x = x + 1;
+    }
+
+    write("End of loop");
+}
