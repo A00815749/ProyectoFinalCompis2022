@@ -427,7 +427,7 @@ def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CA
 # 11 = Error in a function call with an invalid number of parameters (neuralpar)
 # 12 =  Error in a function call with a mismatch of parameters (neuralpar2)
 # 13 = Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)
-#
+# 14 =  Error in a NULL check where the function id does not exist (neuralexist at CTEEXP)
 #
 #
 #
@@ -464,6 +464,8 @@ def errorhandler(errortype, location = ""):
         errormessage = "Error in a function call with a mismatch of parameters (neuralpar2)"
     elif (errortype == 13):
         errormessage = "Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)"
+    elif (errortype == 14):
+        errormessage = "Error in a NULL check where the function id does not exist (neuralexist at CTEEXP)"
     print("ERROR " + errormessage + "\n at ===> " + str(location))
     sys.exit()
 
@@ -507,6 +509,7 @@ def p_NEURALTABLEFUNCTIONS(p):
     neuraltablefunctions : ID
     '''
     #print (p[1]) #THE VALUE STORED IN ID
+    p[0] = p[1]  # STORING THE TOKEN VALUE IN THE YACC STACK 'p'
     addtotableoffunctions(p[1],'VOID',Scopesensor, GlobalVar_set)
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,-999))
     Pjumps.append(len(QUADSlist))
@@ -543,6 +546,7 @@ def p_NEURALINSERTVAR(p):
     neuralinsertvar : ID
     '''
     global Scopesensor,currenttyping
+    p[0] = p[1] # TOKEN STORING IN THE IN THE YACC STACK 'p'
     newaddr = getsetvirtualaddrVARS(currenttyping,Scopesensor) # GET THE VIRTUAL BLOCK ADDRESS DEPENDING ON THE TYPE OF VARIABLE AND THE SCOPE OF THE ENVIRONMENT
     insertinVARStables(p[1],newaddr,currenttyping) # STORE THE VARIABLE DATA
     
@@ -567,7 +571,7 @@ def p_TYPING(p):
     '''
     global currenttyping
     currenttyping = p[1] # STORE THE INT, FLOAT OR CHAR TOKEN FOR THE VARIABLE TYPE
-
+    p[0] = p[1]  # STORING THE TOKEN IN THE YACC STACK 'p'
 
 ####### MODULES HANDLING ##########
 
@@ -582,6 +586,7 @@ def p_NEURALINSERTFUNCNAME(p):
     neuralinsertfuncname : ID
     '''
     global Scopesensor, currentfunctionname,LocalVar_set,GlobalVar_set,currenttyping
+    p[0] = p[1]
     Scopesensor = 'l'
     funcaddr = getsetvirtualaddrFUNC() # GET A FUNCTION ADDRESS IN MEMORY
     currentfunctionname = p[1]
@@ -735,7 +740,7 @@ def p_NEURALPAR2(p):
         COUNTERparameter.append(counter+1)
     else:
         if len(PARAMETERStypelist)!= COUNTERparameter:
-            errorhandler(13)
+            errorhandler(13,p[-1])
 
 # RETURNING SPECIAL QUADRUPLE LOGIC
 
@@ -781,7 +786,7 @@ def p_SPECIALFUNC(p):
 
 def p_ASSIGN(p):
     '''
-    assign : neuralassign1 idarray neuralassign2 exp SEMICOLON 
+    assign : neuralassign1 idarray neuralassign2 assignexp SEMICOLON 
     '''
     global PilaO,Ptypes,HASHofoperatorsinquads,POper,QUADSlist
     if PilaO and Ptypes:
@@ -800,11 +805,10 @@ def p_NEURALASSIGN1(p):
     neuralassign1 : ID
     '''
     global Ptypes,PilaO
+    p[0] = p[1]
     virtualaddr = virtualaddrfetch(p[1])
     PilaO.append(virtualaddr)
     Ptypes.append(getVALtype(p[1]))
-
-
 
 def p_NEURALASSIGN2(p):
     '''
@@ -812,6 +816,12 @@ def p_NEURALASSIGN2(p):
     '''
     global POper
     POper.append(p[1]) # STORING THE EQUAL TOKEN
+
+def p_ASSIGNEXP(p):
+    '''
+    assignexp : exp
+    '''
+    p[0] = p[1] # STORE THAT EXP FOR FUTURE USE
 
 
 ###### WRITING LOGIC SECTION ############
@@ -1035,6 +1045,7 @@ def p_EXP(p):
     '''
     exp : andexp exp1
     '''
+    p[0]= p[1] # STORE THAT EXP TOKEN 
 
 def p_EXP1(p):
     '''
@@ -1046,6 +1057,7 @@ def p_ANDEXP(p):
     '''
     andexp : boolexp andexp1
     '''
+    p[0] = p[1] # STORE THAT ANDEXP TOKEN
 
 def p_ANDEXP1(p):
     '''
@@ -1088,7 +1100,7 @@ def p_BOOLEXP(p):
             QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
             PilaO.append(resultaddress)
             Ptypes.append(resulttype)
-
+    p[0] = p[1] # STORE THAT BOOLEXP
 
 
 def p_BOOLEXP1(p):
@@ -1137,6 +1149,7 @@ def p_ARITHEXP(p):
             QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
             PilaO.append(resultaddress)
             Ptypes.append(resulttype)
+    p[0] = p[1] # STORE THAT ARITHEXP
 
 def p_ARITHEXP1(p):
     '''
@@ -1176,6 +1189,7 @@ def p_GEOEXP(p):
             QUADSlist.append(Quadruple(HASHofoperatorsinquads[operator],leftOperand,rightOperand,resultaddress))
             PilaO.append(resultaddress)
             Ptypes.append(resulttype)
+    p[0] = p[1] #STORE THAT GEOEXP
 
 def p_GEOEXP1(p):
     '''
@@ -1221,11 +1235,12 @@ def p_FINEXP(p):
         if not virtualaddr >= 27000 and virtualaddr < 30000: # IF NOT A FUNCTION CALL ID
             PilaO.append(virtualaddr)
             Ptypes.append(getVALtype(p[1]))
-
+        p[0] = p[1] # STORE THAT CONSTANT EXP
     if len(p) == 3: # FUNCTION CALL HANDLING HERE
         newvirtualaddr = virtualaddrfetch(p[1])
         PilaO.append(newvirtualaddr)
         Ptypes.append(getVALtype(p[1]))
+        p[0] = p[1] # STORE THAT FUNCTION CALL TOKEN
     #
     if len(POper) > 0:
         if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
@@ -1253,13 +1268,22 @@ def p_CTEEXP(p):
     cteexp : CTEINT
             | CTEFLOAT
             | CTECHAR
-            | ID paramsexp
+            | ID neuralexist paramsexp
     '''
     global ConstantVar_set
     if len(p) == 2:
         if not p[1] in ConstantVar_set: #IF THE CONSTANT IS NOT ALREADY SAVED, SAVE IT NOW
             ConstantVar_set[p[1]] = setAVAILvirtualCTEaddress(p[1])
+    p[0] = p[1] # STORE THAT CONSTANT EXP
 
+def p_NEURALEXIST(p):
+    '''
+    neuralexist :
+    '''
+    global LocalVar_set,GlobalVar_set,ConstantVar_set,Tableof_functions
+    if p[-1] not in ConstantVar_set and p[-1] not in GlobalVar_set and p[-1] not in LocalVar_set and p[-1] not in Tableof_functions:
+        errorhandler(14,p[-1])
+    p[0] = p[-1] # STORE THAT ID BEFORE FUNCTION CALLS
 
 ####EXCEPTIONS HANDLING#####
 

@@ -77,7 +77,7 @@ def changeofcontextnext(value): # METHOD TO CHECK IF IT IS THE LAST LOCAL VARIAB
 
 
 for x in Tableof_functions.keys(): # GET THE THE NAME OF THE MAIN PROGRAM FUNCTION
-    if Tableof_functions[x]['context'] == 'g':
+    if Tableof_functions[x]['scopecontext'] == 'g':
         programname = x
 
 GLOBALmemory = Memorysimulacra()
@@ -91,9 +91,9 @@ for elem2 in ConstantVar_set: # LOAD THE DIRECT CONSTANT VALUES TO THE MEMORY
     virtualaddr = ConstantVar_set[elem2]
     if virtualaddr < 23000:
         GLOBALmemory.simmemory[virtualaddr]=int(elem2)
-    if virtualaddr < 25000:
+    elif virtualaddr < 25000:
         GLOBALmemory.simmemory[virtualaddr]=float(elem2)
-    if virtualaddr < 27000:
+    elif virtualaddr < 27000:
         GLOBALmemory.simmemory[virtualaddr]=str(elem2) 
 
 
@@ -112,18 +112,18 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  EQUAL   =  "
     if int(operator) == 11:
         if Scopesensorglobal: # GLOBAL VARIABLE OR VALUES ASSIGNED TO GLOBAL VARIABLE
-            if (GLOBALmemory.simmemory[int(leftoperand)]): # IS THERE SOMETHING TO ASSIGN?
+            if (GLOBALmemory.simmemory[int(leftoperand)] != None): # IS THERE SOMETHING TO ASSIGN?
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
             else:
                 ERROR("LEFT OPERAND IS NULL/EMPTY","ASSIGN = OPERATOR QUAD")
         else:
             try: # LOCAL VARIABLE OR VALUE TO LOCAL VARIABLE
-                if(localmemory.simmemory[int(leftoperand)]):
+                if(localmemory.simmemory[int(leftoperand) ] != None):
                     localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS NULL/EMPTY","ASSIGN = OPERATOR QUAD")
             except: # GLOBAL VARIABLE TO LOCAL
-                if(GLOBALmemory.simmemory[int(leftoperand)]):
+                if(GLOBALmemory.simmemory[int(leftoperand)]!= None):
                     localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS NULL/EMPTY","ASSIGN = OPERATOR QUAD")
@@ -132,7 +132,7 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  SUM   +  "
     elif int(operator) == 1:
         if Scopesensorglobal:
-            if(GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]): # CHECK IF BOTH ACTUALLY HAVE VALUES
+            if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] + GLOBALmemory.simmemory[int(rightoperand)]
             else:
                 ERROR("EITHER OPERAND IS NULL/EMPTY","SUM OPERATOR QUAD")
@@ -151,7 +151,7 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  TIMES   *  "
     elif int(operator) == 3:
         if Scopesensorglobal:
-            if(GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]): # CHECK IF BOTH ACTUALLY HAVE VALUES
+            if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] * GLOBALmemory.simmemory[int(rightoperand)]
             else:
                 ERROR("EITHER OPERAND IS NULL/EMPTY","TIMES OPERATOR QUAD")
@@ -171,7 +171,7 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  REST   -  "
     elif int(operator) == 2:
         if Scopesensorglobal:
-            if(GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]): # CHECK IF BOTH ACTUALLY HAVE VALUES
+            if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
             else:
                 ERROR("EITHER OPERAND IS NULL/EMPTY","REST OPERATOR QUAD")
@@ -202,7 +202,7 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  DIVIDE   /  "
     elif int(operator) == 4:
         if Scopesensorglobal:
-            if(GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]): # CHECK IF BOTH ACTUALLY HAVE VALUES
+            if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 if type(GLOBALmemory.simmemory[int(leftoperand)]) == int and type(GLOBALmemory.simmemory[int(rightoperand)]) == int: # CHECK IF WE ARE DEALING WITH INT VARIABLES OR FLOAT VARIABLES
                     GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] // GLOBALmemory.simmemory[int(rightoperand)] #FLOOR DIVISION
                 else:

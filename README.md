@@ -11,14 +11,13 @@ Diciembre 30 ~ Enero 6 Arreglo del guardado de variables locales, inicializacion
 
 Enero 7 ~ 10 Inicio de la maquina virtual, agregado de la seccion de ciclos while y for, manejando la parte inicial de la logica de funciones, revision de la mapa de memoria de ejecucion de la maquina virtual
 
-
+Enero 11 ~ 12 Avance de la maquina virtual con secciones de los booleanos y saltos, con secciones iniciales de parametros de funciones, Debuggeo de la PilaO y descubrimiento de la falta de guardado de expresiones constantes y la necesidad de guardar ciertos tokens en la gramatica.
 
 
 
 
 
 ## SECTION FOR PENDING PROBLEMS TO CHECK BETWEEN CODING SESSIONS ###
- CHECK THE ENTIRE IF-ELSE, WHILE, FOR SECTION LOGIC TO SEE IF IT PASSES MUSTER, DOUBLE CHECK ASSIGN, READ, WRITE SECTIONS
- PilaO WAS EMPTY BECAUSE MISSING SECTIONS FOR ADDING VARIABLES IN FUNCTION CALLS AND DEFINITIONS
- CHECK PARAMETERS CALLS AND DEFINITIONS SECTION
- IF THIS RUNS THEN THE ONLY THING THAT WILL BE MISSING WILL BE VECTORS IN THE PARSER SECTION
+ DOUBLE CHECK ASSIGN, READ, WRITE SECTIONS
+ CHECK PARAMETERS CALLS , DEFINITIONS IF-ELSE, WHILE, FOR SECTION LOGIC TO SEE IF IT PASSES MUSTER
+ IT RUNS THE STATUTES.TXT TEST FILE
