@@ -48,7 +48,7 @@ Rule 30    paramsexp -> LEFTPAR neuralera paramsexp2 neuralpar
 Rule 31    paramsexp -> idarray
 Rule 32    paramsexp2 -> exp neuralpar2 auxparamsexp2
 Rule 33    paramsexp2 -> empty
-Rule 34    auxparamsexp2 -> COMMA exp auxparamsexp2
+Rule 34    auxparamsexp2 -> COMMA exp neuralpar2 auxparamsexp2
 Rule 35    auxparamsexp2 -> empty
 Rule 36    neuralera -> <empty>
 Rule 37    neuralpar -> RIGHTPAR
@@ -244,7 +244,7 @@ neuralinsertid       : 25
 neuralinsertvar      : 6 11
 neuralmainjump       : 1
 neuralpar            : 30
-neuralpar2           : 32
+neuralpar2           : 32 34
 neuralread           : 63
 neuraltablefunctions : 1
 neuralwhile1         : 72
@@ -4597,7 +4597,7 @@ state 205
 state 206
 
     (32) paramsexp2 -> exp neuralpar2 . auxparamsexp2
-    (34) auxparamsexp2 -> . COMMA exp auxparamsexp2
+    (34) auxparamsexp2 -> . COMMA exp neuralpar2 auxparamsexp2
     (35) auxparamsexp2 -> . empty
     (117) empty -> .
 
@@ -4680,7 +4680,7 @@ state 213
 
 state 214
 
-    (34) auxparamsexp2 -> COMMA . exp auxparamsexp2
+    (34) auxparamsexp2 -> COMMA . exp neuralpar2 auxparamsexp2
     (81) exp -> . andexp exp1
     (84) andexp -> . boolexp andexp1
     (88) boolexp -> . arithexp boolexp1
@@ -4793,16 +4793,13 @@ state 221
 
 state 222
 
-    (34) auxparamsexp2 -> COMMA exp . auxparamsexp2
-    (34) auxparamsexp2 -> . COMMA exp auxparamsexp2
-    (35) auxparamsexp2 -> . empty
-    (117) empty -> .
+    (34) auxparamsexp2 -> COMMA exp . neuralpar2 auxparamsexp2
+    (38) neuralpar2 -> .
 
-    COMMA           shift and go to state 214
-    RIGHTPAR        reduce using rule 117 (empty -> .)
+    COMMA           reduce using rule 38 (neuralpar2 -> .)
+    RIGHTPAR        reduce using rule 38 (neuralpar2 -> .)
 
-    auxparamsexp2                  shift and go to state 229
-    empty                          shift and go to state 215
+    neuralpar2                     shift and go to state 229
 
 state 223
 
@@ -4962,10 +4959,16 @@ state 228
 
 state 229
 
-    (34) auxparamsexp2 -> COMMA exp auxparamsexp2 .
+    (34) auxparamsexp2 -> COMMA exp neuralpar2 . auxparamsexp2
+    (34) auxparamsexp2 -> . COMMA exp neuralpar2 auxparamsexp2
+    (35) auxparamsexp2 -> . empty
+    (117) empty -> .
 
-    RIGHTPAR        reduce using rule 34 (auxparamsexp2 -> COMMA exp auxparamsexp2 .)
+    COMMA           shift and go to state 214
+    RIGHTPAR        reduce using rule 117 (empty -> .)
 
+    auxparamsexp2                  shift and go to state 233
+    empty                          shift and go to state 215
 
 state 230
 
@@ -5046,7 +5049,7 @@ state 231
   ! CTEFLOAT        [ reduce using rule 117 (empty -> .) ]
   ! CTECHAR         [ reduce using rule 117 (empty -> .) ]
 
-    statutes                       shift and go to state 233
+    statutes                       shift and go to state 234
     assign                         shift and go to state 50
     reading                        shift and go to state 51
     writing                        shift and go to state 52
@@ -5071,17 +5074,24 @@ state 232
 
     (75) foring -> FOR neuralfor1 idarray EQUAL exp neuralfor2 exp neuralfor3 LEFTBR statutes . RIGHTBR
 
-    RIGHTBR         shift and go to state 234
+    RIGHTBR         shift and go to state 235
 
 
 state 233
 
-    (69) elsing -> neuralelse LEFTBR statutes . RIGHTBR
+    (34) auxparamsexp2 -> COMMA exp neuralpar2 auxparamsexp2 .
 
-    RIGHTBR         shift and go to state 235
+    RIGHTPAR        reduce using rule 34 (auxparamsexp2 -> COMMA exp neuralpar2 auxparamsexp2 .)
 
 
 state 234
+
+    (69) elsing -> neuralelse LEFTBR statutes . RIGHTBR
+
+    RIGHTBR         shift and go to state 236
+
+
+state 235
 
     (75) foring -> FOR neuralfor1 idarray EQUAL exp neuralfor2 exp neuralfor3 LEFTBR statutes RIGHTBR .
 
@@ -5099,7 +5109,7 @@ state 234
     RIGHTBR         reduce using rule 75 (foring -> FOR neuralfor1 idarray EQUAL exp neuralfor2 exp neuralfor3 LEFTBR statutes RIGHTBR .)
 
 
-state 235
+state 236
 
     (69) elsing -> neuralelse LEFTBR statutes RIGHTBR .
 

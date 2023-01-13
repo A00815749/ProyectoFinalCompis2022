@@ -387,13 +387,13 @@ def getsetvirtualaddrVARS(type,scope):
     else:
         if type == 'int':
             LOCALINTcounter+= 1
-            return LOCALINTcounter + 1
+            return LOCALINTcounter 
         elif type == 'float':
             LOCALFLOATcounter+= 1
-            return LOCALFLOATcounter + 1
+            return LOCALFLOATcounter 
         elif type == 'char':
             LOCALCHARcounter+= 1
-            return LOCALCHARcounter + 1
+            return LOCALCHARcounter 
 
 def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CALLED
     if value in LocalVar_set:
@@ -682,7 +682,7 @@ def p_PARAMSEXP2(p):
 
 def p_AUXPARAMSEXP2(p):
     '''
-    auxparamsexp2 : COMMA exp auxparamsexp2
+    auxparamsexp2 : COMMA exp neuralpar2 auxparamsexp2
             | empty
     '''
 
@@ -693,7 +693,7 @@ def p_NEURALERA(p):
     global QUADSlist,HASHofoperatorsinquads,POper,COUNTERparameter
     POper.append("~~~")
     id = p[-3] # FUNCTION ID
-    QUADSlist.append (Quadruple(HASHofoperatorsinquads['ERA'],-1,-1,id))
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['ERA'],-1,-1,id))
     COUNTERparameter.append(0)
 
 def p_NEURALPAR(p):
@@ -731,10 +731,10 @@ def p_NEURALPAR2(p):
         if argumenttype == 'int':
             PARAMSINTcounter += 1
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
-        if argumenttype == 'float':
+        elif argumenttype == 'float':
             PARAMSFLOATcounter += 1
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
-        if argumenttype == 'char':
+        elif argumenttype == 'char':
             PARAMSCHARcounter += 1
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
         COUNTERparameter.append(counter+1)
@@ -999,7 +999,7 @@ def p_NEURALFOR2(p):
     '''
     neuralfor2 : TO
     '''
-    global Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads
+    global Ptypes,PilaO,QUADSlist,HASHofoperatorsinquads,INITIALvalinFOR
     type = Ptypes.pop()
     if type == 'int':
         if PilaO:

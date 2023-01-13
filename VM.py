@@ -265,9 +265,9 @@ while PROCCOUNTER <= len(Quads):
 
     elif int(operator) == 5 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATER OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATER OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] > GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -287,9 +287,9 @@ while PROCCOUNTER <= len(Quads):
 
     elif int(operator) == 6 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATERAND OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATERAND OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] >= GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -309,9 +309,9 @@ while PROCCOUNTER <= len(Quads):
     
     elif int(operator) == 7 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSER OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSER OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] < GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -331,9 +331,9 @@ while PROCCOUNTER <= len(Quads):
     
     elif int(operator) == 8 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSERAND OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSERAND OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] <= GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -353,9 +353,9 @@ while PROCCOUNTER <= len(Quads):
     
     elif int(operator) == 9 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","SAME OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","SAME OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] == GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -375,9 +375,9 @@ while PROCCOUNTER <= len(Quads):
     
     elif int(operator) == 10 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","NOTSAME OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","NOTSAME OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] != GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -397,9 +397,9 @@ while PROCCOUNTER <= len(Quads):
     
     elif int(operator) == 14 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] and GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -419,9 +419,9 @@ while PROCCOUNTER <= len(Quads):
 
     elif int(operator) == 15 :
         if Scopesensorglobal:
-            if GLOBALmemory.simmemory(int(leftoperand)) == None:
+            if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
-            if GLOBALmemory.simmemory(int(rightoperand)) == None:
+            if GLOBALmemory.simmemory[int(rightoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
             GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] or GLOBALmemory.simmemory[int(rightoperand)]
         else:
@@ -501,7 +501,7 @@ while PROCCOUNTER <= len(Quads):
                 if localmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory[int(result)] or GLOBALmemory.simmemory[int(rightoperand)] < 0:
                     ERROR ("VECTOR INDEX OUT OF BOUNDS ",leftoperand)
             elif globalsensor(int(leftoperand)):
-                if GLOBALmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory(int(result)) or GLOBALmemory.simmemory[int(rightoperand)]< 0:
+                if GLOBALmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory[int(result)] or GLOBALmemory.simmemory[int(rightoperand)]< 0:
                     ERROR ("VECTOR INDEX OUT OF BOUNDS ",leftoperand)
 
     # OPERATOR BEING "  ENDPROC  "
