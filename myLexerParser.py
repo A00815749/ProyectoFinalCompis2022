@@ -76,6 +76,7 @@ PilaO = []
 Ptypes = []
 POper = []
 Pjumps = []
+PDim = []
 ###### SENSORS, CHECKING THE SCOPE (CONTEXT) OF THE VARIABLES, & COUNTERS ############
 Scopesensor = 'g' # G for global or l for local
 currenttyping = '' # Stores the typing, being either int float or char
@@ -409,6 +410,44 @@ def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CA
     if type(value)== str:
         return 'char'
 
+def setarraysize(id,context,size): # METHOD ADDING THE SIZE VALUE TO THE VARIABLE THAT IS AN ARRAY
+    global GlobalVar_set,LocalVar_set
+    if context == 'g':
+        GlobalVar_set[id]['size'] = size
+    elif context == 'l':
+        LocalVar_set[id]['size'] = size
+
+def setvirtualaddrarray(context,type,size): # METHOD USED IN DIMENSION MANAGEMENT OF VECTORS
+    global GLOBALINTcounter, GLOBALFLOATcounter, GLOBALCHARcounter
+    global LOCALINTcounter, LOCALCHARcounter, LOCALFLOATcounter
+    if context == 'g':
+        if type == 'int':
+            GLOBALINTcounter += size
+        elif type == 'float':
+            GLOBALFLOATcounter += size
+        elif type == 'char':
+            GLOBALCHARcounter += size
+    elif context == 'l':
+        if type == 'int':
+            LOCALINTcounter += size
+        elif type == 'float':
+            LOCALFLOATcounter += size
+        elif type == 'char':
+            LOCALCHARcounter += size
+
+def fetchvirtualaddr(id): # GET THE INITIAL VIRTUAL ADDRESS ONLY FOR VECTORS
+    global GlobalVar_set, LocalVar_set
+    try:
+        return LocalVar_set[id]['virtualaddress']
+    except:
+        return GlobalVar_set[id]['virtualaddress']
+
+def getlimits(id):
+    global GlobalVar_set,LocalVar_set
+    try:
+        return LocalVar_set[id]['size']
+    except:
+        return GlobalVar_set[id]['size']
 
 
 #### ERROR HABDLER IN AUXILIAR METHODS
@@ -427,8 +466,8 @@ def getVALtype(value): # RETURN THE TYPE OF THE VARIABLE OR FUNCTION ID BEING CA
 # 11 = Error in a function call with an invalid number of parameters (neuralpar)
 # 12 =  Error in a function call with a mismatch of parameters (neuralpar2)
 # 13 = Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)
-# 14 =  Error in a NULL check where the function id does not exist (neuralexist at CTEEXP)
-#
+# 14 = Error in a NULL check where the function id does not exist (neuralexist at CTEEXP)
+# 15 = Error in checking if an id actually corresponds to an array in the variables sets (initarray)
 #
 #
 #
@@ -466,6 +505,8 @@ def errorhandler(errortype, location = ""):
         errormessage = "Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)"
     elif (errortype == 14):
         errormessage = "Error in a NULL check where the function id does not exist (neuralexist at CTEEXP)"
+    elif (errortype == 15):
+        errormessage = "Error in checking if an id actually corresponds to an array in the variables sets (initarray)"
     print("ERROR " + errormessage + "\n at ===> " + str(location))
     sys.exit()
 
@@ -550,19 +591,101 @@ def p_NEURALINSERTVAR(p):
     newaddr = getsetvirtualaddrVARS(currenttyping,Scopesensor) # GET THE VIRTUAL BLOCK ADDRESS DEPENDING ON THE TYPE OF VARIABLE AND THE SCOPE OF THE ENVIRONMENT
     insertinVARStables(p[1],newaddr,currenttyping) # STORE THE VARIABLE DATA
     
-
-def p_VARSARR(p):
-    '''
-    varsarr : LEFTSQR CTEINT RIGHTSQR
-        | empty
-    '''
-
 def p_VARSMUL(p): # MULTIPLE VARIABLE LOGIC
     '''
     varsmul : COMMA neuralinsertvar varsarr varsmul
             | SEMICOLON
     '''
 
+###### VECTORS DECLARATION HANDLING #################
+
+
+def p_VARSARR(p):
+    '''
+    varsarr : initdim CTEINT enddim
+        | empty
+    '''
+
+def p_INITDIM(p): # SET THE VARIABLE isArray SENSOR AS TRUE
+    '''
+    initdim : LEFTSQR
+    '''
+    global LocalVar_set,GlobalVar_set,Scopesensor
+    id = p[-1] # STORE THE VARIABLE ID
+    if Scopesensor == 'g':
+        GlobalVar_set[id]['isArray'] = True
+    else:
+        LocalVar_set[id]['isArray'] = True
+
+def p_ENDDIM(p):
+    '''
+    enddim : RIGHTSQR
+    '''
+    global Scopesensor,currenttyping,ConstantVar_set
+    LsDim = int(p[-1]) # STORE THE PREVIOUS TOKEN AS THE UPPER LIMIT, IN THIS LANGUAGE THIS INDICATES THE VECTOR/ARRAY SIZE, FROM 1 TO N
+    id = p[-3]
+    if not p[-1] in ConstantVar_set: # STORE THAT CONSTANT VALUE WITH ITS ACTUAL VIRTUAL ADDRESS
+        ConstantVar_set[LsDim] = setAVAILvirtualCTEaddress(LsDim)
+    setarraysize(id,Scopesensor,LsDim) # STORE THE SIZE OF THE ARRAY
+    setvirtualaddrarray(Scopesensor,currenttyping,LsDim) # MODIFY THE VIRTUAL MEMORY BLOCK WITH THE SPACE NEEDED FOR THE VECTOR
+
+
+
+##### VARIABLES VECTORS CALLS HANDLING #####
+
+def p_IDARRAY(p):
+    '''
+    idarray : initarray exp verify RIGHTSQR
+            | empty
+    '''
+    global PilaO,Ptypes,POper,QUADSlist,HASHofoperatorsinquads,GlobalVar_set,ConstantVar_set
+    if len(p) > 2:
+        if PilaO and POper: # CHECK THE STACKS AND THAT WE ARE IN AN ARRAY AND NOT AN EMPTY
+            aux = PilaO.pop()
+            initialaddr = fetchvirtualaddr(p[-1])
+            if not initialaddr in ConstantVar_set: # IF NEW CONSTANT, SAVE THE VIRTUAL ADDRESS
+                ConstantVar_set[initialaddr] = setAVAILvirtualCTEaddress(initialaddr)
+            virtualaddr = ConstantVar_set[initialaddr] # GET THE VIRTUAL ADDRESS
+            pointer = setAVAILvirtualtempaddress('pointer') # GET THE POINTER VIRTUAL MEMORY DEALT WITH
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],aux,virtualaddr,pointer)) # # GET THE VERIFYING QUADRUPLE 
+            PilaO.append(pointer)
+            POper.pop()
+
+
+def p_INITARRAY(p):
+    '''
+    neuralinitarray : LEFTSQR
+    '''
+    global POper,Ptypes,PilaO
+    if PilaO:
+        id = PilaO.pop()
+        type = Ptypes.pop()
+        name = p[-1] # IDENTIFIER TOKEN
+        try:
+            LocalVar_set[name]['isArray']
+        except:
+            try:
+                GlobalVar_set[name]['isArray']
+            except:
+                errorhandler(15)
+        Dim = 1
+        PDim.append((id,Dim))
+        POper.append("~~~")
+
+
+def p_VERIFY(p):
+    '''
+    verify : 
+    '''
+    global PilaO,QUADSlist,HASHofoperatorsinquads,ConstantVar_set
+    value = PilaO[-1]
+    id = p[-3]
+    limit = getlimits(id)
+    LsDim = virtualaddrfetch(limit)
+    LiDim = virtualaddrfetch(0)
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['VER'],value,LiDim,LsDim)) # GET THE VER QUADRUPLE
+
+###### VARIABLE TYPING HANDLING #########
 def p_TYPING(p):
     '''
     typing : INT
@@ -1029,13 +1152,6 @@ def p_NEURALFOR3(p):
         else:
             errorhandler(10)
 
-##### VARIABLES AND EXPRESSIONS HANDLING #####
-
-def p_IDARRAY(p):
-    '''
-    idarray : LEFTSQR exp RIGHTSQR
-            | empty
-    '''
 
 
 

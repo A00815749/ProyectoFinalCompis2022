@@ -1,0 +1,23 @@
+Program funcS;
+VARS
+    int: a, b, c;
+    float: d, e;
+
+function void calcula (float: x);
+VARS int: y;
+{
+    y = 1;
+    while(y < 11) do {
+        x = x * d;
+        y = y + 1;
+    }
+    write("Acumulado en funcion void", x);
+}
+
+
+main(){
+    a = 3;
+    d = 1.1;
+    write(a, d);
+    calcula(10.0)
+}

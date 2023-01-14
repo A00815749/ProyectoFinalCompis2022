@@ -1,0 +1,12 @@
+Program reading;
+VARS
+    float: a;
+    int: b;
+    char: c;
+main(){
+    write("Reading 3, a float, a int y a char");
+    read(a);
+    read(b);
+    read(c);
+    write("Results: ", a,b,c);
+}

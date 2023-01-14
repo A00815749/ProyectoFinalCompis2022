@@ -75,6 +75,26 @@ def changeofcontextnext(value): # METHOD TO CHECK IF IT IS THE LAST LOCAL VARIAB
     except:
         return False
 
+def vectorsensor(value): # FAST ARRAY SENSOR FOR THE ADDRESS
+    return value >= 30000
+
+def fromVector(index): # HANDLE THE VECTORS WITH THE DOUBLE INDEXING
+    global Scopesensorglobal
+    if Scopesensorglobal:
+        try: 
+            return int(GLOBALmemory.simmemory[index])
+        except:
+            print("The index ==> ",index)
+            print(GLOBALmemory.simmemory)
+            return index
+    else:
+        try:
+            return localmemory.simmemory[index]
+        except:
+            print("The index ==> ", index)
+            print(localmemory.simmemory)
+            return index
+
 
 for x in Tableof_functions.keys(): # GET THE THE NAME OF THE MAIN PROGRAM FUNCTION
     if Tableof_functions[x]['scopecontext'] == 'g':
@@ -111,6 +131,8 @@ while PROCCOUNTER <= len(Quads):
     ####################### VIRTUAL MACHINE CONSOLE APPLICATION LOGIC STARTS HERE #######################
     # OPERATOR BEING "  EQUAL   =  "
     if int(operator) == 11:
+        if vectorsensor(int(result)):
+            result = fromVector(int(result))
         if Scopesensorglobal: # GLOBAL VARIABLE OR VALUES ASSIGNED TO GLOBAL VARIABLE
             if (GLOBALmemory.simmemory[int(leftoperand)] != None): # IS THERE SOMETHING TO ASSIGN?
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
@@ -131,6 +153,10 @@ while PROCCOUNTER <= len(Quads):
 
     # OPERATOR BEING "  SUM   +  "
     elif int(operator) == 1:
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] + GLOBALmemory.simmemory[int(rightoperand)]
@@ -150,6 +176,10 @@ while PROCCOUNTER <= len(Quads):
     
     # OPERATOR BEING "  TIMES   *  "
     elif int(operator) == 3:
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] * GLOBALmemory.simmemory[int(rightoperand)]
@@ -170,6 +200,10 @@ while PROCCOUNTER <= len(Quads):
 
     # OPERATOR BEING "  REST   -  "
     elif int(operator) == 2:
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
@@ -201,6 +235,10 @@ while PROCCOUNTER <= len(Quads):
 
     # OPERATOR BEING "  DIVIDE   /  "
     elif int(operator) == 4:
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 if type(GLOBALmemory.simmemory[int(leftoperand)]) == int and type(GLOBALmemory.simmemory[int(rightoperand)]) == int: # CHECK IF WE ARE DEALING WITH INT VARIABLES OR FLOAT VARIABLES
@@ -235,6 +273,8 @@ while PROCCOUNTER <= len(Quads):
 
     # OPERATOR BEING "  READ  "
     elif int(operator)==12:
+        if vectorsensor(int(result)): # IF IN VECTOR GET THE ELEMENT
+                result = fromVector(int(result))
         if Scopesensorglobal:
             value = input() # READ FROM THE USER
             isReadable(int(result),value)
@@ -253,8 +293,12 @@ while PROCCOUNTER <= len(Quads):
         if result[0] == '"':
             print(result[1:-1]) # PRINT THE ENTIRE COMMENT IN ONE GO
         elif Scopesensorglobal:
+            if vectorsensor(int(result)): # IF IN VECTOR GET THE ELEMENT
+                result = fromVector(int(result))
             print(GLOBALmemory.simmemory[int(result)])
         else:
+            if vectorsensor(int(result)): # IF IN VECTOR GET THE ELEMENT
+                result = fromVector(int(result))
             try:
                 print(localmemory.simmemory[int(result)])
             except:
@@ -264,6 +308,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  GREATER    >  "
 
     elif int(operator) == 5 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATER OPERATOR QUAD")
@@ -286,6 +334,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  GREATERAND    >=  "
 
     elif int(operator) == 6 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATERAND OPERATOR QUAD")
@@ -308,6 +360,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  LESSER    <  "
     
     elif int(operator) == 7 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSER OPERATOR QUAD")
@@ -330,6 +386,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  LESSERAND    <=  "
     
     elif int(operator) == 8 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSERAND OPERATOR QUAD")
@@ -352,6 +412,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  SAME    ==  "
     
     elif int(operator) == 9 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","SAME OPERATOR QUAD")
@@ -374,6 +438,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  NOTSAME    <>  "
     
     elif int(operator) == 10 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","NOTSAME OPERATOR QUAD")
@@ -396,6 +464,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  AND  "
     
     elif int(operator) == 14 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
@@ -418,6 +490,10 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  OR  "
 
     elif int(operator) == 15 :
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
@@ -514,6 +590,10 @@ while PROCCOUNTER <= len(Quads):
     
     # OPERATOR BEING "  PARAMS  "
     elif int(operator)==22:
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
+        if vectorsensor(int(rightoperand)):
+            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
             localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
         else:
@@ -530,6 +610,8 @@ while PROCCOUNTER <= len(Quads):
 
     # OPERATOR BEING "  RETURN  "
     elif int(operator)==30:
+        if vectorsensor(int(leftoperand)):
+            leftoperand = fromVector(int(leftoperand))
         if localsensor(int(leftoperand)):
             GLOBALmemory.simmemory[int(result)]= localmemory.simmemory[int(leftoperand)]
         elif globalsensor(int(leftoperand)):
