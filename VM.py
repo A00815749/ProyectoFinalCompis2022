@@ -14,6 +14,7 @@ STACKofexecs = []
 PROCList = []
 PROCCOUNTER = 0
 Scopesensorglobal = True
+CURRENTprocessname = ''
 
 class Memorysimulacra:
     def __init__(self):
@@ -25,11 +26,6 @@ class Memorysimulacra:
 def ERROR(type,location = ""):
     print("ERROR: ", type , " at ===>", location)
     sys.exit()
-
-def loadlocalmemory(processname):
-    for elem in Tableof_functions[processname]['variables']:
-        virtualaddr = Tableof_functions[processname]['variables'][elem]['virtualaddress']
-        localmemory.simmemory[virtualaddr] = None # LOAD THE KEYS
 
 def localsensor(value): # AS DEFINED
     try:
@@ -75,8 +71,23 @@ def changeofcontextnext(value): # METHOD TO CHECK IF IT IS THE LAST LOCAL VARIAB
     except:
         return False
 
-def vectorsensor(value): # FAST ARRAY SENSOR FOR THE ADDRESS
-    return value >= 30000
+def vectorsensor(value): # ARRAY SENSOR FOR THE ADDRESS IN THE OBLIGATORY SUM QUAD IN THE VER PROCESS
+    isVector = False
+    if Scopesensorglobal:
+        for y in Tableof_functions[programname]['variables']:
+            if Tableof_functions[programname]['variables'][y]['virtualaddress'] == value:
+                isVector = Tableof_functions[programname]['variables'][y]['isArray']
+                return isVector
+    else:
+        for z in Tableof_functions[CURRENTprocessname]['variables']:
+            if Tableof_functions[CURRENTprocessname]['variables'][z]['virtualaddress'] == value:
+                isVector = Tableof_functions[CURRENTprocessname]['variables'][z]['isArray']
+                return isVector
+    return isVector
+
+def pointersensor(value): # FAST POINTER SENSOR
+    return value >= 40000
+
 
 def fromVector(index): # HANDLE THE VECTORS WITH THE DOUBLE INDEXING
     global Scopesensorglobal
@@ -95,6 +106,17 @@ def fromVector(index): # HANDLE THE VECTORS WITH THE DOUBLE INDEXING
             print(localmemory.simmemory)
             return index
 
+def loadlocalmemory(processname):
+    for elem in Tableof_functions[processname]['variables']:
+        virtualaddr = Tableof_functions[processname]['variables'][elem]['virtualaddress']
+        localmemory.simmemory[virtualaddr] = None # LOAD THE KEYS
+        if 'size' in Tableof_functions[processname]['variables'][elem]: # MAKE AVAILABLE MEMORY SPACES FOR THE ELEMENTS IN VECTORS 
+            vectoravail = Tableof_functions[processname]['variables'][elem]['size']
+            a = 0
+            while a < vectoravail:
+                vmaddress += 1
+                a +=1
+                GLOBALmemory.simmemory[vmaddress] = None
 
 for x in Tableof_functions.keys(): # GET THE THE NAME OF THE MAIN PROGRAM FUNCTION
     if Tableof_functions[x]['scopecontext'] == 'g':
@@ -106,6 +128,15 @@ localmemory = Memorysimulacra()
 for elem in Tableof_functions[programname]['variables']: ## READ THE GLOBAL MEMORY
     vmaddress = Tableof_functions[programname]['variables'][elem]['virtualaddress'] # GET THE REPRESENTATIVE BLOCKS IN THE TABLE OF FUNCTIONS OF THE COMPILER
     GLOBALmemory.simmemory[vmaddress] = None # SAVE THE KEYS, CURRENTLY EMPTY
+    if 'size' in Tableof_functions[programname]['variables'][elem]: # MAKE AVAILABLE MEMORY SPACES FOR THE ELEMENTS IN VECTORS 
+        vectoravail = Tableof_functions[programname]['variables'][elem]['size']
+        a = 0
+        while a < vectoravail:
+            vmaddress += 1
+            a +=1
+            GLOBALmemory.simmemory[vmaddress] = None
+
+
 
 for elem2 in ConstantVar_set: # LOAD THE DIRECT CONSTANT VALUES TO THE MEMORY
     virtualaddr = ConstantVar_set[elem2]
@@ -131,16 +162,32 @@ while PROCCOUNTER <= len(Quads):
     ####################### VIRTUAL MACHINE CONSOLE APPLICATION LOGIC STARTS HERE #######################
     # OPERATOR BEING "  EQUAL   =  "
     if int(operator) == 11:
-        if vectorsensor(int(result)):
-            result = fromVector(int(result))
         if Scopesensorglobal: # GLOBAL VARIABLE OR VALUES ASSIGNED TO GLOBAL VARIABLE
+            if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
+                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+            if pointersensor(int(leftoperand)):
+                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
             if (GLOBALmemory.simmemory[int(leftoperand)] != None): # IS THERE SOMETHING TO ASSIGN?
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
             else:
                 ERROR("LEFT OPERAND IS NULL/EMPTY","ASSIGN = OPERATOR QUAD")
         else:
+            if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
+                if int(result) in localmemory.simmemory:
+                    result = localmemory.simmemory[localmemory.simmemory[int(result)]]
+                elif int(result) in GLOBALmemory.simmemory:
+                    result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                else:
+                    ERROR("RESULT OPERAND IS POINTER BUT WHERE IT POINTS IS NOT ASSIGNED IN MEMORY","ASSIGN = OPERATOR QUAD")
+            if pointersensor(int(leftoperand)):
+                if int(leftoperand) in localmemory.simmemory:
+                    leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
+                elif int(leftoperand) in GLOBALmemory.simmemory:
+                    leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                else:
+                    ERROR("LEFTOPERAND OPERAND IS POINTER BUT WHERE IT POINTS IS NOT ASSIGNED IN MEMORY","ASSIGN = OPERATOR QUAD")
             try: # LOCAL VARIABLE OR VALUE TO LOCAL VARIABLE
-                if(localmemory.simmemory[int(leftoperand) ] != None):
+                if(localmemory.simmemory[int(leftoperand)] != None):
                     localmemory.simmemory[int(result)] = localmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS NULL/EMPTY","ASSIGN = OPERATOR QUAD")
@@ -153,11 +200,11 @@ while PROCCOUNTER <= len(Quads):
 
     # OPERATOR BEING "  SUM   +  "
     elif int(operator) == 1:
-        if vectorsensor(int(leftoperand)):
-            leftoperand = fromVector(int(leftoperand))
-        if vectorsensor(int(rightoperand)):
-            rightoperand = fromVector(int(rightoperand))
         if Scopesensorglobal:
+            if vectorsensor(int(leftoperand)):
+                GLOBALmemory.simmemory[int(leftoperand)] = int(leftoperand)
+            if vectorsensor(int(rightoperand)):
+                GLOBALmemory.simmemory[int(rightoperand)] = int(rightoperand)
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] + GLOBALmemory.simmemory[int(rightoperand)]
             else:
@@ -562,6 +609,7 @@ while PROCCOUNTER <= len(Quads):
         if localmemory is not None: # IS IT NOT EMPTY?
             STACKofexecs.append(localmemory)
             localmemory = Memorysimulacra()
+            CURRENTprocessname = result
             loadlocalmemory(result) # START THE FUNCTION NAME
         else:
             localmemory = Memorysimulacra()

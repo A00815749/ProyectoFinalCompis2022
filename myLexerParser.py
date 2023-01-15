@@ -84,7 +84,7 @@ currentfunctionname = ''
 TEMPORALScounter = 0 # Sensor for counting the temporals used, stored in the table of functions
 INITIALvalinFOR = 0 # Global value to store the counter in the for logic section
 FINALvalinFOR = 0 # Global value to store the final value in the counter for the for logic section
-
+Dim = 0
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
 #When a memory block is used, it adds 1 to the counter.
 GLOBALINTcounter = 1000 - 1  # BLOCK of 2000 spaces 
@@ -632,39 +632,37 @@ def p_IDARRAY(p):
     idarray : initarray exp verify RIGHTSQR
             | empty
     '''
-    global PilaO,Ptypes,POper,QUADSlist,HASHofoperatorsinquads,GlobalVar_set,ConstantVar_set
-    if len(p) > 2:
-        if PilaO and POper: # CHECK THE STACKS AND THAT WE ARE IN AN ARRAY AND NOT AN EMPTY
+    global PilaO,Ptypes,POper,QUADSlist,HASHofoperatorsinquads,GlobalVar_set,ConstantVar_set,Dim
+    #### WHEREAS aux IS THE VALUE OF THE INTERNAL EXPRESSION, BEING IT A CONSTANT OR AN EXPRESSION, AND WHEREAS baseaddr IS OUR BASEADDRESS (dirBase)
+    if len(p) > 2: # IF WE ARENT DEALING WITH AN EMPTY 
+        if PilaO and POper: # CHECK THE STACKS FOR THE INTERNAL EXPRESSION, AND THAT WE HAVE A FAKE BOTTOM
             aux = PilaO.pop()
-            initialaddr = fetchvirtualaddr(p[-1])
-            if not initialaddr in ConstantVar_set: # IF NEW CONSTANT, SAVE THE VIRTUAL ADDRESS
-                ConstantVar_set[initialaddr] = setAVAILvirtualCTEaddress(initialaddr)
-            virtualaddr = ConstantVar_set[initialaddr] # GET THE VIRTUAL ADDRESS
+            baseaddr = fetchvirtualaddr(p[-1]) # GET THE VIRTUAL ADDRESS OF THE VARIABLE ARRAY WE ARE LOOKING (ITS STARTING POINT)
             pointer = setAVAILvirtualtempaddress('pointer') # GET THE POINTER VIRTUAL MEMORY DEALT WITH
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],aux,virtualaddr,pointer)) # # GET THE VERIFYING QUADRUPLE 
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],aux,baseaddr,pointer)) # GET THE VERIFYING QUADRUPLE 
             PilaO.append(pointer)
             POper.pop() # ELIMINATING FAKE BOTTOM
+            Dim = 0
 
 
 def p_INITARRAY(p):
     '''
     initarray : LEFTSQR
     '''
-    global POper,Ptypes,PilaO
-    if PilaO:
-        id = PilaO.pop()
-        type = Ptypes.pop()
-        name = p[-1] # IDENTIFIER TOKEN
-        try:
-            LocalVar_set[name]['isArray']
-        except:
-            try:
-                GlobalVar_set[name]['isArray']
-            except:
-                errorhandler(15)
-        Dim = 1
-        PDim.append((id,Dim))
-        POper.append("~~~")
+    global POper,Ptypes,PilaO,Dim
+    ### WE DEALT WITH THE NEED TO ASSIGN ARRAY SENSORS IN ANOTHER SECTION IN THE LOGIC, WE DONT NEED TO ADD THE ID TO THE PilaO HERE
+    nameid = p[-1]
+    # CHECK IF THE VAR WE HAVE ITS ACTUALLY AN ARRAY IN BOTH GLOBAL AND LOCAL VAR SETS
+    if GlobalVar_set[nameid]['isArray']: 
+        Dim += 1
+        PDim.append((nameid,Dim))
+        POper.append("~~~") # ADD FAKE BOTTOM
+    elif LocalVar_set[nameid]['isArray']:
+        Dim += 1
+        PDim.append((nameid,Dim))
+        POper.append("~~~") # ADD FAKE BOTTOM
+    else:
+        errorhandler(15)
 
 def p_VERIFY(p):
     '''
@@ -1341,9 +1339,20 @@ def p_FINEXP(p):
     # PARENTHESES HANDLING, VECTORS HANDLING SECTION AND CTEEXP HANDLING
     if len(p) == 2:
         virtualaddr = virtualaddrfetch(p[1])
-        if not virtualaddr >= 27000 and virtualaddr < 30000: # IF NOT A FUNCTION CALL ID
-            PilaO.append(virtualaddr)
-            Ptypes.append(getVALtype(p[1]))
+        isArraysensor = False
+        try:
+            if GlobalVar_set[p[1]]['isArray'] :
+                isArraysensor = True
+        except:
+            try:
+                if LocalVar_set[p[1]]['isArray'] :
+                    isArraysensor = True
+            except:
+                    isArraysensor =  False    
+        if not virtualaddr >= 27000 and virtualaddr < 30000 : # IF NOT A FUNCTION CALL ID
+            if not isArraysensor:
+                PilaO.append(virtualaddr)
+                Ptypes.append(getVALtype(p[1]))
         p[0] = p[1] # STORE THAT CONSTANT EXP
     if len(p) == 3: # FUNCTION CALL HANDLING HERE
         newvirtualaddr = virtualaddrfetch(p[1])
