@@ -468,12 +468,6 @@ def getlimits(id):
 # 13 = Error in a function call where the stored number of types in a function does not match with the actual number of types in the list of that function (neuralpar2)
 # 14 = Error in a NULL check where the function id does not exist (neuralexist at CTEEXP)
 # 15 = Error in checking if an id actually corresponds to an array in the variables sets (initarray)
-#
-#
-#
-#
-#
-#
 
 def errorhandler(errortype, location = ""):
     errormessage = ""
@@ -649,12 +643,12 @@ def p_IDARRAY(p):
             pointer = setAVAILvirtualtempaddress('pointer') # GET THE POINTER VIRTUAL MEMORY DEALT WITH
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],aux,virtualaddr,pointer)) # # GET THE VERIFYING QUADRUPLE 
             PilaO.append(pointer)
-            POper.pop()
+            POper.pop() # ELIMINATING FAKE BOTTOM
 
 
 def p_INITARRAY(p):
     '''
-    neuralinitarray : LEFTSQR
+    initarray : LEFTSQR
     '''
     global POper,Ptypes,PilaO
     if PilaO:
@@ -671,7 +665,6 @@ def p_INITARRAY(p):
         Dim = 1
         PDim.append((id,Dim))
         POper.append("~~~")
-
 
 def p_VERIFY(p):
     '''
@@ -788,6 +781,18 @@ def p_MULPARAMS(p):
             | empty
     '''
 
+# RETURNING SPECIAL QUADRUPLE LOGIC
+
+def p_RETURNING(p):
+    '''
+    returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
+    '''
+    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set
+    valuetoreturn = PilaO.pop() ## CHECK THE STATUS OF PILAO AND PTYPES
+    Ptypes.pop()
+    functionvirtualaddr = GlobalVar_set[currentfunctionname]['virtualaddress'] # GET THE ADDRESS OF THE SPECIAL FUNCTION ADDRESS TO BE USED AS TEMPORAL CONTAINER
+    QUADSlist.append(Quadruple(HASHofoperatorsinquads['RETURN'],valuetoreturn,-1,functionvirtualaddr))
+
 
 #########PARAMETERS HANDLING IN FUNCTION CALLS #########
 
@@ -864,18 +869,6 @@ def p_NEURALPAR2(p):
     else:
         if len(PARAMETERStypelist)!= COUNTERparameter:
             errorhandler(13,p[-1])
-
-# RETURNING SPECIAL QUADRUPLE LOGIC
-
-def p_RETURNING(p):
-    '''
-    returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
-    '''
-    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set
-    valuetoreturn = PilaO.pop() ## CHECK THE STATUS OF PILAO AND PTYPES
-    Ptypes.pop()
-    functionvirtualaddr = GlobalVar_set[currentfunctionname]['virtualaddress'] # GET THE ADDRESS OF THE SPECIAL FUNCTION ADDRESS TO BE USED AS TEMPORAL CONTAINER
-    QUADSlist.append(Quadruple(HASHofoperatorsinquads['RETURN'],valuetoreturn,-1,functionvirtualaddr))
 
 
 #### STATUTES HANDLING #####
