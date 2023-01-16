@@ -644,7 +644,6 @@ def p_IDARRAY(p):
             POper.pop() # ELIMINATING FAKE BOTTOM
             Dim = 0
 
-
 def p_INITARRAY(p):
     '''
     initarray : LEFTSQR
@@ -985,7 +984,7 @@ def p_NEURALREAD(p):
 
 def p_MULREAD(p):
     '''
-    mulread : COMMA ID idarray mulread
+    mulread : COMMA neuralread idarray mulread
             | empty
     '''
 
