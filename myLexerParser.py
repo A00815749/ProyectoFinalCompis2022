@@ -1046,11 +1046,11 @@ def p_WHILING(p):
     '''
     global Pjumps,QUADSlist,HASHofoperatorsinquads
     if Pjumps:
-        endofwhile = Pjumps.pop()
-        startofwhile = Pjumps.pop()
-        QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startofwhile+1)) # SET THE GOTO QUAD WHITH THE APPROPIATE COUNTER
+        endofwhile = Pjumps.pop() # THE GOTOF QUADCOUNTER
+        startofwhile = Pjumps.pop() # THE BOOLEAN EVALUATION QUADCOUNTER
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startofwhile+1)) # SET THE GOTO QUAD WHITH THE OFFSET QUADCOUNTER
         modQuad = QUADSlist[endofwhile - 1]
-        modQuad.result = len(QUADSlist) + 1 # STORE IN THE QUAD THE COUNTER
+        modQuad.result = len(QUADSlist) + 1 # MODIFY THE GOTOF QUADRUPLE
 
 
 def p_NEURALWHILE1(p):
@@ -1058,7 +1058,7 @@ def p_NEURALWHILE1(p):
     neuralwhile1 : WHILE
     '''
     global Pjumps, QUADSlist
-    Pjumps.append(len(QUADSlist)) # GET THE QUADCOUNTER SAVED
+    Pjumps.append(len(QUADSlist)) # GET THE QUADCOUNTER SAVED FOR THE BOOLEAN EVALUATION AND START OF WHILE SECTION
 
 def p_NEURALWHILE2(p):
     '''
@@ -1069,9 +1069,8 @@ def p_NEURALWHILE2(p):
         exptype = Ptypes.pop()
         if exptype == 'bool':
             result = PilaO.pop()
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],result,-1,99)) #THE QUAD PENDING THE QUADCOUNTER FOR THE GOTOF
-            Pjumps.append(len(QUADSlist)) # THE QUADCOUNTER STORED IN PJUMPS
-
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],result,-1,-999)) 
+            Pjumps.append(len(QUADSlist)) # THE GOTOF QUADCOUNTER STORED IN PJUMPS
 
 
 
@@ -1087,8 +1086,8 @@ def p_FORING(p):
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],INITIALvalinFOR,constant1addr,temporalint)) # THE ITERATION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],temporalint,-1,INITIALvalinFOR)) #CONTINUING ITERATION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],temporalint,-1,PilaO[-1])) #THE QUADRUPLE GETTING THE OPERATOR STACK MODIFIED
-    endoffor = Pjumps.pop() #GET THE COUNTER FOR THE ENDOFFOR
-    startoffor = Pjumps.pop() # GET THE COUNTER FOR THE STARTOFFOR
+    endoffor = Pjumps.pop() #GET THE COUNTER FOR THE GOTOF
+    startoffor = Pjumps.pop() # GET THE COUNTER FOR THE EXPRESSION EVALUATION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startoffor)) # VALIDATE THE CONDITION
     QUADSlist[endoffor - 1].result =  len(QUADSlist) + 1 # GET THAT PENDING QUADRUPLE WITH THE QUAD COUNTER
     PilaO.pop()
@@ -1136,9 +1135,9 @@ def p_NEURALFOR3(p):
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],exp,-1,FINALvalinFOR))
             temporalbool = setAVAILvirtualtempaddress('bool') # GET THE VIRTUAL ADDRESS
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['<'],INITIALvalinFOR,FINALvalinFOR,temporalbool))
-            Pjumps.append(len(QUADSlist))
+            Pjumps.append(len(QUADSlist)) # THE EXPRESSION EVALUATION QUADCOUNTER
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],temporalbool,-1,-99))
-            Pjumps.append(len(QUADSlist))
+            Pjumps.append(len(QUADSlist)) # THE GOTOF QUADCOUNTER
         else:
             errorhandler(10)
 
