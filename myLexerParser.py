@@ -998,9 +998,9 @@ def p_IFING(p):
     '''
     global Pjumps, QUADSlist
     if Pjumps: #IF there are pending jumps
-        endofjump = Pjumps.pop() # GET THE STORED ADDRESS
-        modQuad = QUADSlist[endofjump-1] # GET THE ADDRESS PENDING FOR THE QUADRUPLE TO BE MODIFIED
-        modQuad.result = len(QUADSlist)+ 1 # STORES THE APPROPIATE ADDRESS
+        endofjump = Pjumps.pop() # GET THE ADDRESS FOR THE START OF THE ELSE SECTION
+        modQuad = QUADSlist[endofjump-1] # USE THE PREVIOUS ADDRESS TO GET TO THE GOTO QUAD
+        modQuad.result = len(QUADSlist)+ 1 # MODIFY THAT GOTO QUAD
 
 def p_NEURALIF(p):
     '''
@@ -1029,10 +1029,10 @@ def p_NEURALELSE(p):
     global QUADSlist,Pjumps,HASHofoperatorsinquads
     if Pjumps:
         QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,-99))
-        elseendofjump = Pjumps.pop() # GET THE ADDRESS FOR THE STORED JUMP
-        Pjumps.append(len(QUADSlist)) # ADD THE QUADRUPLE COUNTER
-        modQuad = QUADSlist[elseendofjump-1] # GET THE ADDRESS PENDING FOR THE QUADRUPLE TO BE MODIFIED
-        modQuad.result = len(QUADSlist) + 1 # STORES THE APPROPIATE ADDRESS
+        elseendofjump = Pjumps.pop() # GET THE ADDRESS FOR THE START OF THE IF SECTION
+        Pjumps.append(len(QUADSlist)) # ADD THE QUADRUPLE COUNTER FOR THE START OF THE ELSE SECTION
+        modQuad = QUADSlist[elseendofjump-1] # USE THE ADDRESS FOR THE START OF THE IF SECTION TO GET THE GOTOF QUAD
+        modQuad.result = len(QUADSlist) + 1 # MODIFY THE QUAD WITH CURRENT QUADCOUNTER 
 
 
 
