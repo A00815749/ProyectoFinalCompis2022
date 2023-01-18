@@ -1357,7 +1357,6 @@ def p_FINEXP(p):
         PilaO.append(newvirtualaddr)
         Ptypes.append(getVALtype(p[1]))
         p[0] = p[1] # STORE THAT FUNCTION CALL TOKEN
-    #
     if len(POper) > 0:
         if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
             rightOperand = PilaO.pop()
