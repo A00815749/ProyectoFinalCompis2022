@@ -85,7 +85,7 @@ Rule 67    mulwrite -> COMMA auxwrite mulwrite
 Rule 68    mulwrite -> empty
 Rule 69    reading -> READ LEFTPAR neuralread idarray mulread RIGHTPAR SEMICOLON
 Rule 70    neuralread -> ID
-Rule 71    mulread -> COMMA ID idarray mulread
+Rule 71    mulread -> COMMA neuralread idarray mulread
 Rule 72    mulread -> empty
 Rule 73    ifing -> IF LEFTPAR exp neuralif THEN LEFTBR statutes RIGHTBR elsing
 Rule 74    neuralif -> RIGHTPAR
@@ -157,7 +157,7 @@ FOR                  : 81
 FUNCTION             : 22
 GREATER              : 95
 GREATERAND           : 96
-ID                   : 2 8 24 33 59 70 71 82 119
+ID                   : 2 8 24 33 59 70 82 119
 IF                   : 73
 INT                  : 19
 LEFTBR               : 1 27 73 75 78 81
@@ -252,7 +252,7 @@ neuralinsertvar      : 6 9
 neuralmainjump       : 1
 neuralpar            : 37
 neuralpar2           : 39 41
-neuralread           : 69
+neuralread           : 69 71
 neuraltablefunctions : 1
 neuralwhile1         : 78
 neuralwhile2         : 78
@@ -3869,7 +3869,7 @@ state 171
 state 172
 
     (69) reading -> READ LEFTPAR neuralread idarray . mulread RIGHTPAR SEMICOLON
-    (71) mulread -> . COMMA ID idarray mulread
+    (71) mulread -> . COMMA neuralread idarray mulread
     (72) mulread -> . empty
     (121) empty -> .
 
@@ -4199,10 +4199,12 @@ state 187
 
 state 188
 
-    (71) mulread -> COMMA . ID idarray mulread
+    (71) mulread -> COMMA . neuralread idarray mulread
+    (70) neuralread -> . ID
 
-    ID              shift and go to state 201
+    ID              shift and go to state 145
 
+    neuralread                     shift and go to state 201
 
 state 189
 
@@ -4314,7 +4316,7 @@ state 200
 
 state 201
 
-    (71) mulread -> COMMA ID . idarray mulread
+    (71) mulread -> COMMA neuralread . idarray mulread
     (15) idarray -> . initarray exp verify RIGHTSQR
     (16) idarray -> . empty
     (17) initarray -> . LEFTSQR
@@ -4698,8 +4700,8 @@ state 212
 
 state 213
 
-    (71) mulread -> COMMA ID idarray . mulread
-    (71) mulread -> . COMMA ID idarray mulread
+    (71) mulread -> COMMA neuralread idarray . mulread
+    (71) mulread -> . COMMA neuralread idarray mulread
     (72) mulread -> . empty
     (121) empty -> .
 
@@ -4789,9 +4791,9 @@ state 220
 
 state 221
 
-    (71) mulread -> COMMA ID idarray mulread .
+    (71) mulread -> COMMA neuralread idarray mulread .
 
-    RIGHTPAR        reduce using rule 71 (mulread -> COMMA ID idarray mulread .)
+    RIGHTPAR        reduce using rule 71 (mulread -> COMMA neuralread idarray mulread .)
 
 
 state 222

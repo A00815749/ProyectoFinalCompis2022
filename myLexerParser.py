@@ -84,7 +84,7 @@ currentfunctionname = ''
 TEMPORALScounter = 0 # Sensor for counting the temporals used, stored in the table of functions
 INITIALvalinFOR = 0 # Global value to store the counter in the for logic section
 FINALvalinFOR = 0 # Global value to store the final value in the counter for the for logic section
-
+Dim = 0
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
 #When a memory block is used, it adds 1 to the counter.
 GLOBALINTcounter = 1000 - 1  # BLOCK of 2000 spaces 
@@ -632,39 +632,36 @@ def p_IDARRAY(p):
     idarray : initarray exp verify RIGHTSQR
             | empty
     '''
-    global PilaO,Ptypes,POper,QUADSlist,HASHofoperatorsinquads,GlobalVar_set,ConstantVar_set
-    if len(p) > 2:
-        if PilaO and POper: # CHECK THE STACKS AND THAT WE ARE IN AN ARRAY AND NOT AN EMPTY
+    global PilaO,Ptypes,POper,QUADSlist,HASHofoperatorsinquads,GlobalVar_set,ConstantVar_set,Dim
+    #### WHEREAS aux IS THE VALUE OF THE INTERNAL EXPRESSION, BEING IT A CONSTANT OR AN EXPRESSION, AND WHEREAS baseaddr IS OUR BASEADDRESS (dirBase)
+    if len(p) > 2: # IF WE ARENT DEALING WITH AN EMPTY 
+        if PilaO and POper: # CHECK THE STACKS FOR THE INTERNAL EXPRESSION, AND THAT WE HAVE A FAKE BOTTOM
             aux = PilaO.pop()
-            initialaddr = fetchvirtualaddr(p[-1])
-            if not initialaddr in ConstantVar_set: # IF NEW CONSTANT, SAVE THE VIRTUAL ADDRESS
-                ConstantVar_set[initialaddr] = setAVAILvirtualCTEaddress(initialaddr)
-            virtualaddr = ConstantVar_set[initialaddr] # GET THE VIRTUAL ADDRESS
+            baseaddr = fetchvirtualaddr(p[-1]) # GET THE VIRTUAL ADDRESS OF THE VARIABLE ARRAY WE ARE LOOKING (ITS STARTING POINT)
             pointer = setAVAILvirtualtempaddress('pointer') # GET THE POINTER VIRTUAL MEMORY DEALT WITH
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],aux,virtualaddr,pointer)) # # GET THE VERIFYING QUADRUPLE 
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],aux,baseaddr,pointer)) # GET THE VERIFYING QUADRUPLE 
             PilaO.append(pointer)
             POper.pop() # ELIMINATING FAKE BOTTOM
-
+            Dim = 0
 
 def p_INITARRAY(p):
     '''
     initarray : LEFTSQR
     '''
-    global POper,Ptypes,PilaO
-    if PilaO:
-        id = PilaO.pop()
-        type = Ptypes.pop()
-        name = p[-1] # IDENTIFIER TOKEN
-        try:
-            LocalVar_set[name]['isArray']
-        except:
-            try:
-                GlobalVar_set[name]['isArray']
-            except:
-                errorhandler(15)
-        Dim = 1
-        PDim.append((id,Dim))
-        POper.append("~~~")
+    global POper,Ptypes,PilaO,Dim
+    ### WE DEALT WITH THE NEED TO ASSIGN ARRAY SENSORS IN ANOTHER SECTION IN THE LOGIC, WE DONT NEED TO ADD THE ID TO THE PilaO HERE
+    nameid = p[-1]
+    # CHECK IF THE VAR WE HAVE ITS ACTUALLY AN ARRAY IN BOTH GLOBAL AND LOCAL VAR SETS
+    if GlobalVar_set[nameid]['isArray']: 
+        Dim += 1
+        PDim.append((nameid,Dim))
+        POper.append("~~~") # ADD FAKE BOTTOM
+    elif LocalVar_set[nameid]['isArray']:
+        Dim += 1
+        PDim.append((nameid,Dim))
+        POper.append("~~~") # ADD FAKE BOTTOM
+    else:
+        errorhandler(15)
 
 def p_VERIFY(p):
     '''
@@ -987,7 +984,7 @@ def p_NEURALREAD(p):
 
 def p_MULREAD(p):
     '''
-    mulread : COMMA ID idarray mulread
+    mulread : COMMA neuralread idarray mulread
             | empty
     '''
 
@@ -1001,9 +998,9 @@ def p_IFING(p):
     '''
     global Pjumps, QUADSlist
     if Pjumps: #IF there are pending jumps
-        endofjump = Pjumps.pop() # GET THE STORED ADDRESS
-        modQuad = QUADSlist[endofjump-1] # GET THE ADDRESS PENDING FOR THE QUADRUPLE TO BE MODIFIED
-        modQuad.result = len(QUADSlist)+ 1 # STORES THE APPROPIATE ADDRESS
+        endofjump = Pjumps.pop() # GET THE ADDRESS FOR THE START OF THE ELSE SECTION
+        modQuad = QUADSlist[endofjump-1] # USE THE PREVIOUS ADDRESS TO GET TO THE GOTO QUAD
+        modQuad.result = len(QUADSlist)+ 1 # MODIFY THAT GOTO QUAD
 
 def p_NEURALIF(p):
     '''
@@ -1032,10 +1029,10 @@ def p_NEURALELSE(p):
     global QUADSlist,Pjumps,HASHofoperatorsinquads
     if Pjumps:
         QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,-99))
-        elseendofjump = Pjumps.pop() # GET THE ADDRESS FOR THE STORED JUMP
-        Pjumps.append(len(QUADSlist)) # ADD THE QUADRUPLE COUNTER
-        modQuad = QUADSlist[elseendofjump-1] # GET THE ADDRESS PENDING FOR THE QUADRUPLE TO BE MODIFIED
-        modQuad.result = len(QUADSlist) + 1 # STORES THE APPROPIATE ADDRESS
+        elseendofjump = Pjumps.pop() # GET THE ADDRESS FOR THE START OF THE IF SECTION
+        Pjumps.append(len(QUADSlist)) # ADD THE QUADRUPLE COUNTER FOR THE START OF THE ELSE SECTION
+        modQuad = QUADSlist[elseendofjump-1] # USE THE ADDRESS FOR THE START OF THE IF SECTION TO GET THE GOTOF QUAD
+        modQuad.result = len(QUADSlist) + 1 # MODIFY THE QUAD WITH CURRENT QUADCOUNTER 
 
 
 
@@ -1049,11 +1046,11 @@ def p_WHILING(p):
     '''
     global Pjumps,QUADSlist,HASHofoperatorsinquads
     if Pjumps:
-        endofwhile = Pjumps.pop()
-        startofwhile = Pjumps.pop()
-        QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startofwhile+1)) # SET THE GOTO QUAD WHITH THE APPROPIATE COUNTER
+        endofwhile = Pjumps.pop() # THE GOTOF QUADCOUNTER
+        startofwhile = Pjumps.pop() # THE BOOLEAN EVALUATION QUADCOUNTER
+        QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startofwhile+1)) # SET THE GOTO QUAD WHITH THE OFFSET QUADCOUNTER
         modQuad = QUADSlist[endofwhile - 1]
-        modQuad.result = len(QUADSlist) + 1 # STORE IN THE QUAD THE COUNTER
+        modQuad.result = len(QUADSlist) + 1 # MODIFY THE GOTOF QUADRUPLE
 
 
 def p_NEURALWHILE1(p):
@@ -1061,7 +1058,7 @@ def p_NEURALWHILE1(p):
     neuralwhile1 : WHILE
     '''
     global Pjumps, QUADSlist
-    Pjumps.append(len(QUADSlist)) # GET THE QUADCOUNTER SAVED
+    Pjumps.append(len(QUADSlist)) # GET THE QUADCOUNTER SAVED FOR THE BOOLEAN EVALUATION AND START OF WHILE SECTION
 
 def p_NEURALWHILE2(p):
     '''
@@ -1072,9 +1069,8 @@ def p_NEURALWHILE2(p):
         exptype = Ptypes.pop()
         if exptype == 'bool':
             result = PilaO.pop()
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],result,-1,99)) #THE QUAD PENDING THE QUADCOUNTER FOR THE GOTOF
-            Pjumps.append(len(QUADSlist)) # THE QUADCOUNTER STORED IN PJUMPS
-
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],result,-1,-999)) 
+            Pjumps.append(len(QUADSlist)) # THE GOTOF QUADCOUNTER STORED IN PJUMPS
 
 
 
@@ -1090,8 +1086,8 @@ def p_FORING(p):
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['+'],INITIALvalinFOR,constant1addr,temporalint)) # THE ITERATION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],temporalint,-1,INITIALvalinFOR)) #CONTINUING ITERATION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],temporalint,-1,PilaO[-1])) #THE QUADRUPLE GETTING THE OPERATOR STACK MODIFIED
-    endoffor = Pjumps.pop() #GET THE COUNTER FOR THE ENDOFFOR
-    startoffor = Pjumps.pop() # GET THE COUNTER FOR THE STARTOFFOR
+    endoffor = Pjumps.pop() #GET THE COUNTER FOR THE GOTOF
+    startoffor = Pjumps.pop() # GET THE COUNTER FOR THE EXPRESSION EVALUATION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTO'],-1,-1,startoffor)) # VALIDATE THE CONDITION
     QUADSlist[endoffor - 1].result =  len(QUADSlist) + 1 # GET THAT PENDING QUADRUPLE WITH THE QUAD COUNTER
     PilaO.pop()
@@ -1139,9 +1135,9 @@ def p_NEURALFOR3(p):
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['='],exp,-1,FINALvalinFOR))
             temporalbool = setAVAILvirtualtempaddress('bool') # GET THE VIRTUAL ADDRESS
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['<'],INITIALvalinFOR,FINALvalinFOR,temporalbool))
-            Pjumps.append(len(QUADSlist))
+            Pjumps.append(len(QUADSlist)) # THE EXPRESSION EVALUATION QUADCOUNTER
             QUADSlist.append(Quadruple(HASHofoperatorsinquads['GOTOF'],temporalbool,-1,-99))
-            Pjumps.append(len(QUADSlist))
+            Pjumps.append(len(QUADSlist)) # THE GOTOF QUADCOUNTER
         else:
             errorhandler(10)
 
@@ -1341,16 +1337,26 @@ def p_FINEXP(p):
     # PARENTHESES HANDLING, VECTORS HANDLING SECTION AND CTEEXP HANDLING
     if len(p) == 2:
         virtualaddr = virtualaddrfetch(p[1])
-        if not virtualaddr >= 27000 and virtualaddr < 30000: # IF NOT A FUNCTION CALL ID
-            PilaO.append(virtualaddr)
-            Ptypes.append(getVALtype(p[1]))
+        isArraysensor = False
+        try:
+            if GlobalVar_set[p[1]]['isArray'] :
+                isArraysensor = True
+        except:
+            try:
+                if LocalVar_set[p[1]]['isArray'] :
+                    isArraysensor = True
+            except:
+                    isArraysensor =  False    
+        if not virtualaddr >= 27000 and virtualaddr < 30000 : # IF NOT A FUNCTION CALL ID
+            if not isArraysensor:
+                PilaO.append(virtualaddr)
+                Ptypes.append(getVALtype(p[1]))
         p[0] = p[1] # STORE THAT CONSTANT EXP
     if len(p) == 3: # FUNCTION CALL HANDLING HERE
         newvirtualaddr = virtualaddrfetch(p[1])
         PilaO.append(newvirtualaddr)
         Ptypes.append(getVALtype(p[1]))
         p[0] = p[1] # STORE THAT FUNCTION CALL TOKEN
-    #
     if len(POper) > 0:
         if POper[-1] =='*' or POper[-1]=='/': # GENERATING THE GEOMETRIC QUADS
             rightOperand = PilaO.pop()

@@ -1,0 +1,26 @@
+Program Vectors;
+VARS
+    int: x[4],y[4];
+    int: a, b, c, d, e, f, g, h;
+
+main(){
+    x[0] = 10;
+    x[1] = 20;
+    x[2] = 30;
+    x[3] = 40;
+    e = 0;
+    f = 1;
+    g = 2;
+    h = 3;
+    write("Vectors started", x[0], x[1], x[2], x[3]);
+    a = x[0] + 1;
+    b = x[1] * 2;
+    c = x[2] - 3;
+    d = x[3] / 4;
+    write("Ints are ", a , b , c, d);
+    y[e] = x[h] / 10;
+    y[f] = x[g] - 27;
+    y[g] = x[f] + 1;
+    y[h] = x[e] * 5;
+    write("Vectors assign with operations started", y[0], y[1], y[2], y[3]);
+}
