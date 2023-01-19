@@ -181,36 +181,16 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","ASSIGN = OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","ASSIGN = OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","ASSIGN = OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","ASSIGN = OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","ASSIGN = OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","ASSIGN = OPERATOR QUAD")
             try: # LOCAL VARIABLE OR VALUE TO LOCAL VARIABLE
@@ -259,53 +239,23 @@ while PROCCOUNTER <= len(Quads):
             else: ### NOT VER SECTION
                 if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
                     if int(result) in localmemory.simmemory:
-                        if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                            result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                        elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                            result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                        else:
-                            ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SUM + OPERATOR QUAD")
-                    elif int(result) in GLOBALmemory.simmemory:
-                        if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                            result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                        elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                            result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                        else:
-                            ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SUM + OPERATOR QUAD")
+                            result = localmemory.simmemory[int(result)]
+                    elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                            result = GLOBALmemory.simmemory[int(result)]
                     else:
                         ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","SUM + OPERATOR QUAD")
                 if pointersensor(int(leftoperand)):
                     if int(leftoperand) in localmemory.simmemory:
-                        if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                            leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                        elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                            leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                        else:
-                            ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SUM + OPERATOR QUAD")
-                    elif int(leftoperand) in GLOBALmemory.simmemory:
-                        if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                            leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                        elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                            leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                        else:
-                            ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SUM + OPERATOR QUAD")
+                            leftoperand = localmemory.simmemory[int(leftoperand)]
+                    elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                            leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                     else:
                         ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","SUM + OPERATOR QUAD")
                 if pointersensor(int(rightoperand)):
                     if int(rightoperand) in localmemory.simmemory:
-                        if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                            rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                        elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                            rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                        else:
-                            ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SUM + OPERATOR QUAD")
-                    elif int(rightoperand) in GLOBALmemory.simmemory:
-                        if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                            rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                        elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                            rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                        else:
-                            ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SUM + OPERATOR QUAD")
+                            rightoperand = localmemory.simmemory[int(rightoperand)]
+                    elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                            rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                     else:
                         ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","SUM + OPERATOR QUAD")
                 if localsensor(int(leftoperand)) and localsensor (int(rightoperand)):
@@ -338,53 +288,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","TIMES * OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","TIMES * OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","TIMES * OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","TIMES * OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","TIMES * OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","TIMES * OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","TIMES * OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","TIMES * OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","TIMES * OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor (int(rightoperand)):
@@ -430,53 +350,23 @@ while PROCCOUNTER <= len(Quads):
             else:
                 if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
                     if int(result) in localmemory.simmemory:
-                        if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                            result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                        elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                            result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                        else:
-                            ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","REST - OPERATOR QUAD")
-                    elif int(result) in GLOBALmemory.simmemory:
-                        if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                            result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                        elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                            result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                        else:
-                            ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","REST - OPERATOR QUAD")
+                            result = localmemory.simmemory[int(result)]
+                    elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                            result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","REST - OPERATOR QUAD")
                 if pointersensor(int(leftoperand)):
                     if int(leftoperand) in localmemory.simmemory:
-                        if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                            leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                        elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                            leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                        else:
-                            ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","REST - OPERATOR QUAD")
-                    elif int(leftoperand) in GLOBALmemory.simmemory:
-                        if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                            leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                        elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                            leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                        else:
-                            ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","REST - OPERATOR QUAD")
+                            leftoperand = localmemory.simmemory[int(leftoperand)]
+                    elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                            leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                     else:
                         ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","REST - OPERATOR QUAD")
                 if pointersensor(int(rightoperand)):
                     if int(rightoperand) in localmemory.simmemory:
-                        if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                            rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                        elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                            rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                        else:
-                            ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","REST - OPERATOR QUAD")
-                    elif int(rightoperand) in GLOBALmemory.simmemory:
-                        if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                            rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                        elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                            rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                        else:
-                            ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","REST - OPERATOR QUAD")
+                            rightoperand = localmemory.simmemory[int(rightoperand)]
+                    elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                            rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                     else:
                         ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","REST - OPERATOR QUAD")
                 if localsensor(int(leftoperand)) and localsensor (int(rightoperand)):
@@ -512,53 +402,23 @@ while PROCCOUNTER <= len(Quads):
         else: 
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","DIVIDE / OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","DIVIDE / OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","DIVIDE / OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","DIVIDE / OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","DIVIDE / OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","DIVIDE / OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","DIVIDE / OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","DIVIDE / OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","DIVIDE / OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -596,19 +456,9 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","READ OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","READ OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","READ OPERATOR QUAD")
             value = input() # READ FROM THE USER
@@ -631,19 +481,9 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","WRITE OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","WRITE OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","WRITE OPERATOR QUAD")
             try:
@@ -673,53 +513,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATER > OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATER > OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","GREATER > OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATER > OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATER > OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","GREATER > OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATER > OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATER > OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","GREATER > OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -755,53 +565,24 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATERAND >= OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATERAND >= OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","GREATERAND >= OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
                     if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATERAND >= OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATERAND >= OPERATOR QUAD")
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","GREATERAND >= OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATERAND >= OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","GREATERAND >= OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","GREATERAND >= OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -837,53 +618,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSER < OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSER < OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","LESSER < OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSER < OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSER < OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","LESSER < OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSER < OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSER < OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","LESSER < OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -919,53 +670,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSERAND <= OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSERAND <= OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","LESSERAND <= OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSERAND <= OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSERAND <= OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","LESSERAND <= OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSERAND <= OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","LESSERAND <= OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","LESSERAND <= OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -1001,53 +722,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SAME == OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SAME == OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","SAME == OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SAME == OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SAME == OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","SAME == OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SAME == OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","SAME == OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","SAME == OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -1083,53 +774,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","NOTSAME <> OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","NOTSAME <> OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","NOTSAME <> OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","NOTSAME <> OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","NOTSAME <> OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","NOTSAME <> OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","NOTSAME <> OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","NOTSAME <> OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","NOTSAME <> OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -1165,53 +826,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","AND OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","AND OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","AND OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","AND OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","AND OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","AND OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","AND OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","AND OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","AND OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -1247,53 +878,23 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
                 if int(result) in localmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[localmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[localmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
-                elif int(result) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(result)]>6999 and localmemory.simmemory[int(result)] < 13000:
-                        result = localmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    elif localmemory.simmemory[int(result)]>999 and localmemory.simmemory[int(result)] < 7000:
-                        result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
-                    else:
-                        ERROR("RESULT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
+                        result = localmemory.simmemory[int(result)]
+                elif int(result) in GLOBALmemory.simmemory and int(result) not in localmemory.simmemory:
+                        result = GLOBALmemory.simmemory[int(result)]
                 else:
                     ERROR("RESULT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","OR OPERATOR QUAD")
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","OR OPERATOR QUAD")
             if pointersensor(int(rightoperand)):
                 if int(rightoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
-                elif int(rightoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(rightoperand)]>6999 and localmemory.simmemory[int(rightoperand)] < 13000:
-                        rightoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    elif localmemory.simmemory[int(rightoperand)]>999 and localmemory.simmemory[int(rightoperand)] < 7000:
-                        rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
-                    else:
-                        ERROR("RIGHT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
+                        rightoperand = localmemory.simmemory[int(rightoperand)]
+                elif int(rightoperand) in GLOBALmemory.simmemory and int(rightoperand) not in localmemory.simmemory:
+                        rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 else:
                     ERROR("RIGHT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","OR OPERATOR QUAD")
             if localsensor(int(leftoperand)) and localsensor(int(rightoperand)):
@@ -1395,19 +996,9 @@ while PROCCOUNTER <= len(Quads):
         else:
             if pointersensor(int(leftoperand)):
                 if int(leftoperand) in localmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","PARAMS OPERATOR QUAD")
-                elif int(leftoperand) in GLOBALmemory.simmemory:
-                    if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                        leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                        leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                    else:
-                        ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","PARAMS OPERATOR QUAD")
+                        leftoperand = localmemory.simmemory[int(leftoperand)]
+                elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                        leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 else:
                     ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","PARAMS OPERATOR QUAD")
             if changeofcontextnext(int(leftoperand)): #### REMEMBER TO ACCOUNT FOR THE CHANGE OF CONTEXT WITH THE POINTERS, NOT YET DONE
@@ -1425,19 +1016,9 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator)==30:
         if pointersensor(int(leftoperand)):
             if int(leftoperand) in localmemory.simmemory:
-                if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                    leftoperand = localmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                    leftoperand = GLOBALmemory.simmemory[localmemory.simmemory[int(leftoperand)]]
-                else:
-                    ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
-            elif int(leftoperand) in GLOBALmemory.simmemory:
-                if localmemory.simmemory[int(leftoperand)]>6999 and localmemory.simmemory[int(leftoperand)] < 13000:
-                    leftoperand = localmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                elif localmemory.simmemory[int(leftoperand)]>999 and localmemory.simmemory[int(leftoperand)] < 7000:
-                    leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
-                else:
-                    ERROR("LEFT OPERAND POINTER STORED A VALUE THAT IS NOT A LOCAL OR GLOBAL ADDRESS","OR OPERATOR QUAD")
+                    leftoperand = localmemory.simmemory[int(leftoperand)]
+            elif int(leftoperand) in GLOBALmemory.simmemory and int(leftoperand) not in localmemory.simmemory:
+                    leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             else:
                 ERROR("LEFT OPERAND IS POINTER BUT IS NOT ASSIGNED CORRECTLY IN MEMORY","OR OPERATOR QUAD")
         if localsensor(int(leftoperand)):
