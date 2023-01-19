@@ -1,0 +1,26 @@
+Program Vectors;
+VARS
+    int: x[4];
+    int: a, b, c, d;
+
+
+main(){
+
+    a = 0;
+    b = 1;
+    c = 2;
+    d = 3;
+    write("Ints started ", a , b , c, d);
+    x[0] = 10;
+    x[1] = 20;
+    x[2] = 30;
+    x[3] = 40;
+    write("Vectors started", x[0], x[1], x[2], x[3]);
+    write("Vectors call with expressions started", x[a], x[b], x[c], x[d]);
+    x[a] = 50;
+    x[b] = 60;
+    x[c] = 70;
+    x[d] = 80;
+    write("Vectors assign with expressions started", x[0], x[1], x[2], x[3]);
+
+}

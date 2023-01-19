@@ -18,6 +18,7 @@ PROCCOUNTER = 0
 Scopesensorglobal = True
 CURRENTprocessname = ''
 IsVerSUMQUAD = False
+IsVerAssgnQUAD = False
 
 class Memorysimulacra:
     def __init__(self):
@@ -169,11 +170,9 @@ while PROCCOUNTER <= len(Quads):
     if int(operator) == 11:
         if Scopesensorglobal: # GLOBAL VARIABLE OR VALUES ASSIGNED TO GLOBAL VARIABLE
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if (GLOBALmemory.simmemory[int(leftoperand)] != None): # IS THERE SOMETHING TO ASSIGN?
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
             else:
@@ -216,14 +215,11 @@ while PROCCOUNTER <= len(Quads):
                     ERROR("EITHER OPERAND IS NULL/EMPTY","SUM OPERATOR QUAD")
             else:  ### NOT VER SECTION
                 if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                    GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                    result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                    result = GLOBALmemory.simmemory[int(result)]
                 if pointersensor(int(leftoperand)):
-                    GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                    leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                    leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
                 if pointersensor(int(rightoperand)):
-                    GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                    rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                    rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
                 if (GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                     GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] + GLOBALmemory.simmemory[int(rightoperand)]
                 else:
@@ -273,14 +269,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 3:
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] * GLOBALmemory.simmemory[int(rightoperand)]
             else:
@@ -323,14 +316,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 2:
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] - GLOBALmemory.simmemory[int(rightoperand)]
             else:
@@ -384,14 +374,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 4:
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if(GLOBALmemory.simmemory[int(leftoperand)] != None and GLOBALmemory.simmemory[int(rightoperand)] != None): # CHECK IF BOTH ACTUALLY HAVE VALUES
                 if type(GLOBALmemory.simmemory[int(leftoperand)]) == int and type(GLOBALmemory.simmemory[int(rightoperand)]) == int: # CHECK IF WE ARE DEALING WITH INT VARIABLES OR FLOAT VARIABLES
                     GLOBALmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)] // GLOBALmemory.simmemory[int(rightoperand)] #FLOOR DIVISION
@@ -448,8 +435,7 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator)==12:
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             value = input() # READ FROM THE USER
             isReadable(int(result),value)
             GLOBALmemory.simmemory[int(result)] = value # SAVE IT IN MEMORY
@@ -475,8 +461,7 @@ while PROCCOUNTER <= len(Quads):
             print(result[1:-1]) # PRINT THE ENTIRE COMMENT IN ONE GO
         elif Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             print(GLOBALmemory.simmemory[int(result)])
         else:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT ### P.S PROBABLY BREAKES FLOAT AND INT TYPING
@@ -497,14 +482,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 5 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATER OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -549,14 +531,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 6 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","GREATERAND OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -602,14 +581,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 7 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSER OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -654,14 +630,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 8 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","LESSERAND OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -706,14 +679,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 9 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","SAME OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -758,14 +728,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 10 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","NOTSAME OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -810,14 +777,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 14 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -862,14 +826,11 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator) == 15 :
         if Scopesensorglobal:
             if pointersensor(int(result)): # IF WE HAVE A POINTER REPLACE IT WITH THE ADDRESS THAT ITS POINTING AT
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]] = GLOBALmemory.simmemory[int(result)]
-                result = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(result)]]
+                result = GLOBALmemory.simmemory[int(result)]
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             if pointersensor(int(rightoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]] = GLOBALmemory.simmemory[int(rightoperand)]
-                rightoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(rightoperand)]]
+                rightoperand = GLOBALmemory.simmemory[int(rightoperand)]
             if GLOBALmemory.simmemory[int(leftoperand)] == None:
                 ERROR("NULL VALUE IN OPERAND","AND OPERATOR QUAD")
             if GLOBALmemory.simmemory[int(rightoperand)] == None:
@@ -967,6 +928,7 @@ while PROCCOUNTER <= len(Quads):
     # OPERATOR BEING "  VER  "
     elif int(operator)==20:
         IsVerSUMQUAD = True
+        #IsVerAssgnQUAD = True
         if Scopesensorglobal:
             if GLOBALmemory.simmemory[int(leftoperand)]>= GLOBALmemory.simmemory[int(result)] or GLOBALmemory.simmemory[int(leftoperand)] < 0:
                 ERROR ("VECTOR INDEX OUT OF BOUNDS ",leftoperand)
@@ -990,8 +952,7 @@ while PROCCOUNTER <= len(Quads):
     elif int(operator)==22:
         if Scopesensorglobal:
             if pointersensor(int(leftoperand)):
-                GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]] = GLOBALmemory.simmemory[int(leftoperand)]
-                leftoperand = GLOBALmemory.simmemory[GLOBALmemory.simmemory[int(leftoperand)]]
+                leftoperand = GLOBALmemory.simmemory[int(leftoperand)]
             localmemory.simmemory[int(result)] = GLOBALmemory.simmemory[int(leftoperand)]
         else:
             if pointersensor(int(leftoperand)):
