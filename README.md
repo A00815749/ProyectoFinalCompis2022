@@ -21,6 +21,8 @@ Enero 15 Se logro terminar todo excepto vectores, se concentro en documentacion 
 
 Enero 17 ~ 18 Se siguio trabajando en vectores
 
+Enero 20 Vectores se logro hacer funcionar, iniciando el arreglo de funciones
+
 
 ## SECTION FOR PENDING PROBLEMS TO CHECK BETWEEN CODING SESSIONS ###
  VECTORS PART IN THE VM IS ADVANCING, THERE ARE NO PROBLEMS STORING THE ADDRESSES AT THE POINTERS, AND THE NUM VALUES AT THE ADDRESS, JUST HAVE TO BE CAREFUL WHEN DOING THE PARTS OF THE POINTERSENSOR THAT MODIFY THE LEFTOPERAND, RIGHTOPERAND,RESULT
