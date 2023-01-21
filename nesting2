@@ -1,0 +1,22 @@
+Program nesting;
+VARS
+    int: a, b, c, d;
+
+function int afuera (int: val);
+VARS 
+    int: x;
+{
+    x = 5;
+    x = x + val;
+    return (x);
+}
+
+main(){
+
+    a = 1;
+    b = 2;
+    c = 3;
+    d = afuera(a);
+
+    write("Funcion da ", d);
+}

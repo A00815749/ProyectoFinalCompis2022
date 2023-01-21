@@ -85,6 +85,7 @@ TEMPORALScounter = 0 # Sensor for counting the temporals used, stored in the tab
 INITIALvalinFOR = 0 # Global value to store the counter in the for logic section
 FINALvalinFOR = 0 # Global value to store the final value in the counter for the for logic section
 Dim = 0
+paramdefcounter = 0
 ################ MEMORY MAP FOR VARIABLE, CONSTANT, FUNCTION, TEMPORAL, PARAMETERS AND POINTERS STORAGE ###########
 #When a memory block is used, it adds 1 to the counter.
 GLOBALINTcounter = 1000 - 1  # BLOCK of 2000 spaces 
@@ -698,13 +699,16 @@ def p_NEURALINSERTFUNCNAME(p):
     '''
     neuralinsertfuncname : ID
     '''
-    global Scopesensor, currentfunctionname,LocalVar_set,GlobalVar_set,currenttyping
+    global Scopesensor, currentfunctionname,LocalVar_set,GlobalVar_set,currenttyping,PARAMETERStypelist,PARAMETERSvarlist
     p[0] = p[1]
     Scopesensor = 'l'
     funcaddr = getsetvirtualaddrFUNC() # GET A FUNCTION ADDRESS IN MEMORY
     currentfunctionname = p[1]
     GlobalVar_set[currentfunctionname]={'virtualaddress': funcaddr,'type': currenttyping}  # SAVE THE FUNCTION NAME AS GLOBAL VARIABLE
     addtotableoffunctions(currentfunctionname,currenttyping,Scopesensor,LocalVar_set) # SAVE THE DATA TO TABLE OF FUNCTIONS
+    PARAMETERSvarlist.append([currentfunctionname])
+    PARAMETERStypelist.append([currentfunctionname])
+
 
 def p_FUNCTYPE(p):
     '''
@@ -723,11 +727,13 @@ def p_NEURALENDFUNCS(p):
     '''
     neuralendfuncs : 
     '''
-    global Tableof_functions,QUADSlist,HASHofoperatorsinquads,currentfunctionname,TEMPORALScounter
+    global Tableof_functions,QUADSlist,HASHofoperatorsinquads,currentfunctionname,TEMPORALScounter, paramdefcounter
     id = currentfunctionname
     Tableof_functions[id]["Tempsnumber"]= TEMPORALScounter # SAVE THE NUMBER OF TEMPORALS IN THE FUNCTION
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['ENDPROC'],-1,-1,-1)) # UPLOAD THE QUAD
     endandresetfunction() # CLEAN THE LOCAL TABLES, RESET CONTEXT TO GLOBAL
+    paramdefcounter = 0
+
 
 def p_FUNCSIZE(p): # SAVE THE MEMORY SIZE NEEDED FOR THE VARS IN THE FUNCTION INVOLVED
     '''
@@ -736,7 +742,7 @@ def p_FUNCSIZE(p): # SAVE THE MEMORY SIZE NEEDED FOR THE VARS IN THE FUNCTION IN
     global Tableof_functions,LocalVar_set,QUADSlist,currentfunctionname
     global LOCALINTcounter,LOCALFLOATcounter, LOCALCHARcounter, TEMPINTcounter, TEMPFLOATcounter, TEMPCHARcounter, TEMPBOOLcounter, POINTERScounter
     functionname = currentfunctionname
-    Tableof_functions[functionname]['Paramnumbers'] = len(LocalVar_set)
+    Tableof_functions[functionname]['Paramnumbers'] = paramdefcounter
     Tableof_functions[functionname]['Intnumbers'] = (LOCALINTcounter-(7000-1)) + (TEMPINTcounter - (13000-1))
     Tableof_functions[functionname]['Floatnumbers'] = (LOCALFLOATcounter - (9000 - 1)) + (TEMPFLOATcounter - (15000-1))
     Tableof_functions[functionname]['Charnumbers'] = (LOCALCHARcounter-(11000-1)) + (TEMPCHARcounter - (17000-1))
@@ -764,12 +770,21 @@ def p_NEURALINSERTID(p):
     '''
     neuralinsertid : ID
     '''
-    global Scopesensor, currenttyping, PARAMETERSvarlist, PARAMETERStypelist
+    global Scopesensor, currenttyping, PARAMETERSvarlist, PARAMETERStypelist,paramdefcounter,currentfunctionname
     Scopesensor = 'l'
     virtualaddress = getsetvirtualaddrVARS(currenttyping,Scopesensor)
     insertinVARStables(p[1],virtualaddress,currenttyping)
-    PARAMETERSvarlist.append(virtualaddress)
-    PARAMETERStypelist.append(currenttyping)
+    listcounter = 0
+    for x in PARAMETERSvarlist:
+        if currentfunctionname in x:
+            PARAMETERSvarlist[listcounter].append(virtualaddress)
+        listcounter+=1
+    listcounter = 0
+    for y in PARAMETERStypelist:
+        if currentfunctionname in y:
+            PARAMETERStypelist[listcounter].append(currenttyping)
+        listcounter+=1
+    paramdefcounter = paramdefcounter + 1
 
 
 def p_MULPARAMS(p):
@@ -815,9 +830,10 @@ def p_NEURALERA(p):
     '''
     neuralera :
     '''
-    global QUADSlist,HASHofoperatorsinquads,POper,COUNTERparameter
+    global QUADSlist,HASHofoperatorsinquads,POper,COUNTERparameter,currentfunctionname
     POper.append("~~~")
     id = p[-3] # FUNCTION ID
+    currentfunctionname = id
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['ERA'],-1,-1,id))
     COUNTERparameter.append(0)
 
@@ -830,7 +846,13 @@ def p_NEURALPAR(p):
     POper.pop() ## GET RID OF THE FALSE BOTTOM
     id = p[-4] #FUNCTION NAME BEING 4 TOKENS BACK
     counter = COUNTERparameter.pop()
-    if len(PARAMETERStypelist) != counter:
+    functionindex = 0   ## LETS FIND WHERE IS OUR FUNCTION LOCATED
+    listacounter = 0
+    for x in PARAMETERStypelist:
+        if currentfunctionname in x:
+            functionindex = listacounter
+        listacounter +=1
+    if len(PARAMETERStypelist[functionindex])-1 != counter: # ADJUST THE COUNTER TO TO OFFSET THE NAME OF THE FUNCTION IN THE LIST OF LISTS
         errorhandler(11)
     startaddress = Tableof_functions[id]['Initialfuncpoint']
     fucntionvirtualaddress = GlobalVar_set[id]['virtualaddress']
@@ -851,17 +873,23 @@ def p_NEURALPAR2(p):
         argument = PilaO.pop()
         argumenttype = Ptypes.pop()
         counter = COUNTERparameter.pop()
-        if argumenttype != PARAMETERStypelist[counter]:
+        functionindex = 0   ## LETS FIND WHERE IS OUR FUNCTION LOCATED
+        listacounter = 0
+        for x in PARAMETERStypelist:
+            if currentfunctionname in x:
+                functionindex = listacounter
+            listacounter +=1
+        if argumenttype != PARAMETERStypelist[functionindex][counter+1]:
             errorhandler(12)
         if argumenttype == 'int':
             PARAMSINTcounter += 1
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[functionindex][counter+1]))
         elif argumenttype == 'float':
             PARAMSFLOATcounter += 1
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[functionindex][counter+1]))
         elif argumenttype == 'char':
             PARAMSCHARcounter += 1
-            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[counter]))
+            QUADSlist.append(Quadruple(HASHofoperatorsinquads['PARAM'],argument,-1,PARAMETERSvarlist[functionindex][counter+1]))
         COUNTERparameter.append(counter+1)
     else:
         if len(PARAMETERStypelist)!= COUNTERparameter:
