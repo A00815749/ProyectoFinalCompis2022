@@ -81,6 +81,7 @@ PDim = []
 Scopesensor = 'g' # G for global or l for local
 currenttyping = '' # Stores the typing, being either int float or char
 currentfunctionname = ''
+currentfunctioncall = ''
 TEMPORALScounter = 0 # Sensor for counting the temporals used, stored in the table of functions
 INITIALvalinFOR = 0 # Global value to store the counter in the for logic section
 FINALvalinFOR = 0 # Global value to store the final value in the counter for the for logic section
@@ -799,7 +800,7 @@ def p_RETURNING(p):
     '''
     returning : RETURN LEFTPAR exp RIGHTPAR SEMICOLON
     '''
-    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set
+    global PilaO,QUADSlist,HASHofoperatorsinquads,GlobalVar_set,currentfunctionname
     valuetoreturn = PilaO.pop() ## CHECK THE STATUS OF PILAO AND PTYPES
     Ptypes.pop()
     functionvirtualaddr = GlobalVar_set[currentfunctionname]['virtualaddress'] # GET THE ADDRESS OF THE SPECIAL FUNCTION ADDRESS TO BE USED AS TEMPORAL CONTAINER
@@ -830,10 +831,10 @@ def p_NEURALERA(p):
     '''
     neuralera :
     '''
-    global QUADSlist,HASHofoperatorsinquads,POper,COUNTERparameter,currentfunctionname
+    global QUADSlist,HASHofoperatorsinquads,POper,COUNTERparameter,currentfunctioncall
     POper.append("~~~")
     id = p[-3] # FUNCTION ID
-    currentfunctionname = id
+    currentfunctioncall = id
     QUADSlist.append(Quadruple(HASHofoperatorsinquads['ERA'],-1,-1,id))
     COUNTERparameter.append(0)
 
@@ -842,14 +843,14 @@ def p_NEURALPAR(p):
     neuralpar : RIGHTPAR
     '''
     global QUADSlist,HASHofoperatorsinquads,Tableof_functions,GlobalVar_set
-    global POper,PilaO,Ptypes,COUNTERparameter,PARAMETERStypelist,currentfunctionname
+    global POper,PilaO,Ptypes,COUNTERparameter,PARAMETERStypelist,currentfunctioncall
     POper.pop() ## GET RID OF THE FALSE BOTTOM
     id = p[-4] #FUNCTION NAME BEING 4 TOKENS BACK
     counter = COUNTERparameter.pop()
     functionindex = 0   ## LETS FIND WHERE IS OUR FUNCTION LOCATED
     listacounter = 0
     for x in PARAMETERStypelist:
-        if currentfunctionname in x:
+        if currentfunctioncall in x:
             functionindex = listacounter
         listacounter +=1
     if len(PARAMETERStypelist[functionindex])-1 != counter: # ADJUST THE COUNTER TO TO OFFSET THE NAME OF THE FUNCTION IN THE LIST OF LISTS
@@ -868,7 +869,7 @@ def p_NEURALPAR2(p):
     neuralpar2 :
     '''
     global PARAMSINTcounter,PARAMSFLOATcounter,PARAMSCHARcounter,PARAMETERStypelist
-    global PilaO,Ptypes,QUADSlist,HASHofoperatorsinquads,PARAMETERSvarlist,COUNTERparameter
+    global PilaO,Ptypes,QUADSlist,HASHofoperatorsinquads,PARAMETERSvarlist,COUNTERparameter,currentfunctioncall
     if PilaO and Ptypes and PARAMETERStypelist:
         argument = PilaO.pop()
         argumenttype = Ptypes.pop()
@@ -876,7 +877,7 @@ def p_NEURALPAR2(p):
         functionindex = 0   ## LETS FIND WHERE IS OUR FUNCTION LOCATED
         listacounter = 0
         for x in PARAMETERStypelist:
-            if currentfunctionname in x:
+            if currentfunctioncall in x:
                 functionindex = listacounter
             listacounter +=1
         if argumenttype != PARAMETERStypelist[functionindex][counter+1]:
